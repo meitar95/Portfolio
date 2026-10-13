@@ -94,19 +94,50 @@ p { text-wrap: pretty; max-width: 68ch; }
   clip: rect(0 0 0 0); white-space: nowrap;
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons (see components/Button.astro) ----------
+   Rest: dark pill + 12px peach dot. Hover/focus: dot grows to a 28px circle
+   with an arrow, background shifts to a soft grey-to-black gradient. */
 .btn {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  min-height: 44px; padding: 0 1.25rem;
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; gap: 0.7rem;
+  min-height: 48px; padding: 0 1.4rem 0 1.1rem;
   border-radius: var(--radius-pill);
-  background: var(--ink); color: #fff;
-  font-size: var(--fs-small); font-weight: 500; text-decoration: none;
-  transition: transform 0.2s var(--ease), background 0.2s;
+  background: linear-gradient(180deg, #271b1b 0%, var(--ink) 100%);
+  color: #fff; font-size: var(--fs-small); font-weight: 500; text-decoration: none;
+  overflow: hidden; white-space: nowrap;
 }
-.btn:hover { background: #3a2c2c; }
+.btn::before { /* hover gradient, cross-faded (gradients can't transition directly) */
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: linear-gradient(99deg, #545454 0%, #000 100%);
+  opacity: 0; transition: opacity 0.35s var(--ease);
+}
+.btn__dot {
+  display: grid; place-items: center; flex: none;
+  width: 28px; height: 28px; margin-right: -0.1rem;
+  border-radius: 50%; background: var(--peach); color: var(--ink);
+  transform: scale(0.43); /* 12px at rest */
+  transition: transform 0.4s var(--ease);
+}
+.btn__dot svg { opacity: 0; transform: translateX(-6px); transition: opacity 0.25s, transform 0.4s var(--ease); }
+.btn__label { transition: transform 0.4s var(--ease); }
+
+.btn:hover::before, .btn:focus-visible::before,
+a:hover > .card__text .btn::before { opacity: 1; }
+.btn:hover .btn__dot, .btn:focus-visible .btn__dot,
+a:hover > .card__text .btn .btn__dot { transform: scale(1); }
+.btn:hover .btn__dot svg, .btn:focus-visible .btn__dot svg,
+a:hover > .card__text .btn .btn__dot svg { opacity: 1; transform: none; }
+.btn:hover .btn__label, .btn:focus-visible .btn__label,
+a:hover > .card__text .btn .btn__label { transform: translateX(2px); }
 .btn:active { transform: scale(0.98); }
+
 .btn--light { background: #fff; color: var(--ink); }
-.btn--light:hover { background: var(--tint-1); }
+.btn--light::before { background: linear-gradient(99deg, #fff 0%, var(--tint-2) 100%); }
+.btn--light .btn__dot { background: var(--accent); color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn__dot, .btn__dot svg, .btn__label { transition: none; }
+}
 
 /* ---------- Reveal: fades in once, never hides again ----------
    Content is visible without JS; the class is only added when JS runs. */

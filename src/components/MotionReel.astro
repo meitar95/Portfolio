@@ -33,7 +33,8 @@ const files = [
       load.disconnect();
       const { default: lottie } = await import('lottie-web/build/player/lottie_light');
       section.querySelectorAll<HTMLElement>('[data-src]').forEach((el) => {
-        const anim = lottie.loadAnimation({ container: el, renderer: 'svg', loop: true, autoplay: false, path: el.dataset.src! });
+        const anim = lottie.loadAnimation({ container: el, renderer: 'svg', loop: true, autoplay: false, path: el.dataset.src!,
+          rendererSettings: { preserveAspectRatio: 'xMidYMid meet' } });
         anim.addEventListener('DOMLoaded', () => (still ? anim.goToAndStop(0, true) : null));
         if (!still) new IntersectionObserver(([v]) => (v.isIntersecting ? anim.play() : anim.pause())).observe(el);
       });
@@ -46,7 +47,9 @@ const files = [
   .reel__inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--s-5); align-items: center; }
   .reel__text { display: grid; gap: var(--s-2); }
   .reel__grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); }
-  .reel__tile { aspect-ratio: 19 / 17; background: #fff; border-radius: var(--radius-md); overflow: hidden; }
+  /* No boxes: the illustrations sit straight on the page, centered, never clipped */
+  .reel__tile { aspect-ratio: 1; display: grid; place-items: center; }
+  .reel__tile :global(svg) { width: 100% !important; height: 100% !important; overflow: visible; }
   @media (max-width: 809px) {
     .reel__inner { grid-template-columns: 1fr; gap: var(--s-4); }
     .reel__grid { grid-template-columns: repeat(2, 1fr); }

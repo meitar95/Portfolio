@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import HeroGlow from '../components/HeroGlow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import MotionReel from '../components/MotionReel.astro';
+import Button from '../components/Button.astro';
 
 // Drafts show in local preview only; production gets finished work only.
 const showDrafts = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS === 'true';
@@ -47,15 +48,15 @@ const experience = [
       <p class="hero__lead">
         I turn complex, technical systems into clear, intuitive experiences, from cybersecurity to the field.
         I work in an AI-native workflow to prototype, test and ship fast alongside engineering.
-        Currently designing security products at <a href="https://huskeys.io/">Huskeys</a>.
+        Currently designing security products at Huskeys.
       </p>
-      <a class="btn" href="https://cal.com/meitar/30min">Book a call</a>
+      <Button href="https://cal.com/meitar/30min">Contact me</Button>
     </div>
   </section>
 
   <section class="section work" id="work" aria-labelledby="work-title">
     <div class="container">
-      <h2 id="work-title" class="section__title">Selected work</h2>
+      <h2 id="work-title" class="visually-hidden">Selected work</h2>
       <div class="work__list">
         {work.map((w, i) => (
           <ProjectCard
@@ -130,11 +131,10 @@ const experience = [
 </Base>
 
 <style>
-  .hero { position: relative; isolation: isolate; padding-block: clamp(4rem, 10vw, 8rem) var(--s-6); }
+  .hero { position: relative; isolation: isolate; overflow-x: clip; /* glow may spill down, never sideways */ padding-block: clamp(4rem, 10vw, 8rem) var(--s-6); }
   .hero__inner { display: grid; gap: var(--s-3); justify-items: start; }
   .hero__role { font-size: var(--fs-lead); color: var(--ink); }
   .hero__lead { font-size: var(--fs-lead); line-height: 1.55; max-width: 60ch; }
-  .hero__lead a { color: var(--accent); text-underline-offset: 4px; }
 
   .section__title { margin-bottom: var(--s-5); }
   .work { padding-top: var(--s-5); padding-bottom: var(--s-5); }

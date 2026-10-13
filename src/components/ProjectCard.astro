@@ -1,4 +1,5 @@
 ---
+import Button from './Button.astro';
 // Homepage project card. `tint` (1–5) steps through the baby-blue scale,
 // so the stack of cards reads as one soft gradient without using a gradient.
 interface Props {
@@ -16,7 +17,7 @@ const Tag = href ? 'a' : 'div';
       <p>{text}</p>
       {draft
         ? <span class="card__draft">Not migrated yet (preview only)</span>
-        : <span class="btn">Read case study <span aria-hidden="true">→</span></span>}
+        : <Button as="span">Read case study</Button>}
     </div>
     <div class="card__visual">
       {cover
@@ -41,7 +42,6 @@ const Tag = href ? 'a' : 'div';
   .card__text { display: grid; gap: var(--s-2); justify-items: start; }
   .card__text p:not(.eyebrow) { color: var(--ink-2); }
   .card__text .btn { margin-top: var(--s-1); }
-  a.card__link:hover .btn { background: #3a2c2c; }
   a.card__link:hover .card__visual img { transform: scale(1.02); }
   .card__visual { border-radius: var(--radius-md); overflow: hidden; }
   .card__visual img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; transition: transform 0.6s var(--ease); }

@@ -39,6 +39,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
       });
+      // Nav gets its background only after scrolling a little.
+      const setScrolled = () => document.documentElement.classList.toggle('is-scrolled', scrollY > 8);
+      addEventListener('scroll', setScrolled, { passive: true }); setScrolled();
+
       document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => {
         if (el.getBoundingClientRect().top < innerHeight) el.classList.add('is-in', 'no-anim');
         else io.observe(el);

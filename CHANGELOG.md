@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-13 — Feedback round 1
+
+- **Signature button restored** (`components/Button.astro`): peach dot grows into a circle
+  with an arrow on hover/focus, background shifts to a grey-to-black gradient. Used for
+  every button on the site, including the card buttons (they react when the card is hovered).
+- **Hero glow**: no box around it anymore, so no hard edges; it visibly wanders (13–19s
+  loops) and is much softer. Clipped sideways only, so phones never scroll horizontally.
+- **Nav**: transparent at the top so it doesn't slice the glow; frosted background appears
+  after scrolling. Button reads "Contact" on phones so the nav isn't cramped.
+- **Motion reel**: white boxes removed; animations sit on the page, centered, unclipped.
+- "Selected work" heading hidden (kept for screen readers). Huskeys link removed.
+- Reveal: anything already on screen shows instantly; fade shortened to 0.45s; the
+  interactive before/after never fades.
+
 ## 2026-10-13 — Images, motion reel, content fixes
 
 **Added**

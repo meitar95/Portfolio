@@ -1,0 +1,14 @@
+---
+// The signature button (from the Framer site): a small peach dot that grows
+// into a circle with an arrow on hover / keyboard focus.
+// Use `as="span"` when the button sits inside a larger link (e.g. a card).
+interface Props { href?: string; variant?: 'dark' | 'light'; as?: 'a' | 'span' }
+const { href, variant = 'dark', as = 'a' } = Astro.props;
+const Tag = as;
+---
+<Tag class:list={['btn', `btn--${variant}`]} href={as === 'a' ? href : undefined}>
+  <span class="btn__dot" aria-hidden="true">
+    <svg viewBox="0 0 16 16" width="16" height="16"><path d="M3.5 8h9M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </span>
+  <span class="btn__label"><slot /></span>
+</Tag>

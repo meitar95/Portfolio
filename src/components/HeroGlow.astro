@@ -1,7 +1,8 @@
 ---
 // The soft blue glow behind the hero. Pure CSS — no canvas, no JS.
-// The old version had a near-black blob; here it's a deep slate at low
-// opacity, so the motion and depth stay but the black is mellowed.
+// No box around it: the blobs are heavily blurred and free to drift past the
+// hero's edges, so there's never a hard cut line. Colors are soft — the old
+// near-black became a faint deep slate.
 ---
 <div class="glow" aria-hidden="true">
   <span class="glow__blob glow__blob--a"></span>
@@ -10,34 +11,46 @@
 </div>
 
 <style>
-  .glow { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
-  .glow__blob {
-    position: absolute; border-radius: 50%;
-    filter: blur(70px); will-change: transform;
+  .glow {
+    position: absolute; z-index: -1; pointer-events: none;
+    top: -20vh; right: -10vw; width: 70vw; height: 110vh; /* bigger than the hero: no edges */
+    filter: blur(90px);
   }
+  .glow__blob { position: absolute; border-radius: 50%; will-change: transform; }
   .glow__blob--a { /* baby blue — the main wash */
-    width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
-    right: -6vw; top: -14vw; background: #9bd9de; opacity: 0.7;
+    width: 55%; aspect-ratio: 1; left: 30%; top: 10%;
+    background: #9bd9de; opacity: 0.55;
   }
   .glow__blob--b { /* steel blue — depth */
-    width: 28vw; height: 28vw; max-width: 380px; max-height: 380px;
-    right: 8vw; top: 6vw; background: #3f6c88; opacity: 0.45;
+    width: 34%; aspect-ratio: 1; left: 45%; top: 25%;
+    background: #3f6c88; opacity: 0.22;
   }
-  .glow__blob--c { /* deep slate — replaces the old black */
-    width: 20vw; height: 20vw; max-width: 280px; max-height: 280px;
-    right: 2vw; top: 2vw; background: #2e3a52; opacity: 0.28;
+  .glow__blob--c { /* faint deep slate — what used to be black */
+    width: 24%; aspect-ratio: 1; left: 58%; top: 18%;
+    background: #2e3a52; opacity: 0.12;
   }
   @media (max-width: 809px) {
-    .glow__blob--a { width: 90vw; height: 90vw; right: -40vw; top: -40vw; }
-    .glow__blob--b { width: 55vw; height: 55vw; right: -15vw; top: -10vw; opacity: 0.35; }
-    .glow__blob--c { width: 40vw; height: 40vw; right: -10vw; top: -12vw; opacity: 0.2; }
+    .glow { right: -40vw; width: 120vw; height: 80vh; top: -25vh; filter: blur(60px); }
   }
   @media (prefers-reduced-motion: no-preference) {
-    .glow__blob--a { animation: drift-a 22s var(--ease) infinite alternate; }
-    .glow__blob--b { animation: drift-b 18s var(--ease) infinite alternate; }
-    .glow__blob--c { animation: drift-c 26s var(--ease) infinite alternate; }
+    .glow__blob--a { animation: wander-a 16s ease-in-out infinite alternate; }
+    .glow__blob--b { animation: wander-b 13s ease-in-out infinite alternate; }
+    .glow__blob--c { animation: wander-c 19s ease-in-out infinite alternate; }
   }
-  @keyframes drift-a { to { transform: translate(-6%, 8%) scale(1.08); } }
-  @keyframes drift-b { to { transform: translate(-18%, 12%) scale(0.9); } }
-  @keyframes drift-c { to { transform: translate(-30%, 20%) scale(1.15); } }
+  /* Visible, slow wandering — like the Framer gradient, but calmer */
+  @keyframes wander-a {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-28%, 18%) scale(1.15); }
+    100% { transform: translate(-45%, -6%) scale(0.95); }
+  }
+  @keyframes wander-b {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-60%, -20%) scale(1.25); }
+    100% { transform: translate(-20%, 35%) scale(0.9); }
+  }
+  @keyframes wander-c {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-90%, 40%) scale(1.3); }
+    100% { transform: translate(-40%, -30%) scale(1); }
+  }
 </style>
