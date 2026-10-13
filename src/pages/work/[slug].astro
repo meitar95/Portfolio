@@ -44,7 +44,7 @@ const Visual = d.visual ? visuals[d.visual] : null;
     <section class="container cs__block" aria-labelledby="solution">
       <h2 id="solution" class="reveal">The solution</h2>
       <p class="cs__lead reveal">{d.solution.summary}</p>
-      {Visual && <div class="cs__visual reveal"><Visual /></div>}
+      {Visual && <div class="cs__visual"><Visual /></div>}
       <ul class="cs__points reveal">
         {d.solution.points.map((p) => <li><h3>{p.title}</h3><p>{p.text}</p></li>)}
       </ul>

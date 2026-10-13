@@ -35,10 +35,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Footer />
     <script>
       // Fade sections in once as they enter the viewport. Nothing ever re-hides.
+      // Anything already on screen at load (or after a jump link) shows instantly.
       const io = new IntersectionObserver((entries) => {
         for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
-      }, { rootMargin: '0px 0px -10% 0px' });
-      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+      });
+      document.querySelectorAll<HTMLElement>('.reveal').forEach((el) => {
+        if (el.getBoundingClientRect().top < innerHeight) el.classList.add('is-in', 'no-anim');
+        else io.observe(el);
+      });
     </script>
   </body>
 </html>

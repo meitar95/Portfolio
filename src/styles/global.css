@@ -111,9 +111,10 @@ p { text-wrap: pretty; max-width: 68ch; }
 /* ---------- Reveal: fades in once, never hides again ----------
    Content is visible without JS; the class is only added when JS runs. */
 @media (prefers-reduced-motion: no-preference) {
-  .js .reveal { opacity: 0; transform: translateY(16px); }
+  .js .reveal { opacity: 0; transform: translateY(12px); }
   .js .reveal.is-in {
     opacity: 1; transform: none;
-    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+    transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
   }
+  .js .reveal.no-anim { transition: none; }
 }
