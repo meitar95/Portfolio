@@ -1,0 +1,43 @@
+---
+// The soft blue glow behind the hero. Pure CSS — no canvas, no JS.
+// The old version had a near-black blob; here it's a deep slate at low
+// opacity, so the motion and depth stay but the black is mellowed.
+---
+<div class="glow" aria-hidden="true">
+  <span class="glow__blob glow__blob--a"></span>
+  <span class="glow__blob glow__blob--b"></span>
+  <span class="glow__blob glow__blob--c"></span>
+</div>
+
+<style>
+  .glow { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: -1; }
+  .glow__blob {
+    position: absolute; border-radius: 50%;
+    filter: blur(70px); will-change: transform;
+  }
+  .glow__blob--a { /* baby blue — the main wash */
+    width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
+    right: -6vw; top: -14vw; background: #9bd9de; opacity: 0.7;
+  }
+  .glow__blob--b { /* steel blue — depth */
+    width: 28vw; height: 28vw; max-width: 380px; max-height: 380px;
+    right: 8vw; top: 6vw; background: #3f6c88; opacity: 0.45;
+  }
+  .glow__blob--c { /* deep slate — replaces the old black */
+    width: 20vw; height: 20vw; max-width: 280px; max-height: 280px;
+    right: 2vw; top: 2vw; background: #2e3a52; opacity: 0.28;
+  }
+  @media (max-width: 809px) {
+    .glow__blob--a { width: 90vw; height: 90vw; right: -40vw; top: -40vw; }
+    .glow__blob--b { width: 55vw; height: 55vw; right: -15vw; top: -10vw; opacity: 0.35; }
+    .glow__blob--c { width: 40vw; height: 40vw; right: -10vw; top: -12vw; opacity: 0.2; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .glow__blob--a { animation: drift-a 22s var(--ease) infinite alternate; }
+    .glow__blob--b { animation: drift-b 18s var(--ease) infinite alternate; }
+    .glow__blob--c { animation: drift-c 26s var(--ease) infinite alternate; }
+  }
+  @keyframes drift-a { to { transform: translate(-6%, 8%) scale(1.08); } }
+  @keyframes drift-b { to { transform: translate(-18%, 12%) scale(0.9); } }
+  @keyframes drift-c { to { transform: translate(-30%, 20%) scale(1.15); } }
+</style>

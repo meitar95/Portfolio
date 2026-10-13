@@ -1,0 +1,122 @@
+---
+// THE case-study template. Every study renders through this file, in this order:
+//   Above the fold: title + payoff · role/team/timeline · outcome · why · solution · learned
+//   Below the fold: the problem · the evidence (Markdown body) · next study
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import FilterBeforeAfter from '../../components/FilterBeforeAfter.astro';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('work', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+  return all.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, next: all[(i + 1) % all.length] } }));
+}
+
+const { entry, next } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+const visuals = { 'filtering-before-after': FilterBeforeAfter };
+const Visual = d.visual ? visuals[d.visual] : null;
+---
+<Base title={`${d.title} — Meitar Mechoresh`} description={d.tagline}>
+  <article class="cs">
+    <header class="container cs__hero">
+      <a class="cs__back" href="/#work">← All work</a>
+      <h1>{d.title}</h1>
+      <p class="cs__tagline">{d.tagline}</p>
+
+      <dl class="cs__meta">
+        <div><dt>Role</dt><dd>{d.role}</dd></div>
+        <div><dt>Team</dt><dd>{d.team}</dd></div>
+        <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
+        <div><dt>Platform</dt><dd>{d.platform}</dd></div>
+      </dl>
+
+      <ul class="cs__outcomes" aria-label="Outcomes">
+        {d.outcomes.map((o) => <li><strong>{o.value}</strong><span>{o.label}</span></li>)}
+      </ul>
+    </header>
+
+    <section class="container cs__block reveal" aria-labelledby="why">
+      <h2 id="why">Why it mattered</h2>
+      <p class="cs__lead">{d.why}</p>
+    </section>
+
+    <section class="container cs__block" aria-labelledby="solution">
+      <h2 id="solution" class="reveal">The solution</h2>
+      <p class="cs__lead reveal">{d.solution.summary}</p>
+      {Visual && <div class="cs__visual reveal"><Visual /></div>}
+      <ul class="cs__points reveal">
+        {d.solution.points.map((p) => <li><h3>{p.title}</h3><p>{p.text}</p></li>)}
+      </ul>
+    </section>
+
+    <section class="container cs__block reveal" aria-labelledby="learned">
+      <h2 id="learned">What I learned</h2>
+      <blockquote class="cs__quote"><p>{d.learned}</p></blockquote>
+    </section>
+
+    <div class="cs__fold">
+      <div class="container">
+        <p class="eyebrow">How we got there</p>
+        <div class="cs__body"><Content /></div>
+        {d.confidential && <p class="cs__note">All visuals use generic, non-company data for confidentiality.</p>}
+      </div>
+    </div>
+
+    {next && next.id !== entry.id && (
+      <nav class="container cs__next" aria-label="Next case study">
+        <p class="eyebrow">Next case study</p>
+        <a href={`/work/${next.id}/`}>{next.data.title} <span aria-hidden="true">→</span></a>
+      </nav>
+    )}
+  </article>
+</Base>
+
+<style>
+  .cs__hero { display: grid; gap: var(--s-3); padding-block: var(--s-5) var(--s-6); }
+  .cs__back { justify-self: start; color: var(--ink-3); text-decoration: none; font-size: var(--fs-small); padding-block: 0.6rem; }
+  .cs__back:hover { color: var(--accent); }
+  .cs__tagline { font-size: var(--fs-lead); color: var(--ink); max-width: 52ch; }
+
+  .cs__meta {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-3);
+    padding-block: var(--s-3); border-block: 1px solid var(--line); margin-top: var(--s-2);
+  }
+  .cs__meta dt { font-size: var(--fs-small); color: var(--ink-3); }
+  .cs__meta dd { margin: 0; color: var(--ink); font-weight: 500; }
+
+  .cs__outcomes { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); }
+  .cs__outcomes li { background: var(--tint-2); border-radius: var(--radius-md); padding: var(--s-3); display: grid; gap: var(--s-1); align-content: start; }
+  .cs__outcomes strong { font-family: var(--serif); font-weight: 400; font-size: var(--fs-h2); color: var(--ink); line-height: 1.1; }
+  .cs__outcomes span { color: var(--ink-2); font-size: var(--fs-small); }
+
+  .cs__block { display: grid; gap: var(--s-3); padding-block: var(--s-5); }
+  .cs__lead { font-size: var(--fs-lead); line-height: 1.55; }
+  .cs__visual { margin-block: var(--s-2); }
+  .cs__points { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--s-4) var(--s-3); }
+  .cs__points li { display: grid; gap: var(--s-1); align-content: start; padding-top: var(--s-2); border-top: 2px solid var(--tint-4); }
+  .cs__points h3 { font-size: 1.125rem; }
+  .cs__points p { font-size: var(--fs-small); }
+
+  .cs__quote { border-left: 3px solid var(--accent); padding-left: var(--s-3); }
+  .cs__quote p { font-family: var(--serif); font-size: var(--fs-h3); color: var(--ink); line-height: 1.45; max-width: 46ch; }
+
+  .cs__fold { background: var(--surface); margin-top: var(--s-5); padding-block: var(--s-6); }
+  .cs__body { display: grid; gap: var(--s-3); margin-top: var(--s-2); }
+  .cs__body :global(h2) { margin-top: var(--s-4); }
+  .cs__body :global(h2:first-child) { margin-top: 0; }
+  .cs__body :global(strong) { color: var(--ink); font-weight: 500; }
+  .cs__body :global(img) { border-radius: var(--radius-md); }
+  .cs__note { margin-top: var(--s-4); font-size: var(--fs-small); color: var(--ink-3); }
+
+  .cs__next { padding-block: var(--s-6); display: grid; gap: var(--s-1); }
+  .cs__next a { font-family: var(--serif); font-size: var(--fs-h2); color: var(--ink); text-decoration: none; }
+  .cs__next a:hover { color: var(--accent); }
+
+  @media (max-width: 809px) {
+    .cs__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .cs__outcomes { grid-template-columns: 1fr; gap: var(--s-1); }
+    .cs__outcomes li { grid-template-columns: 5.5rem 1fr; align-items: center; gap: var(--s-2); padding: var(--s-2); }
+    .cs__outcomes strong { font-size: 1.5rem; }
+  }
+</style>

@@ -1,14 +1,166 @@
 ---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import HeroGlow from '../components/HeroGlow.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// Drafts show in local preview only; production gets finished work only.
+const showDrafts = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS === 'true';
+const work = (await getCollection('work', ({ data }) => showDrafts || !data.draft))
+  .sort((a, b) => a.data.order - b.data.order);
+
+const skills = ['AI-native workflows', 'Product design', 'UX design', 'Design systems', 'Interaction design',
+  'Usability testing', 'Design QA', 'Design sprints', 'Motion & micro-interactions'];
+
+const experience = [
+  {
+    role: 'Product Designer', org: 'Huskeys', when: '2025 – present',
+    about: 'B2B cybersecurity startup (WAF & API protection)',
+    points: [
+      'First and sole product designer: built the design function and helped grow the team to 5.',
+      'Shipped onboarding end to end (~10x capacity, 1 → 10+ clients a week) and unified 4 filtering patterns across 6 modules into one system.',
+      'Work AI-native (Claude, Figma, Cursor) and lead a unified design system as the product scales.',
+    ],
+  },
+  {
+    role: 'Product Designer', org: 'UI Human Factors', when: '2022 – 2025',
+    about: 'Product design consultancy, complex B2B & B2C systems',
+    points: [
+      'Designed end to end for enterprise clients across cybersecurity, medical, fintech and agri-tech, including Medtronic, Cybersixgill, Sentrycs and Afimilk.',
+      "Redesigned Afimilk's field app for dairy farmers: from near-zero usage to daily use across ~15,000 farms in 50+ countries.",
+      'On Sentrycs, scaled a single concept into an 8-module design system, then, as sole designer, shipped it with engineering at ~90% fidelity.',
+      'Built design systems from scratch across web and mobile, ran usability testing and owned Design QA.',
+    ],
+  },
+];
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Meitar Mechoresh — Product Designer</title>
-  </head>
-  <body>
-    <h1>Meitar Mechoresh</h1>
-    <p>New site in progress.</p>
-  </body>
-</html>
+<Base
+  title="Meitar Mechoresh — Product Designer"
+  description="Product designer turning complex, technical systems into clear experiences, from cybersecurity to the field. AI-native, design-to-code."
+>
+  <section class="hero">
+    <HeroGlow />
+    <div class="container hero__inner">
+      <h1>Hi, I'm Meitar Mechoresh.</h1>
+      <p class="hero__role">Senior Product Designer · B2B SaaS & B2C · AI-native</p>
+      <p class="hero__lead">
+        I turn complex, technical systems into clear, intuitive experiences, from cybersecurity to the field.
+        I work in an AI-native workflow to prototype, test and ship fast alongside engineering.
+        Currently designing security products at <a href="https://huskeys.io/">Huskeys</a>.
+      </p>
+      <a class="btn" href="https://cal.com/meitar/30min">Book a call</a>
+    </div>
+  </section>
+
+  <section class="section work" id="work" aria-labelledby="work-title">
+    <div class="container">
+      <h2 id="work-title" class="section__title">Selected work</h2>
+      <div class="work__list">
+        {work.map((w, i) => (
+          <ProjectCard
+            title={w.data.title}
+            text={w.data.card}
+            meta={w.data.platform}
+            href={w.data.draft ? undefined : `/work/${w.id}/`}
+            tint={Math.min(i + 1, 5)}
+            cover={w.data.cover}
+            coverAlt={w.data.coverAlt}
+            draft={w.data.draft}
+          >
+            {w.id === 'filtering' && (
+              <div slot="visual" class="mini" aria-hidden="true">
+                <div class="mini__bar"><span class="mini__ai">✦ Ask AI or search…</span><span>My special view</span><span>Critical AWS</span></div>
+                <div class="mini__panel">
+                  <b>Filter panel</b>
+                  <span class="mini__input">Describe what you want to see</span>
+                  <div class="mini__chips"><span>Critical only</span><span>Opened this week</span><span>Assigned to me</span></div>
+                  <div class="mini__tabs"><span class="on">Simple</span><span>Advanced</span></div>
+                  <span class="mini__row">Status</span><span class="mini__row">Severity</span><span class="mini__row">Category</span>
+                </div>
+              </div>
+            )}
+          </ProjectCard>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section skills" aria-labelledby="skills-title">
+    <div class="container">
+      <h2 id="skills-title" class="section__title">What I bring</h2>
+      <ul class="chips reveal">
+        {skills.map((s) => <li>{s}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" id="experience" aria-labelledby="exp-title">
+    <div class="container">
+      <h2 id="exp-title" class="section__title">Experience</h2>
+      {experience.map((e) => (
+        <article class="exp reveal">
+          <header class="exp__head">
+            <h3>{e.role} · {e.org}</h3>
+            <p class="exp__when">{e.when}</p>
+          </header>
+          <p class="eyebrow">{e.about}</p>
+          <ul>{e.points.map((p) => <li>{p}</li>)}</ul>
+        </article>
+      ))}
+
+      <article class="exp reveal">
+        <header class="exp__head">
+          <h3>B.Design, Visual Communication · Shenkar College</h3>
+          <p class="exp__when">2019 – 2023</p>
+        </header>
+        <p class="eyebrow">Digital products & animation</p>
+      </article>
+      <article class="exp reveal">
+        <header class="exp__head">
+          <h3>Design Thinking Hackathon · Tel Aviv University × Hong Kong University</h3>
+          <p class="exp__when">2023</p>
+        </header>
+        <p>Joined MBA courses and an Executive MBA hackathon as both a team and solo designer, working with Israeli startups preparing to enter Asian markets.</p>
+      </article>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; isolation: isolate; padding-block: clamp(4rem, 10vw, 8rem) var(--s-6); }
+  .hero__inner { display: grid; gap: var(--s-3); justify-items: start; }
+  .hero__role { font-size: var(--fs-lead); color: var(--ink); }
+  .hero__lead { font-size: var(--fs-lead); line-height: 1.55; max-width: 60ch; }
+  .hero__lead a { color: var(--accent); text-underline-offset: 4px; }
+
+  .section__title { margin-bottom: var(--s-5); }
+  .work { padding-top: var(--s-5); padding-bottom: var(--s-5); }
+  .skills { padding-block: var(--s-4); }
+  .work__list { display: grid; gap: var(--s-3); }
+
+  .skills .container { background: var(--surface-muted); border-radius: var(--radius-lg); padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); }
+  .skills .section__title { margin-bottom: var(--s-3); }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.625rem; list-style: none; padding: 0; }
+  .chips li {
+    background: var(--accent); color: #fff; border-radius: 10px;
+    padding: 0.55rem 0.95rem; font-size: var(--fs-small); font-weight: 500;
+  }
+
+  /* Mini product snippet on the Filtering card (real text, not a shrunken screenshot) */
+  .mini { aspect-ratio: 16 / 10; background: #fff; border-radius: var(--radius-md); padding: 1.1rem; display: grid; align-content: start; gap: 0.75rem; font-size: 0.875rem; color: #2c3346; overflow: hidden; }
+  .mini__bar { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+  .mini__ai { border: 1px solid #2f63d6; color: #2f63d6; border-radius: 999px; padding: 0.25rem 0.7rem; }
+  .mini__panel { display: grid; gap: 0.5rem; border: 1px solid #e3e6ec; border-radius: 10px; padding: 0.8rem; max-width: 20rem; box-shadow: 0 8px 20px -10px rgb(20 30 60 / 0.2); }
+  .mini__input { background: #eef3fd; border: 1px solid #7da0ea; border-radius: 6px; padding: 0.3rem 0.6rem; color: #6b7180; }
+  .mini__chips { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+  .mini__chips span { background: #e3f1f5; border-radius: 6px; padding: 0.15rem 0.5rem; }
+  .mini__tabs { display: flex; gap: 0.8rem; border-bottom: 1px solid #e3e6ec; }
+  .mini__tabs span { padding-bottom: 0.3rem; }
+  .mini__tabs .on { color: #2f63d6; border-bottom: 2px solid #2f63d6; }
+  .mini__row { color: #4a5163; }
+
+  .exp { display: grid; gap: var(--s-1); padding-block: var(--s-4); border-top: 1px solid var(--line); }
+  .exp__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-1) var(--s-3); align-items: baseline; }
+  .exp__when { color: var(--ink-3); font-size: var(--fs-small); white-space: nowrap; }
+  .exp ul { padding-left: 1.1rem; display: grid; gap: var(--s-1); margin-top: var(--s-1); max-width: 72ch; }
+</style>

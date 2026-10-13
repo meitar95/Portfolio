@@ -1,0 +1,27 @@
+---
+// Closing band. Instagram left out until confirmed as design work.
+---
+<footer class="footer" id="contact">
+  <div class="container footer__inner">
+    <h2>Thanks for visiting.</h2>
+    <p>Hiring for a product designer who can own complex systems end to end? Let's talk.</p>
+    <a class="btn btn--light" href="https://cal.com/meitar/30min">Book a 30-min call</a>
+    <ul class="footer__links">
+      <li><a href="https://www.linkedin.com/in/meitar-mechoresh-849669157">LinkedIn</a></li>
+      <li><a href="mailto:meitarxd@gmail.com">meitarxd@gmail.com</a></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    /* Softer than the old pure-black gradient: warm ink into deep slate */
+    background: linear-gradient(180deg, #2b2a3d 0%, #1f1b22 100%);
+    color: rgb(255 255 255 / 0.78);
+    padding-block: var(--s-7);
+  }
+  .footer__inner { display: grid; gap: var(--s-3); justify-items: start; }
+  .footer h2 { color: #fff; }
+  .footer__links { display: flex; flex-wrap: wrap; gap: var(--s-3); list-style: none; padding: 0; margin-top: var(--s-2); }
+  .footer__links a { color: #fff; text-underline-offset: 4px; padding-block: 0.6rem; display: inline-block; }
+</style>

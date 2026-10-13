@@ -1,0 +1,41 @@
+---
+// Top bar. Same three links on every screen size: no hamburger for 3 items.
+---
+<header class="nav">
+  <div class="container nav__inner">
+    <a class="nav__logo" href="/" aria-label="Meitar Mechoresh, home">
+      <span class="nav__full">Meitar Mechoresh</span>
+      <span class="nav__short" aria-hidden="true">MM</span>
+    </a>
+    <nav aria-label="Main">
+      <ul class="nav__links">
+        <li><a href="/#work">Work</a></li>
+        <li><a href="/#experience">Experience</a></li>
+        <li><a class="btn" href="https://cal.com/meitar/30min">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgb(249 248 245 / 0.8);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+  }
+  .nav__inner { display: flex; align-items: center; justify-content: space-between; min-height: 72px; }
+  .nav__logo { font-family: var(--serif); font-size: 1.25rem; color: var(--ink); text-decoration: none; }
+  .nav__short { display: none; }
+  .nav__links { display: flex; align-items: center; gap: var(--s-3); list-style: none; padding: 0; }
+  .nav__links a:not(.btn) {
+    color: var(--ink); text-decoration: none; font-weight: 500; font-size: var(--fs-small);
+    padding: 0.75rem 0;  /* 44px touch height */
+  }
+  .nav__links a:not(.btn):hover { color: var(--accent); }
+  @media (max-width: 520px) {
+    .nav__full { display: none; }
+    .nav__short { display: inline; }
+    .nav__links { gap: var(--s-2); }
+  }
+</style>

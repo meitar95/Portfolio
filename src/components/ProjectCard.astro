@@ -1,0 +1,51 @@
+---
+// Homepage project card. `tint` (1–5) steps through the baby-blue scale,
+// so the stack of cards reads as one soft gradient without using a gradient.
+interface Props {
+  title: string; text: string; href?: string; meta: string;
+  tint: number; cover?: string; coverAlt?: string; draft?: boolean;
+}
+const { title, text, href, meta, tint, cover, coverAlt = '', draft } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+<article class="card reveal" style={`--card-bg: var(--tint-${tint})`}>
+  <Tag class="card__link" href={href}>
+    <div class="card__text">
+      <p class="eyebrow">{meta}</p>
+      <h3>{title}</h3>
+      <p>{text}</p>
+      {draft
+        ? <span class="card__draft">Not migrated yet (preview only)</span>
+        : <span class="btn">Read case study <span aria-hidden="true">→</span></span>}
+    </div>
+    <div class="card__visual">
+      {cover
+        ? <img src={cover} alt={coverAlt} loading="lazy" decoding="async" />
+        : <slot name="visual"><div class="card__placeholder" aria-hidden="true"></div></slot>}
+    </div>
+  </Tag>
+</article>
+
+<style>
+  .card { background: var(--card-bg); border-radius: var(--radius-lg); }
+  .card__link {
+    display: grid; grid-template-columns: 1fr 1.15fr; gap: var(--s-5); align-items: center;
+    padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); color: inherit; text-decoration: none;
+    border-radius: inherit;
+  }
+  .card__text { display: grid; gap: var(--s-2); justify-items: start; }
+  .card__text p:not(.eyebrow) { color: var(--ink-2); }
+  .card__text .btn { margin-top: var(--s-1); }
+  a.card__link:hover .btn { background: #3a2c2c; }
+  a.card__link:hover .card__visual img { transform: scale(1.02); }
+  .card__visual { border-radius: var(--radius-md); overflow: hidden; }
+  .card__visual img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; transition: transform 0.6s var(--ease); }
+  .card__placeholder { aspect-ratio: 16 / 10; background: rgb(255 255 255 / 0.45); border-radius: var(--radius-md); }
+  .card__draft { font-size: var(--fs-small); color: var(--ink-3); border: 1px dashed var(--ink-3); border-radius: var(--radius-pill); padding: 0.4rem 0.9rem; }
+
+  /* Tablet + phone: visual on top, text below — and the image never disappears */
+  @media (max-width: 809px) {
+    .card__link { grid-template-columns: 1fr; gap: var(--s-3); }
+    .card__visual { order: -1; }
+  }
+</style>

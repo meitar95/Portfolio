@@ -1,0 +1,52 @@
+---
+// Every page uses this shell: <head>, nav, footer, and the one tiny script.
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { title: string; description: string; image?: string }
+const { title, description, image = '/og.png' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="theme-color" content="#f9f8f5" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Satoshi (body font). TODO: self-host the woff2 files once downloaded from fontshare.com -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500&display=swap" />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Nav />
+    <main id="main"><slot /></main>
+    <Footer />
+    <script>
+      // Fade sections in once as they enter the viewport. Nothing ever re-hides.
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -10% 0px' });
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
+
+<style>
+  .skip {
+    position: absolute; left: var(--gutter); top: -100px; z-index: 100;
+    background: var(--ink); color: #fff; padding: 0.75rem 1rem; border-radius: 8px;
+  }
+  .skip:focus { top: 1rem; }
+</style>
