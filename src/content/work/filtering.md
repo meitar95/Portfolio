@@ -30,7 +30,7 @@ solution:
     first-time viewer to a daily power user.
   points:
     - title: Ask AI
-      text: Describe what you want to see in plain language. Per-client suggestions get non-technical users started without learning any syntax.
+      text: Product asked for an AI helper; I decided where it lives and how it behaves. Instead of a side chat, it sits in the filter bar, so a plain-language request changes the table itself.
     - title: Simple / Advanced
       text: The essentials up front, full query depth one click away.
     - title: Grouped filters

@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-10-13 — Images, motion reel, content fixes
+
+**Added**
+- Card images for Sentrycs, Cybersixgill, Farmers and Herd (WebP, 800px + 1600px, ~12–60 KB each), with real alt text.
+- "More capabilities — Motion & illustration" section: the 6 Lottie animations from the
+  Framer site. The player loads only when the section is near, pauses off-screen, and
+  shows a still frame for reduced-motion visitors.
+
+**Changed**
+- Filtering → Ask AI: now credits the request to Product and shows Meitar's call on
+  placement and behavior (in the filter bar, changing the table, not a side chat).
+- Experience: Bank Leumi restored as a client name (text only, no screens).
+- Card images are 16:9 so logos are never cropped.
+
+**Pending**
+- Lottie files still load from Framer's CDN; swap in the originals before cancelling Framer.
+
 ## 2026-10-13 — Foundation + Filtering pilot
 
 **Added**

@@ -4,6 +4,8 @@ tagline: TODO
 card: Redesigned Afimilk's herd-management platform for milking, health and fertility data — restructured navigation and a new visual system, tested with farmers.
 order: 5
 draft: true
+cover: /images/herd
+coverAlt: "Afimilk herd-management concept with a Daily Tasks view for fertility and health"
 why: TODO
 role: TODO (confirm title)
 team: TODO

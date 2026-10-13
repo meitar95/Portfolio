@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import HeroGlow from '../components/HeroGlow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import MotionReel from '../components/MotionReel.astro';
 
 // Drafts show in local preview only; production gets finished work only.
 const showDrafts = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS === 'true';
@@ -26,7 +27,7 @@ const experience = [
     role: 'Product Designer', org: 'UI Human Factors', when: '2022 – 2025',
     about: 'Product design consultancy, complex B2B & B2C systems',
     points: [
-      'Designed end to end for enterprise clients across cybersecurity, medical, fintech and agri-tech, including Medtronic, Cybersixgill, Sentrycs and Afimilk.',
+      'Designed end to end for enterprise clients across cybersecurity, medical, fintech and agri-tech, including Medtronic, Bank Leumi, Cybersixgill, Sentrycs and Afimilk.',
       "Redesigned Afimilk's field app for dairy farmers: from near-zero usage to daily use across ~15,000 farms in 50+ countries.",
       'On Sentrycs, scaled a single concept into an 8-module design system, then, as sole designer, shipped it with engineering at ~90% fidelity.',
       'Built design systems from scratch across web and mobile, ran usability testing and owned Design QA.',
@@ -94,6 +95,8 @@ const experience = [
     </div>
   </section>
 
+  <MotionReel />
+
   <section class="section" id="experience" aria-labelledby="exp-title">
     <div class="container">
       <h2 id="exp-title" class="section__title">Experience</h2>
@@ -147,7 +150,7 @@ const experience = [
   }
 
   /* Mini product snippet on the Filtering card (real text, not a shrunken screenshot) */
-  .mini { aspect-ratio: 16 / 10; background: #fff; border-radius: var(--radius-md); padding: 1.1rem; display: grid; align-content: start; gap: 0.75rem; font-size: 0.875rem; color: #2c3346; overflow: hidden; }
+  .mini { aspect-ratio: 16 / 9; background: #fff; border-radius: var(--radius-md); padding: 1.1rem; display: grid; align-content: start; gap: 0.75rem; font-size: 0.875rem; color: #2c3346; overflow: hidden; }
   .mini__bar { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
   .mini__ai { border: 1px solid #2f63d6; color: #2f63d6; border-radius: 999px; padding: 0.25rem 0.7rem; }
   .mini__panel { display: grid; gap: 0.5rem; border: 1px solid #e3e6ec; border-radius: 10px; padding: 0.8rem; max-width: 20rem; box-shadow: 0 8px 20px -10px rgb(20 30 60 / 0.2); }

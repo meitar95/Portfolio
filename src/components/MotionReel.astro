@@ -1,0 +1,54 @@
+---
+// "More capabilities": a small reel of product animations (Lottie).
+// The player (~45 KB gzipped) loads only when this section nears the screen,
+// plays while visible, pauses off-screen, and shows a still frame for
+// visitors who prefer reduced motion.
+// TODO: replace the Framer CDN URLs with the original .json files in /public/lottie/
+// before Framer is cancelled.
+const base = 'https://framerusercontent.com/assets/';
+const files = [
+  'Pv5XOrHG6ZYvbSaqnnU4AQSvyhc', '6LZix3jk6QgSrtFDURUE9q1SYM', 'fvSKeIrkSMbYG7j97Bn7xrC3rM',
+  'VCcK2G04NgkzjYND0hr85hhIvw', 'YRuOwDptGv7Q7yRbjKOsk5OYWc', 'YkzUDWw2dyETnTLDW9V5aF2XPI',
+].map((id) => `${base}${id}.json`);
+---
+<section class="section reel" aria-labelledby="reel-title" data-reel>
+  <div class="container reel__inner">
+    <div class="reel__text">
+      <p class="eyebrow">More capabilities</p>
+      <h2 id="reel-title">Motion & illustration</h2>
+      <p>Trained in animation at Shenkar. At UI Human Factors I designed and animated product illustrations, including for Bank Leumi's mobile banking app.</p>
+    </div>
+    <ul class="reel__grid" aria-label="Product animation samples">
+      {files.map((src) => <li><div class="reel__tile" data-src={src} role="img" aria-label="Animated product illustration"></div></li>)}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>('[data-reel]');
+  if (section) {
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const load = new IntersectionObserver(async ([e]) => {
+      if (!e.isIntersecting) return;
+      load.disconnect();
+      const { default: lottie } = await import('lottie-web/build/player/lottie_light');
+      section.querySelectorAll<HTMLElement>('[data-src]').forEach((el) => {
+        const anim = lottie.loadAnimation({ container: el, renderer: 'svg', loop: true, autoplay: false, path: el.dataset.src! });
+        anim.addEventListener('DOMLoaded', () => (still ? anim.goToAndStop(0, true) : null));
+        if (!still) new IntersectionObserver(([v]) => (v.isIntersecting ? anim.play() : anim.pause())).observe(el);
+      });
+    }, { rootMargin: '400px' });
+    load.observe(section);
+  }
+</script>
+
+<style>
+  .reel__inner { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--s-5); align-items: center; }
+  .reel__text { display: grid; gap: var(--s-2); }
+  .reel__grid { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); }
+  .reel__tile { aspect-ratio: 19 / 17; background: #fff; border-radius: var(--radius-md); overflow: hidden; }
+  @media (max-width: 809px) {
+    .reel__inner { grid-template-columns: 1fr; gap: var(--s-4); }
+    .reel__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>

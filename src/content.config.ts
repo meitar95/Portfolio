@@ -14,7 +14,7 @@ const work = defineCollection({
     card: z.string().max(220),               // homepage card blurb
     order: z.number(),
     draft: z.boolean().default(false),       // drafts never reach production
-    cover: z.string().optional(),            // /images/... for the homepage card
+    cover: z.string().optional(),            // /images/<name> → <name>-800.webp + <name>-1600.webp
     coverAlt: z.string().optional(),
     visual: z.enum(['filtering-before-after']).optional(), // interactive hero visual
 

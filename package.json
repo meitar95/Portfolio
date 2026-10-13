@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@fontsource/lustria": "^5.3.0",
-    "astro": "^7.3.8"
+    "astro": "^7.3.8",
+    "lottie-web": "^5.13.0"
   }
 }

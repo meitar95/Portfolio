@@ -4,6 +4,8 @@ tagline: TODO
 card: A modular dashboard and design system for a dark-web threat-intelligence platform used by risk and cyber analysts.
 order: 3
 draft: true
+cover: /images/cybersixgill
+coverAlt: "Cybersixgill threat-hunting dashboard with alert counts, top threat actors and trending CVEs"
 why: TODO
 role: Product Designer
 team: TODO
