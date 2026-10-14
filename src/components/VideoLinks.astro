@@ -1,0 +1,37 @@
+---
+// Links to public videos, with YouTube thumbnails. No embedded player: nothing loads
+// from YouTube until the visitor clicks.
+interface Props { videos: { id: string; title: string }[]; source?: string }
+const { videos, source = 'Sentrycs on YouTube' } = Astro.props;
+---
+<ul class="vids">
+  {videos.map((v) => (
+    <li>
+      <a href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener">
+        <span class="vids__thumb">
+          <img src={`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`} alt="" width="480" height="360" loading="lazy" decoding="async" />
+          <span class="vids__play" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+        </span>
+        <span class="vids__text"><b>{v.title}</b><small>{source} ↗</small></span>
+      </a>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .vids { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-3); }
+  .vids a { display: grid; gap: var(--s-1); text-decoration: none; color: inherit; }
+  .vids__thumb { position: relative; display: block; border-radius: var(--radius-md); overflow: hidden; background: #151a33; }
+  .vids__thumb img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; transition: transform 0.5s var(--ease); }
+  .vids a:hover .vids__thumb img { transform: scale(1.03); }
+  .vids__play {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+    background: rgb(255 255 255 / 0.92); color: var(--ink); box-shadow: 0 6px 20px rgb(0 0 0 / 0.3);
+  }
+  .vids__text { display: grid; gap: 2px; }
+  .vids__text b { color: var(--ink); font-weight: 500; }
+  .vids__text small { color: var(--ink-3); font-size: 0.875rem; }
+  .vids a:hover b { color: var(--accent); }
+  @media (max-width: 560px) { .vids { grid-template-columns: 1fr; } }
+</style>

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-14 — Sentrycs: team voice + videos
+
+- The concept-deck brief now reads "we" (the deck was a team effort).
+- New `components/VideoLinks.astro`: YouTube thumbnail cards that open in a new tab
+  (no embedded player, so nothing heavy loads). Sentrycs links its two public videos
+  that feature the redesign.
+
 ## 2026-10-14 — Sentrycs case study
 
 - Built from the Sentrycs Figma file (Presentation + Style guide pages).
