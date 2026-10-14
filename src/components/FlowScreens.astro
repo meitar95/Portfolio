@@ -27,6 +27,7 @@ const single = (s: string) => s.endsWith('.webp') || s.endsWith('.png');
 
   <div class={`fs__stage${dark ? ' fs__stage--dark' : ''}`}>
     <div class="fs__screen">
+      {frame === 'desktop' && <button type="button" class="zoom-btn" data-fs-zoom><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> Enlarge</button>}
       {steps.map((s, i) => (
         <div class={`fs__shot${i === 0 ? ' is-on' : ''}`} data-shot={i}>
           {single(s.src)
@@ -60,6 +61,10 @@ const single = (s: string) => s.endsWith('.webp') || s.endsWith('.png');
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => go(i)));
     root.querySelector('[data-prev]')!.addEventListener('click', () => go(cur - 1));
+    root.querySelector('[data-fs-zoom]')?.addEventListener('click', () => {
+      const img = shots[cur].querySelector('img')!;
+      dispatchEvent(new CustomEvent('zoom', { detail: [{ src: img.getAttribute('src')!, label: tabs[cur].querySelector('b')!.textContent! }] }));
+    });
     root.querySelector('[data-next]')!.addEventListener('click', () => go(cur + 1));
     root.addEventListener('keydown', (e) => {
       if (!(e.target as HTMLElement).matches('[data-step]')) return;

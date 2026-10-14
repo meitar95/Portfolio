@@ -3,6 +3,7 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import Zoom from '../components/Zoom.astro';
 
 interface Props { title: string; description: string; image?: string }
 const { title, description, image = '/og.png' } = Astro.props;
@@ -33,6 +34,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <Nav />
     <main id="main"><slot /></main>
     <Footer />
+    <Zoom />
     <script>
       // Fade sections in once as they enter the viewport. Nothing ever re-hides.
       // Anything already on screen at load (or after a jump link) shows instantly.

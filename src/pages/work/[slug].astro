@@ -80,7 +80,7 @@ const Visual = d.visual ? visuals[d.visual] : null;
     {next && next.id !== entry.id && (
       <nav class="container cs__next" aria-label="Next case study">
         <p class="eyebrow">Next case study</p>
-        <a href={`/work/${next.id}/`}>{next.data.title} <span aria-hidden="true">→</span></a>
+        <a href={`/work/${next.id}/`}>{next.data.title.split(' ').slice(0, -1).join(' ')} <span class="nowrap">{next.data.title.split(' ').at(-1)}&nbsp;<span aria-hidden="true">→</span></span></a>
       </nav>
     )}
   </article>
@@ -143,7 +143,16 @@ const Visual = d.visual ? visuals[d.visual] : null;
   @media (max-width: 809px) {
     .cs__meta { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .cs__outcomes { grid-template-columns: 1fr; gap: var(--s-1); }
-    .cs__outcomes li { grid-template-columns: 5.5rem 1fr; align-items: center; gap: var(--s-2); padding: var(--s-2); }
-    .cs__outcomes strong { font-size: 1.5rem; }
+    .cs__outcomes li { grid-template-columns: minmax(5.5rem, auto) 1fr; align-items: center; gap: var(--s-2); padding: var(--s-2); }
+    .cs__outcomes strong { font-size: 1.5rem; white-space: nowrap; }
+    .cs__quote p { font-size: var(--fs-lead); }
   }
+  /* Phones: one fact per row (label left, value right) so long roles and teams don't
+     turn into tall, ragged half-width columns */
+  @media (max-width: 600px) {
+    .cs__meta { grid-template-columns: 1fr; gap: var(--s-2); }
+    .cs__meta > div { display: grid; grid-template-columns: 5.5rem 1fr; gap: var(--s-2); align-items: baseline; }
+    .cs__meta dd { margin: 0; }
+  }
+  .nowrap { white-space: nowrap; }
 </style>

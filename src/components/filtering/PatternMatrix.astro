@@ -33,6 +33,11 @@ const modules: [string, string[]][] = [
       </div>
     ))}
   </div>
+  <ul class="mlist">
+    {modules.map(([m, used]) => (
+      <li><span>{m}</span><span class="mlist__p">{used.map((id) => { const p = patterns.find((x) => x.id === id)!; return <span><i class={`mark mark--${id}`}></i>{p.name}</span>; })}</span></li>
+    ))}
+  </ul>
   <figcaption><b>6 modules, 4 patterns.</b> Two modules mixed two patterns on the same screen.</figcaption>
 </figure>
 
@@ -48,6 +53,18 @@ const modules: [string, string[]][] = [
   .matrix__row--head span { display: grid; gap: 2px; font-size: 0.875rem; color: var(--ink); line-height: 1.25; }
   .matrix__row--head b { font-weight: 500; }
   .matrix__row--head small { color: var(--ink-3); font-size: 0.875rem; }
+  /* Phones: the grid doesn't fit, so each module lists the pattern(s) it used */
+  .mlist { display: none; }
+  @media (max-width: 600px) {
+    .matrix { display: none; }
+    .mlist { display: grid; list-style: none; margin: 0; padding: var(--s-1) var(--s-3); background: var(--bg); border-radius: var(--radius-md); }
+    .mlist li { display: grid; grid-template-columns: 7.5rem 1fr; gap: var(--s-2); align-items: start; padding: 0.7rem 0; border-top: 1px solid var(--line); }
+    .mlist li:first-child { border-top: 0; }
+    .mlist li > span:first-child { color: var(--ink); font-weight: 500; }
+    .mlist__p { display: grid; gap: 0.3rem; font-size: var(--fs-small); color: var(--ink-2); }
+    .mlist__p span { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .mlist .mark { width: 10px; height: 10px; flex: none; }
+  }
   .mark { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
   .mark--off { width: 6px; height: 6px; background: var(--line); }
   .mark--a { background: #3f6c88; }

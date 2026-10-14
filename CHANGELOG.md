@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-14 · Mobile review fixes
+
+- New shared full-screen viewer (`Zoom.astro`): every desktop flow screen and every
+  before/after slider gets an **Enlarge** button. On phones the screen opens at a readable
+  width and can be swiped and pinched; sliders open Before and After stacked.
+- Case study header on phones: Role / Team / Timeline / Platform are one row each (label
+  left, value right) instead of two narrow, ragged columns.
+- Outcome numbers never wrap ("10 → 10K" stayed on two lines before).
+- "What we learned" quote is a size smaller on phones.
+- Filtering pattern matrix: on phones it becomes a list (module → pattern used), since the
+  4-column grid was cut off.
+- "Next case study" link keeps its last word and arrow together.
+
 ## 2026-10-14 · Filtering: mock table instead of grey placeholders
 
 - Prototype: the grey bars are now a faded findings table (finding, severity, status, cloud)
