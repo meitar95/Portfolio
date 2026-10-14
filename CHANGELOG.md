@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-14 — Card buttons go light
+
+- Black buttons are now only for "Contact me". "Read case study" uses the light button
+  (white, steel-blue dot that grows into an arrow) with a soft shadow so it holds on tinted cards.
+
 ## 2026-10-14 — Hero intro
 
 - Repositioned around security and complex B2B: "Founding designer at Huskeys, building WAF and API
