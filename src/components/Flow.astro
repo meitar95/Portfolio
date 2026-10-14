@@ -1,0 +1,96 @@
+---
+/**
+ * Flow chart for any case study (MDX). One or more lanes, each a row of steps.
+ * Horizontal on wide screens, vertical on phones. No library, no canvas.
+ *
+ *   <Flow lanes={[
+ *     { label: 'Before', tone: 'before', steps: [
+ *       { t: 'Open the app' },
+ *       { t: 'Find the cow', d: 'Search or scroll', exit: 'Left without logging' },
+ *     ]},
+ *     { label: 'After', tone: 'after', steps: [ ... ] },
+ *   ]} caption="..." />
+ *
+ * Step fields: t (title), d (detail, optional), exit (where people dropped off,
+ * optional), kind: 'step' | 'decision' | 'end' (optional).
+ * Lane tone: 'before' (muted) | 'after' (accent) | 'neutral' (default).
+ */
+type Step = { t: string; d?: string; exit?: string; kind?: 'step' | 'decision' | 'end' };
+type Lane = { label?: string; tone?: 'before' | 'after' | 'neutral'; steps: Step[] };
+interface Props { lanes: Lane[]; caption?: string }
+const { lanes, caption } = Astro.props;
+// Steps after the first drop-off are faded: fewer people ever got there.
+const firstExit = (lane: Lane) => lane.steps.findIndex((s) => s.exit);
+---
+<figure class="flow">
+  {lanes.map((lane) => (
+    <div class={`flow__lane flow__lane--${lane.tone ?? 'neutral'}`}>
+      {lane.label && <p class="flow__label">{lane.label}</p>}
+      <ol class="flow__steps" style={`--n: ${lane.steps.length}`}>
+        {lane.steps.map((s, i) => (
+          <li class={`flow__step flow__step--${s.kind ?? 'step'}${firstExit(lane) > -1 && i > firstExit(lane) ? ' is-after-exit' : ''}`}>
+            <div class="flow__node">
+              <b>{s.t}</b>
+              {s.d && <span>{s.d}</span>}
+            </div>
+            {s.exit && <p class="flow__exit"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4 4l8 8M12 6v6H6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>{s.exit}</p>}
+          </li>
+        ))}
+      </ol>
+    </div>
+  ))}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .flow { display: grid; gap: var(--s-3); margin: 0; }
+  .flow figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .flow__lane { display: grid; gap: var(--s-1); }
+  .flow__label { font-size: var(--fs-small); font-weight: 500; color: var(--ink-3); }
+
+  /* Row of equal steps; the arrow between nodes is the li::before of every step but the first */
+  .flow__steps {
+    list-style: none; padding: 0; margin: 0;
+    display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 28px;
+  }
+  .flow__step { position: relative; display: grid; gap: 6px; align-content: start; }
+  .flow__step + .flow__step::before {
+    content: ''; position: absolute; left: -22px; top: 1.4rem; width: 16px; height: 2px; background: var(--ink-3); opacity: 0.5;
+  }
+  .flow__step + .flow__step::after {
+    content: ''; position: absolute; left: -10px; top: calc(1.4rem - 4px); border: 5px solid transparent; border-left-color: var(--ink-3); opacity: 0.5;
+  }
+
+  .flow__node {
+    display: grid; gap: 2px; padding: 0.75rem 0.875rem; border-radius: 12px;
+    background: var(--bg); border: 1px solid var(--line); min-height: 2.8rem;
+  }
+  .flow__node b { font-weight: 500; color: var(--ink); line-height: 1.3; }
+  .flow__node span { font-size: 0.875rem; color: var(--ink-3); line-height: 1.4; }
+  .flow__step--decision .flow__node { border-style: dashed; }
+  .flow__step--end .flow__node { background: var(--ink); border-color: var(--ink); }
+  .flow__step--end .flow__node b { color: #fff; }
+  .flow__step--end .flow__node span { color: rgb(255 255 255 / 0.75); }
+
+  .flow__lane--after .flow__node { background: var(--tint-1); border-color: var(--tint-4); }
+  .flow__lane--after .flow__step--end .flow__node { background: var(--accent); border-color: var(--accent); }
+  .flow__lane--before .flow__node { background: transparent; }
+  .flow__lane--before .flow__node b { color: var(--ink-2); }
+  .flow__lane--before .flow__step--end .flow__node { background: transparent; border: 1.5px dashed var(--ink-3); }
+  .flow__lane--before .flow__step--end .flow__node b { color: var(--ink-2); }
+  .flow__lane--before .flow__step--end .flow__node span { color: var(--ink-3); }
+  .flow__step.is-after-exit .flow__node { opacity: 0.55; }
+
+  .flow__exit {
+    display: inline-flex; align-items: center; gap: 0.35rem; justify-self: start;
+    padding: 0.2rem 0.55rem; border-radius: var(--radius-pill);
+    background: #fbe7e1; color: #8a3b2a; font-size: 0.875rem; font-weight: 500;
+  }
+
+  /* Phones and narrow columns: stack vertically, arrows point down */
+  @media (max-width: 720px) {
+    .flow__steps { grid-template-columns: 1fr; gap: 22px; }
+    .flow__step + .flow__step::before { left: 1.25rem; top: -18px; width: 2px; height: 12px; }
+    .flow__step + .flow__step::after { left: calc(1.25rem - 4px); top: -8px; border: 5px solid transparent; border-top-color: var(--ink-3); }
+  }
+</style>

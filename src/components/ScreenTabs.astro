@@ -1,0 +1,64 @@
+---
+/**
+ * A few full screens, one at a time, behind tabs. Shared by any case study.
+ * Each screen: src = base path without the size suffix (`${src}-800.webp`, `-1600.webp`).
+ *
+ *   <ScreenTabs screens={[{ src: '/images/x/dashboard', label: 'Dashboard', note: '...', alt: '...' }]} w={1600} h={876} />
+ */
+type Screen = { src: string; label: string; note: string; alt: string };
+interface Props { screens: Screen[]; w: number; h: number; caption?: string; dark?: boolean }
+const { screens, w, h, caption, dark = false } = Astro.props;
+---
+<figure class="st" data-st style={`--ratio: ${w} / ${h}`}>
+  <div class="st__top">
+    <div class="st__tabs" role="tablist" aria-label="Choose a screen">
+      {screens.map((s, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-i={i} data-note={s.note}>{s.label}</button>)}
+    </div>
+    <p class="st__note" data-note-out aria-live="polite">{screens[0].note}</p>
+  </div>
+  <div class={`st__stage${dark ? ' st__stage--dark' : ''}`}>
+    {screens.map((s, i) => (
+      <img src={`${s.src}-1600.webp`} srcset={`${s.src}-800.webp 800w, ${s.src}-1600.webp 1600w`} sizes="(max-width: 1080px) 100vw, 1080px"
+        width={w} height={h} alt={s.alt} class={i === 0 ? 'is-on' : ''} data-shot={i}
+        loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+    ))}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-st]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-i]')];
+    const shots = [...root.querySelectorAll<HTMLImageElement>('[data-shot]')];
+    const note = root.querySelector<HTMLElement>('[data-note-out]')!;
+    tabs.forEach((b) => b.addEventListener('click', () => {
+      if (b.getAttribute('aria-selected') === 'true') return;
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t === b)));
+      shots.forEach((s) => s.classList.toggle('is-on', s.dataset.shot === b.dataset.i));
+      note.classList.add('is-out');
+      setTimeout(() => { note.textContent = b.dataset.note!; note.classList.remove('is-out'); }, 220);
+    }));
+  });
+</script>
+
+<style>
+  .st { display: grid; gap: var(--s-3); margin: 0; }
+  .st figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .st__top { display: grid; gap: var(--s-2); justify-items: start; }
+  .st__tabs { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 4px; background: var(--tint-1); border-radius: var(--radius-pill); }
+  .st__tabs button {
+    border: 0; background: none; cursor: pointer; min-height: 40px; padding: 0 1.1rem; border-radius: var(--radius-pill);
+    font-size: var(--fs-small); font-weight: 500; color: var(--ink-3); transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  }
+  .st__tabs button[aria-selected='true'] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgb(31 21 21 / 0.08), 0 2px 8px -2px rgb(31 21 21 / 0.12); }
+  .st__note { color: var(--ink); transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), filter 0.45s var(--ease); }
+  .st__note.is-out { opacity: 0; transform: translateY(4px); filter: blur(3px); transition-duration: 0.2s; }
+  .st__stage {
+    position: relative; aspect-ratio: var(--ratio); overflow: hidden; border-radius: var(--radius-md);
+    background: #f4f6f8; box-shadow: 0 16px 40px -16px rgb(16 22 42 / 0.35); border: 1px solid var(--line);
+  }
+  .st__stage--dark { background: #0d1a33; border-color: transparent; }
+  .st__stage img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: 0; transition: opacity 0.45s var(--ease); }
+  .st__stage img.is-on { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .st__note, .st__stage img { transition: none; } }
+</style>

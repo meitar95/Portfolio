@@ -1,0 +1,65 @@
+---
+// The rule behind every dashboard: a 12 × 9 grid inside the search bar's edges.
+// 3 columns × 3 rows = 1 small widget. 16px between widgets. 130px left, 50px right.
+// Layout below follows the real dashboard from the design file, snapped to that grid.
+const widgets = [
+  { t: 'New alerts', c: '1 / 7', r: '1 / 4' },
+  { t: 'Top malware', c: '1 / 4', r: '4 / 7' },
+  { t: 'Top malware', c: '4 / 7', r: '4 / 7' },
+  { t: 'Organization assets', c: '1 / 7', r: '7 / 10' },
+  { t: 'Reports of the day', c: '7 / 10', r: '1 / 10' },
+  { t: 'News', c: '10 / 13', r: '1 / 10' },
+];
+---
+<figure class="wg">
+  <div class="wg__frame" role="img" aria-label="Dashboard grid: 12 columns and 9 rows inside the search bar edges, with six widgets placed on it">
+    <span class="wg__m wg__m--l">130</span>
+    <div class="wg__search">Search bar edges · 1740</div>
+    <div class="wg__grid">
+      <div class="wg__cells" aria-hidden="true">{Array.from({ length: 108 }).map(() => <i></i>)}</div>
+      {widgets.map((w) => <b style={`grid-column: ${w.c}; grid-row: ${w.r}`}>{w.t}</b>)}
+    </div>
+    <span class="wg__m wg__m--r">50</span>
+  </div>
+  <ul class="wg__rules">
+    <li><strong>3 × 3</strong><span>columns × rows make one small widget; bigger widgets are multiples</span></li>
+    <li><strong>16px</strong><span>between every widget, everywhere</span></li>
+    <li><strong>130 / 50</strong><span>left and right margins, so widgets line up with the search bar</span></li>
+  </ul>
+</figure>
+
+<style>
+  .wg { display: grid; gap: var(--s-3); margin: 0; }
+  .wg__frame {
+    position: relative; display: grid; grid-template-columns: 7% 1fr 2.6%; grid-template-rows: auto 1fr; gap: 10px 0;
+    padding: var(--s-3) 0; border-radius: var(--radius-md); background: #0d1a33; color: #c9d6ea; aspect-ratio: 16 / 9;
+  }
+  .wg__m { grid-row: 1 / -1; display: grid; place-items: center; font-size: 0.875rem; color: #6f86ad; border-inline: 1px dashed rgb(111 134 173 / 0.4); }
+  .wg__m--l { grid-column: 1; border-left: 0; }
+  .wg__m--r { grid-column: 3; border-right: 0; }
+  .wg__search {
+    grid-column: 2; grid-row: 1; padding: 0.4rem 0.75rem; border: 1px solid rgb(201 214 234 / 0.6); border-radius: 6px;
+    font-size: 0.875rem; color: #9fb2d3;
+  }
+  .wg__grid, .wg__cells {
+    display: grid; grid-template-columns: repeat(12, 1fr); grid-template-rows: repeat(9, 1fr); gap: 4px;
+  }
+  .wg__grid { grid-column: 2; grid-row: 2; position: relative; }
+  .wg__cells { position: absolute; inset: 0; }
+  .wg__cells i { border-radius: 2px; background: rgb(111 134 173 / 0.12); }
+  .wg__grid b {
+    display: flex; align-items: flex-start; padding: 0.5rem 0.6rem; border-radius: 6px; z-index: 1;
+    background: linear-gradient(160deg, rgb(37 99 235 / 0.35), rgb(20 40 80 / 0.85)); border: 1px solid rgb(120 160 230 / 0.45);
+    font-size: 0.875rem; font-weight: 500; color: #fff; line-height: 1.25;
+  }
+  .wg__rules { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); }
+  .wg__rules li { display: grid; gap: 2px; }
+  .wg__rules strong { font-weight: 500; font-size: 1.25rem; color: var(--ink); }
+  .wg__rules span { font-size: var(--fs-small); color: var(--ink-3); }
+  @media (max-width: 640px) {
+    .wg__rules { grid-template-columns: 1fr; }
+    .wg__grid b { font-size: 0; padding: 0; }
+    .wg__frame { aspect-ratio: 4 / 3; }
+    .wg__m { font-size: 0; }
+  }
+</style>

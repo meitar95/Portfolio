@@ -1,0 +1,84 @@
+---
+title: A herd system built around the job
+tagline: "Everyone said it doesn't look good. Underneath was a cluttered system new users couldn't find their way around."
+card: Redesigned Afimilk's herd-management platform for milking, health and fertility data — restructured navigation and a new visual system, tested with farmers.
+order: 5
+cover: /images/herd
+coverAlt: "Afimilk herd-management concept with a Daily Tasks view for fertility and health"
+visual: herd-before-after
+
+why: >-
+  Afimilk's herd system runs 15,000+ dairy farms in 50+ countries and tracks more
+  than 10 million cows: milk yield, fat and protein, conductivity, the signals that
+  catch mastitis or ketosis early. Its users are farm directors and farmers aged 30
+  to 70 who spend most of the day outdoors and come to the office to log data and
+  check on the herd. If they can't find what they need, the data never turns into action.
+role: Detail designer, promoted to lead designer during the project
+team: Head of user research, UX specialist, UI art director, project manager, veterinarian consultant, engineers
+timeline: ~3 years · the last as lead designer
+platform: Agri-tech, B2B web
+
+outcomes:
+  - value: "15K+"
+    label: dairy farms in 50+ countries on the redesigned system
+  - value: "Beta"
+    label: testing with real users confirmed onboarding got easier
+  - value: "Lead"
+    label: promoted to lead designer, then led the field app redesign
+
+solution:
+  summary: >-
+    Every screen focused on the job. Minimal, organized, data first. Features built
+    for the office that farmers didn't use in the field were cleaned out.
+  points:
+    - title: Data first
+      text: Decoration out, numbers in. Tables carry more columns and still read calmer.
+    - title: Progress, not counts
+      text: Tasks grouped by type, each showing what's done and what's left today.
+    - title: Built from use, not assumptions
+      text: Feedback showed what farmers don't use. Office-only features were removed.
+    - title: One language
+      text: Dashboard, herd view, tasks and settings share one set of components and colors.
+
+learned: >-
+  Ask what people don't use, not only what they want. Afimilk's close contact with
+  farmers showed us which features only made sense in the office, and cutting them
+  did more for new users than anything we added.
+---
+
+import Flow from '../../components/Flow.astro';
+import DetailCompare from '../../components/herd/DetailCompare.astro';
+import ScreenTabs from '../../components/ScreenTabs.astro';
+
+## The problem
+
+The system had tried to look trendy and elegant, and got lost in graphic add-ons that didn't age well. New users struggled to find key features, and the design system couldn't carry the amount of data on screen.
+
+<Flow lanes={[
+  { label: 'How we got to a brief', steps: [
+    { t: '"It doesn\'t look good"', d: 'Honest feedback from clients and management' },
+    { t: 'Name the real issue', d: 'Outdated, cluttered, too many add-ons' },
+    { t: 'What does look good?', d: 'The team named Monday, Jira, Adobe CC, Figma' },
+    { t: 'The brief', d: 'Minimal, organized, elegant. Data first.', kind: 'end' },
+  ]},
+]} />
+
+## The evidence
+
+### Two details, zoomed in
+
+The page farmers open every morning, Daily Tasks, shows the approach best: keep the data, remove what makes it hard to read.
+
+<DetailCompare />
+
+### One language, every screen
+
+The same components and colors carry from the dashboard to a single cow's history to settings.
+
+<ScreenTabs w={1600} h={900} caption="From the 2023 concept work. Demo data." screens={[
+  { src: '/images/herd/dashboard', label: 'Dashboard', note: 'Fertility, health and herd routine at a glance, with today\'s tasks on the left.', alt: 'Dashboard with fertility and health rings, herd routine chart and KPI bars' },
+  { src: '/images/herd/herdview', label: 'Herd view', note: 'One cow: status, a 10-day chart of eating, rumination and heat, and the next action.', alt: 'Herd view of a single cow with pregnancy timeline, 10-day chart and fertility card' },
+  { src: '/images/herd/settings', label: 'Settings', note: 'Task rules in plain controls: switches, sliders and steppers.', alt: 'Settings for tasks with toggles, thresholds and a details panel' },
+]} />
+
+**Result:** beta users confirmed in testing that onboarding improved. We used that data to make the case that the field workers' app needed the same care, and [I led that project next](/work/farmers/).

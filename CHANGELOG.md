@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-10-14 — Flow chart, Cybersixgill and Herd
+
+**Template**
+- New `components/Flow.astro`: a flow chart any case study can use in MDX. One or more
+  lanes (e.g. Before / After), steps with an optional detail, a red "drop-off" tag
+  where people left, faded steps after it, and a highlighted end step. Horizontal on
+  desktop, vertical on phones. Used in Farmers, Cybersixgill and Herd.
+- The drag-to-compare slider is now shared (`components/BeforeAfterSlider.astro`);
+  Sentrycs and Herd both use it. New shared `components/ScreenTabs.astro`.
+
+**Cybersixgill** (published) — from the C6G Figma page
+- Hero: Dashboard / Asset inventory / Monitoring policies (browser bar cropped out).
+- Same widget at 10 and 10k alerts; the 3×3 widget grid drawn as a diagram; the
+  inventory flow as a flow chart; the shipped dashboard from Cybersixgill's site.
+
+**Herd** (published) — from the "Presenting" slides and the 2023 concept file
+- Hero: Daily Tasks before/after slider. Problem → brief as a flow chart.
+- Calendar and task list zoomed before/after; dashboard, herd view and settings tabs.
+- Links to the Farmers study (the field app it led to).
+
 ## 2026-10-14 — Screen anatomy fits one screen
 
 - "One screen, broken into parts": the screenshot's width is now capped by the window

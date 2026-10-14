@@ -12,6 +12,8 @@ import Base from '../../layouts/Base.astro';
 import FilterBeforeAfter from '../../components/filtering/FilterBeforeAfter.astro';
 import SentrycsSlider from '../../components/sentrycs/BeforeAfterSlider.astro';
 import FarmersBeforeAfter from '../../components/farmers/FarmersBeforeAfter.astro';
+import C6gScreens from '../../components/cybersixgill/C6gScreens.astro';
+import HerdSlider from '../../components/herd/HerdSlider.astro';
 
 export async function getStaticPaths() {
   const all = (await getCollection('work', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
@@ -22,7 +24,9 @@ const { entry, next } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
 const visuals = { 'filtering-before-after': FilterBeforeAfter, 'sentrycs-before-after': SentrycsSlider,
-  'farmers-before-after': FarmersBeforeAfter };
+  'farmers-before-after': FarmersBeforeAfter,
+  'cybersixgill-screens': C6gScreens,
+  'herd-before-after': HerdSlider };
 const Visual = d.visual ? visuals[d.visual] : null;
 ---
 <Base title={`${d.title} — Meitar Mechoresh`} description={d.tagline}>

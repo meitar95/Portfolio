@@ -1,0 +1,84 @@
+---
+title: Designing for 10 alerts and 10,000
+tagline: One dashboard system for a dark-web threat intelligence platform, built to hold up at ten alerts or ten thousand.
+card: A modular dashboard and design system for a dark-web threat-intelligence platform used by risk and cyber analysts.
+order: 3
+cover: /images/cybersixgill
+coverAlt: "Cybersixgill threat-hunting dashboard with alert counts, top threat actors and trending CVEs"
+visual: cybersixgill-screens
+
+why: >-
+  Cybersixgill collected threat intelligence from the deep and dark web: forums,
+  markets, paste sites, chat apps. Analysts came to it with one question: what
+  threatens my organization right now? The same screens had to answer it for a
+  five-person security team and for an enterprise with thousands of alerts and
+  more than eleven thousand assets to watch.
+role: Product Designer, through UI – Human Factors
+team: Design team at UI – Human Factors, Cybersixgill product and engineering
+timeline: ~1 year · 2022
+platform: Threat intelligence, B2B web
+
+outcomes:
+  - value: "10 → 10K"
+    label: every widget designed to hold numbers from ten to ten thousand
+  - value: "1 grid"
+    label: for every dashboard widget, so new ones drop in without a redesign
+  - value: "11K+"
+    label: assets the inventory was designed to manage, ranked by risk
+
+solution:
+  summary: >-
+    A dashboard built from widgets on one strict grid, every widget drawn at three
+    data volumes, and an asset inventory that lets teams decide once what to monitor.
+  points:
+    - title: One widget grid
+      text: 3 columns by 3 rows make a small widget, 16px between them, aligned to the search bar.
+    - title: Built for volume
+      text: Each widget drawn at regular, 100+ and 1k+ data, so big numbers never break a layout.
+    - title: Inventory, ranked by risk
+      text: Domains, IPs, executives and more in one table, with what's new and what's at risk on top.
+    - title: Policies, not chores
+      text: Teams set what to watch and what to exclude once, instead of cleaning the list by hand.
+
+learned: >-
+  Security dashboards are judged at their worst moment, the day the numbers spike.
+  Designing every widget for the biggest customer first, then checking it still
+  felt calm for the smallest, kept one system working for both.
+---
+
+import Flow from '../../components/Flow.astro';
+import NumberScale from '../../components/cybersixgill/NumberScale.astro';
+import WidgetGrid from '../../components/cybersixgill/WidgetGrid.astro';
+import RefImage from '../../components/RefImage.astro';
+
+## The problem
+
+A threat feed is only useful if it fits on screen. The number in a widget could be 10 for one customer and 10,000 for the next, and the layout had to survive both.
+
+<NumberScale />
+
+## The evidence
+
+### One grid for every widget
+
+Instead of designing dashboards screen by screen, we set one rule every widget follows. New widgets drop into the grid without a redesign.
+
+<WidgetGrid />
+
+### An inventory that cleans itself
+
+Attack surface monitoring added thousands of assets per customer. The flow we designed keeps that list useful without someone pruning it by hand.
+
+<Flow lanes={[
+  { tone: 'after', steps: [
+    { t: 'Scan finds assets', d: 'Domains, IPs, executives, BINs and more' },
+    { t: 'Inventory', d: 'New and at-risk items on top' },
+    { t: 'Inspect one', d: 'Location, cloud, related domains' },
+    { t: 'Act', d: 'Remove, or report a false positive' },
+    { t: 'Set a policy', d: 'What to watch, what to exclude', kind: 'end' },
+  ]},
+]} />
+
+**Result:** the visual language carried into the product Cybersixgill shipped and showed on its own site:
+
+<RefImage src="/images/cybersixgill/shipped" alt="Cybersixgill's threat hunting dashboard on a laptop, as shown on the company's website" caption="As shown on Cybersixgill's public website, 2023." />

@@ -16,7 +16,7 @@ const work = defineCollection({
     draft: z.boolean().default(false),       // drafts never reach production
     cover: z.string().optional(),            // /images/<name> → <name>-800.webp + <name>-1600.webp
     coverAlt: z.string().optional(),
-    visual: z.enum(['filtering-before-after', 'sentrycs-before-after', 'farmers-before-after']).optional(), // interactive hero visual
+    visual: z.enum(['filtering-before-after', 'sentrycs-before-after', 'farmers-before-after', 'cybersixgill-screens', 'herd-before-after']).optional(), // interactive hero visual
 
     // 1. Why it mattered (business angle)
     why: z.string(),

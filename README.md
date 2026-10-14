@@ -20,6 +20,10 @@ hosted on Vercel. Every change pushed to GitHub republishes the site automatical
 | Sentrycs slider + visuals | `src/components/sentrycs/*.astro`, images in `public/images/sentrycs/` |
 | Farmers before/after + visuals | `src/components/farmers/*.astro`, images in `public/images/farmers/` |
 | YouTube link cards | `src/components/VideoLinks.astro` |
+| Before/after drag slider (any case study) | `src/components/BeforeAfterSlider.astro` |
+| Screens behind tabs (any case study) | `src/components/ScreenTabs.astro` |
+| Cybersixgill / Herd visuals | `src/components/cybersixgill/*.astro`, `src/components/herd/*.astro` |
+| Flow chart (any case study) | `src/components/Flow.astro` — usage example at the top of the file |
 | Icons (Untitled UI style) | `src/components/icons.ts`, `Icon.astro` |
 | Reference image with caption | `src/components/RefImage.astro` |
 | Images | `public/images/` |

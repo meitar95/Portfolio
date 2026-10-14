@@ -1,0 +1,48 @@
+---
+// Two details from the Daily Tasks page, zoomed: what changed and why. Crops of the real frames.
+const rows = [
+  {
+    id: 'cal', t: 'Calendar', before: 'A full month grid with colored dots. Big, and still hard to read.',
+    after: 'A week strip with the number of tasks per day. Today is one tap away.',
+    bw: 403, bh: 295, aw: 260, ah: 117,
+  },
+  {
+    id: 'groups', t: 'Task list', before: 'A colored box per task with a count. No sense of how much is done.',
+    after: 'Tasks grouped by type, each with progress: done, and how many are left.',
+    bw: 180, bh: 340, aw: 260, ah: 278,
+  },
+];
+---
+<div class="dc">
+  {rows.map((r) => (
+    <figure class="dc__row">
+      <figcaption class="dc__t">{r.t}</figcaption>
+      <div class="dc__pair">
+        <div class="dc__side">
+          <span class="dc__tag">Before</span>
+          <div class="dc__shot"><img src={`/images/herd/${r.id}-before.webp`} width={r.bw} height={r.bh} loading="lazy" decoding="async" alt={`${r.t} before the redesign`} /></div>
+          <p>{r.before}</p>
+        </div>
+        <div class="dc__side dc__side--after">
+          <span class="dc__tag">After</span>
+          <div class="dc__shot"><img src={`/images/herd/${r.id}-after.webp`} width={r.aw} height={r.ah} loading="lazy" decoding="async" alt={`${r.t} after the redesign`} /></div>
+          <p>{r.after}</p>
+        </div>
+      </div>
+    </figure>
+  ))}
+</div>
+
+<style>
+  .dc { display: grid; gap: var(--s-4); }
+  .dc__row { display: grid; gap: var(--s-2); margin: 0; }
+  .dc__t { font-weight: 500; color: var(--ink); }
+  .dc__pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); }
+  .dc__side { display: grid; grid-template-rows: auto 1fr auto; gap: var(--s-1); padding: var(--s-2); border-radius: var(--radius-md); background: var(--bg); }
+  .dc__side--after { background: var(--tint-1); }
+  .dc__tag { font-size: var(--fs-small); font-weight: 500; color: var(--ink-3); }
+  .dc__shot { display: grid; place-items: center; min-height: 180px; padding: var(--s-2); border-radius: 12px; background: #fff; }
+  .dc__shot img { max-width: 100%; height: auto; display: block; }
+  .dc__side p { font-size: var(--fs-small); color: var(--ink-2); }
+  @media (max-width: 560px) { .dc__pair { grid-template-columns: 1fr; } }
+</style>

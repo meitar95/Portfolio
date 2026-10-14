@@ -51,10 +51,26 @@ import DataFindings from '../../components/farmers/DataFindings.astro';
 import FieldNotes from '../../components/farmers/FieldNotes.astro';
 import TagFlow from '../../components/farmers/TagFlow.astro';
 import GrowthChart from '../../components/farmers/GrowthChart.astro';
+import Flow from '../../components/Flow.astro';
 
 ## The problem
 
 The app could do a lot. Farmers opened it, found a cow, and left without logging anything. The task that makes the whole system work was the one nobody finished.
+
+<Flow lanes={[
+  { label: 'Before: the flow that mattered, and where it broke', tone: 'before', steps: [
+    { t: 'Open the app', d: 'Lands on a dashboard of counters' },
+    { t: 'Find the cow', d: 'Search, or scroll a list', exit: 'Most left here' },
+    { t: 'Cow card', d: 'Graphs and tiles first' },
+    { t: 'Log the task', d: 'Rarely reached', kind: 'end' },
+  ]},
+  { label: 'After', tone: 'after', steps: [
+    { t: 'Open the app', d: "Lands on today's tasks" },
+    { t: 'Pick a task', d: 'Progress per group' },
+    { t: 'Pick the cow', d: 'Or tap her tag with the wand' },
+    { t: 'Log it, next cow', d: 'One tap, list stays open', kind: 'end' },
+  ]},
+]} />
 
 <DataFindings />
 

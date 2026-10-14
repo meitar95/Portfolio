@@ -1,0 +1,10 @@
+---
+// Cybersixgill hero: three screens from Meitar's UI work (browser bar cropped out).
+import ScreenTabs from '../ScreenTabs.astro';
+const screens = [
+  { src: '/images/cybersixgill/dashboard', label: 'Dashboard', note: 'What threatens my organization today, in one screen of widgets.', alt: 'Cybersixgill dashboard: new alerts with imminent and emerging threats, malware widgets, organization assets with trends, reports and news' },
+  { src: '/images/cybersixgill/inventory', label: 'Asset inventory', note: 'Every domain, IP and executive the company owns, ranked by risk.', alt: 'Asset inventory: counts per asset type with new items, a risk-scored table and a details panel for one domain' },
+  { src: '/images/cybersixgill/policies', label: 'Monitoring policies', note: 'Decide once what to watch, so the inventory stays relevant on its own.', alt: 'Policies dialog: name a policy and choose asset types, sources, importance and labels to monitor' },
+];
+---
+<ScreenTabs screens={screens} w={1600} h={874} dark caption="From the design files. Demo data." />

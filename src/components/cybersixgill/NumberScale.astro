@@ -1,0 +1,26 @@
+---
+// The same header widget at two data volumes, from the design file's "Regular" and "1k+" frames.
+---
+<figure class="ns">
+  <div class="ns__row">
+    <div class="ns__item">
+      <span class="ns__label">A small customer</span>
+      <img src="/images/cybersixgill/kpi-regular.webp" width="719" height="162" loading="lazy" decoding="async" alt="Alerts header with 10 new alerts, 6 imminent and 4 emerging threats" />
+    </div>
+    <div class="ns__item">
+      <span class="ns__label">An enterprise</span>
+      <img src="/images/cybersixgill/kpi-1k.webp" width="719" height="162" loading="lazy" decoding="async" alt="The same header with 10k new alerts, 6k imminent and 4k emerging threats, in the same space" />
+    </div>
+  </div>
+  <figcaption>Every widget was drawn at three volumes (regular, 100+, 1k+) so numbers never broke the layout.</figcaption>
+</figure>
+
+<style>
+  .ns { display: grid; gap: var(--s-2); margin: 0; }
+  .ns figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .ns__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); }
+  .ns__item { display: grid; gap: var(--s-1); }
+  .ns__label { font-size: var(--fs-small); font-weight: 500; color: var(--ink-3); }
+  .ns__item img { width: 100%; height: auto; display: block; border-radius: 12px; background: #0d1a33; }
+  @media (max-width: 640px) { .ns__row { grid-template-columns: 1fr; } }
+</style>

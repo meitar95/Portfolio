@@ -1,0 +1,10 @@
+---
+// Herd hero: the Daily Tasks page before and after the redesign (shared slider).
+import BeforeAfterSlider from '../BeforeAfterSlider.astro';
+const pairs = [
+  { id: 'tasks', label: 'Daily tasks', note: 'Same page, same data. Less decoration, more of what the farmer came for.' },
+];
+---
+<BeforeAfterSlider pairs={pairs} dir="/images/herd" w={1600} h={900} dark={false}
+  altAfter="After: the redesigned Daily Tasks page with task groups, a week strip and a calmer fertility table"
+  caption="Drag to compare the old Daily Tasks page (left) with the redesign (right). Demo data." />
