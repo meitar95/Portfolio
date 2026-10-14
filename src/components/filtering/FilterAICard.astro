@@ -17,12 +17,13 @@ const query = 'Critical AWS findings this week';
   <div class="fa__bar">
     <span class="fa__chip" style="--d: 0"><i>Severity</i> is <b><em class="dot"></em>Critical</b> ×</span>
     <span class="fa__chip" style="--d: 1"><i>Cloud</i> is <b>AWS</b> ×</span>
-    <span class="fa__chip" style="--d: 2"><i>Opened</i> is <b>This week</b> ×</span>
+    <span class="fa__chip fa__chip--3" style="--d: 2"><i>Opened</i> is <b>This week</b> ×</span>
+    <span class="fa__chip fa__chip--more" style="--d: 2"><b>+1</b></span>
     <span class="fa__add">+ Add filter</span>
     <span class="fa__count"><b data-count>257</b> matching</span>
   </div>
   <div class="fa__rows">{Array.from({ length: 6 }).map((_, i) => <i style={`--r: ${i}`} class={i < 2 ? 'keep' : ''}></i>)}</div>
-  <span class="fa__toast">✓ AI added 3 filters</span>
+  <span class="fa__toast">✓ <span class="fa__long">AI added 3 filters · 7 matching</span><span class="fa__short">7 matching</span></span>
 </div>
 
 <script>
@@ -66,7 +67,7 @@ const query = 'Critical AWS findings this week';
 <style>
   .fa {
     --ease-slow: cubic-bezier(0.33, 1, 0.68, 1);
-    position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-md);
+    position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-md); container-type: inline-size;
     display: grid; grid-template-rows: auto auto 1fr; gap: 0.7rem; padding: 1rem;
     background: #fafafa; box-shadow: inset 0 0 0 1px rgb(31 21 21 / 0.06);
     font: 400 0.8125rem/1.2 'Plus Jakarta Sans', var(--sans); color: #243165;
@@ -78,15 +79,19 @@ const query = 'Critical AWS findings this week';
     transition: flex-basis 0.9s var(--ease-slow), border-radius 0.9s var(--ease-slow), box-shadow 0.6s var(--ease-slow);
     flex-basis: 8.5rem;
   }
-  .fa.is-typing .fa__ai { flex-basis: 100%; border-radius: 10px; box-shadow: 0 0 0 4px rgb(70 101 255 / 0.12); color: #243165; }
+  .fa.is-typing .fa__ai { flex: 1 1 100%; border-radius: 10px; box-shadow: 0 0 0 4px rgb(70 101 255 / 0.12); color: #243165; }
   .fa__spark { color: #4665ff; }
   .fa.is-thinking .fa__spark { animation: fa-spin 1.2s linear infinite; }
   .fa__caret { width: 1px; height: 1em; background: #243165; opacity: 0; }
   .fa.is-typing:not(.is-done) .fa__caret { animation: fa-blink 1s steps(1) infinite; }
-  .fa__view { color: #64748b; transition: opacity 0.6s var(--ease-slow); }
-  .fa.is-typing .fa__view { opacity: 0; }
+  .fa__view { color: #64748b; max-width: 9rem; overflow: hidden; transition: opacity 0.5s var(--ease-slow), max-width 0.9s var(--ease-slow); }
+  .fa.is-typing .fa__view { opacity: 0; max-width: 0; }
+  .fa__top { gap: 0; }
+  .fa__view { margin-left: 0.75rem; }
+  .fa.is-typing .fa__view { margin-left: 0; }
+  .fa__text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .fa__bar { display: flex; align-items: center; gap: 0.45rem; white-space: nowrap; min-height: 30px; }
+  .fa__bar { display: flex; flex-wrap: nowrap; overflow: hidden; align-items: center; gap: 0.45rem; white-space: nowrap; min-height: 30px; }
   .fa__chip {
     display: inline-flex; gap: 0.3rem; align-items: center; padding: 0.3rem 0.5rem; border-radius: 7px; background: #f2f2f2; color: #8390a3;
     opacity: 0; transform: translateY(6px) scale(0.98); max-width: 0; padding-inline: 0; margin-right: -0.45rem;
@@ -97,13 +102,13 @@ const query = 'Critical AWS findings this week';
   .fa__chip b { font-weight: 600; color: #243165; display: inline-flex; align-items: center; gap: 0.25rem; }
   .fa__chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #9b1c31; }
   .fa.is-done .fa__chip {
-    opacity: 1; transform: none; max-width: 14rem; padding-inline: 0.5rem; margin-right: 0;
+    opacity: 1; transform: none; max-width: 20rem; padding-inline: 0.5rem; margin-right: 0;
     transition-delay: calc(var(--d) * 0.35s);
   }
   .fa.is-resetting .fa__chip { transition-duration: 0.9s; transition-delay: calc((2 - var(--d)) * 0.12s); }
   .fa__add { color: #287be0; font-weight: 500; max-width: 7rem; overflow: hidden; transition: max-width 0.8s var(--ease-slow), opacity 0.6s var(--ease-slow); }
   .fa.is-done .fa__add { max-width: 0; opacity: 0; }
-  .fa__bar { min-width: 0; overflow: hidden; }
+  .fa__bar { min-width: 0; }
   .fa__count { margin-left: auto; color: #8390a3; }
   .fa__count b { color: #243165; font-weight: 600; }
 
@@ -126,10 +131,32 @@ const query = 'Critical AWS findings this week';
   @keyframes fa-spin { to { transform: rotate(360deg); } }
   .fa__spark { display: inline-block; }
 
-  @media (max-width: 560px) {
-    .fa { aspect-ratio: 4 / 3; }
-    .fa__count { display: none; }
-    .fa__bar { mask-image: linear-gradient(90deg, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  /* Sized by the card's own width, so it works in any layout (desktop card, tablet, phone).
+     One row of chips at every size: fewer chips + a "+1" when space is tight, never wrapping. */
+  .fa__chip--more { display: none; }
+  .fa__toast { white-space: nowrap; max-width: 92%; }
+  .fa__short { display: none; }
+  @container (max-width: 520px) {
+    .fa { font-size: 0.75rem; gap: 0.55rem; padding: 0.8rem; }
+    .fa__view:last-child { display: none; }
+    .fa__chip { padding-block: 0.25rem; }
+    .fa__rows i { height: 18px; }
+    .fa__toast { bottom: 0.7rem; }
   }
+  @container (max-width: 480px) { .fa__count { display: none; } }
+  @container (max-width: 400px) {
+    .fa__long { display: none; } .fa__short { display: inline; }
+    .fa__view { display: none; }
+    .fa__chip--3 { display: none; }
+    .fa__chip--more { display: inline-flex; }
+  }
+  @container (max-width: 270px) {
+    .fa__chip--more b::after { content: ''; }
+    .fa__chip:nth-of-type(2) { display: none; }
+    .fa__chip--more b { font-size: 0; }
+    .fa__chip--more b::before { content: '+2'; font-size: 0.75rem; }
+    .fa__toast { white-space: nowrap; font-size: 0.75rem; }
+  }
+  @media (max-width: 809px) { .fa { aspect-ratio: 4 / 3; } }
   @media (prefers-reduced-motion: reduce) { .fa * { transition: none !important; animation: none !important; } }
 </style>

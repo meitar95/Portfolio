@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-14 — Filtering card: responsive AI moment
+
+- The Ask AI box now takes the full row while typing (saved views slide out of the way).
+- Sized by the card's own width (container queries): one row of chips at every size, with
+  3 chips → 2 + "+1" → 1 + "+2" as space shrinks; count moves into the toast on small cards.
+  Checked at 1440, 1100, 900, 820, 600, 390 and 320px.
+- Nav: tighter spacing under 360px so the Contact button no longer overflows on 320px phones.
+
 ## 2026-10-14 — Filtering card: slow AI moment
 
 - Replaced the fast 4→1 fold with `filtering/FilterAICard.astro`: the Ask AI box opens, slowly
