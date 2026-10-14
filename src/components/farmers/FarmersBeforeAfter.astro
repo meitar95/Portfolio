@@ -1,0 +1,80 @@
+---
+// Hero visual: the old app next to the redesign, one screen at a time.
+// "Before" screens are the shipped app as farmers used it in 2024; "After" are the redesign.
+const pairs = [
+  { id: 'home', label: 'Daily tasks', note: 'Counters, cards and lists competing on one screen. Now: one card per task, with today\'s progress.' },
+  { id: 'cow', label: 'Cow card', note: 'What matters first: pregnancy status and days in milk, then the routine.' },
+];
+const src = (id: string, v: string) => `/images/farmers/${id}-${v}.webp`;
+---
+<figure class="fba" data-fba>
+  <div class="fba__top">
+    <div class="fba__tabs" role="tablist" aria-label="Choose a screen">
+      {pairs.map((p, i) => <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-pair={p.id} data-note={p.note}>{p.label}</button>)}
+    </div>
+    <p class="fba__note" data-note-out aria-live="polite">{pairs[0].note}</p>
+  </div>
+
+  <div class="fba__stage">
+    {['before', 'after'].map((v) => (
+      <div class="fba__col">
+        <span class="fba__label">{v === 'before' ? 'Before' : 'After'}</span>
+        <div class="fba__phone">
+          {pairs.map((p, i) => (
+            <img src={src(p.id, v)} data-img={p.id} class={i === 0 ? 'is-on' : ''} width="360" height="780"
+              loading={i === 0 ? 'eager' : 'lazy'} decoding="async"
+              alt={`${p.label}, ${v === 'before' ? 'the original app' : 'the redesign'}`} />
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-fba]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-pair]')];
+    const imgs = [...root.querySelectorAll<HTMLImageElement>('[data-img]')];
+    const note = root.querySelector<HTMLElement>('[data-note-out]')!;
+    tabs.forEach((b) => b.addEventListener('click', () => {
+      if (b.getAttribute('aria-selected') === 'true') return;
+      tabs.forEach((t) => t.setAttribute('aria-selected', String(t === b)));
+      imgs.forEach((im) => im.classList.toggle('is-on', im.dataset.img === b.dataset.pair));
+      note.classList.add('is-out');
+      setTimeout(() => { note.textContent = b.dataset.note!; note.classList.remove('is-out'); }, 220);
+    }));
+  });
+</script>
+
+<style>
+  .fba { display: grid; gap: var(--s-3); margin: 0; }
+  .fba__top { display: grid; gap: var(--s-2); justify-items: start; }
+  .fba__tabs { display: inline-flex; gap: 4px; padding: 4px; background: var(--tint-1); border-radius: var(--radius-pill); }
+  .fba__tabs button {
+    border: 0; background: none; cursor: pointer; min-height: 40px; padding: 0 1.1rem; border-radius: var(--radius-pill);
+    font-size: var(--fs-small); font-weight: 500; color: var(--ink-3); transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+  }
+  .fba__tabs button[aria-selected='true'] { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgb(31 21 21 / 0.08), 0 2px 8px -2px rgb(31 21 21 / 0.12); }
+  .fba__note { color: var(--ink); transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), filter 0.45s var(--ease); }
+  .fba__note.is-out { opacity: 0; transform: translateY(4px); filter: blur(3px); transition-duration: 0.2s; }
+
+  .fba__stage {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); justify-content: center; gap: clamp(1rem, 4vw, 4rem);
+    padding: clamp(1.5rem, 4vw, 3rem) var(--s-3); border-radius: var(--radius-md);
+    background: linear-gradient(180deg, var(--tint-2), var(--tint-1));
+  }
+  .fba__col { display: grid; gap: var(--s-1); justify-items: center; }
+  .fba__label { font-size: var(--fs-small); font-weight: 500; color: var(--ink-3); }
+  .fba__phone {
+    position: relative; width: 100%; aspect-ratio: 360 / 760; overflow: hidden;
+    border-radius: 28px; border: 6px solid #1f2430; background: #fff;
+    box-shadow: 0 24px 48px -24px rgb(16 22 42 / 0.5);
+  }
+  .fba__phone img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top;
+    opacity: 0; transition: opacity 0.45s var(--ease);
+  }
+  .fba__phone img.is-on { opacity: 1; }
+  @media (max-width: 480px) { .fba__phone { border-width: 4px; border-radius: 20px; } }
+  @media (prefers-reduced-motion: reduce) { .fba__note, .fba__phone img { transition: none; } }
+</style>

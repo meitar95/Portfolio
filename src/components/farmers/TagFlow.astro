@@ -1,0 +1,40 @@
+---
+// Tag assignment, rebuilt around how farms actually do it: many cows in a row, wand in hand.
+const steps = [
+  { id: 1, t: 'Type or scan', d: 'One field. Type the cow\'s ID or tap her tag with the wand.' },
+  { id: 2, t: 'Confirm the cow', d: 'Her ID and current tag, then the new tag. One button.' },
+  { id: 3, t: 'Next cow', d: 'A short confirmation, and the drawer stays open for the next one.' },
+];
+---
+<figure class="tf">
+  <ol class="tf__steps">
+    {steps.map((s) => (
+      <li>
+        <div class="tf__phone"><img src={`/images/farmers/tag-${s.id}.webp`} width="362" height="780" loading="lazy" decoding="async" alt={`Tag assignment, step ${s.id}: ${s.t.toLowerCase()}`} /></div>
+        <p><b>{s.t}</b><span>{s.d}</span></p>
+      </li>
+    ))}
+  </ol>
+</figure>
+
+<style>
+  .tf { margin: 0; }
+  .tf__steps {
+    list-style: none; padding: clamp(1.5rem, 4vw, 2.5rem); margin: 0; border-radius: var(--radius-md);
+    background: linear-gradient(180deg, var(--tint-2), var(--tint-1));
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3);
+  }
+  .tf__steps li { display: grid; gap: var(--s-2); align-content: start; position: relative; }
+  .tf__phone {
+    width: min(100%, 220px); margin-inline: auto; aspect-ratio: 362 / 700; overflow: hidden;
+    border-radius: 22px; border: 5px solid #1f2430; background: #fff; box-shadow: 0 20px 40px -24px rgb(16 22 42 / 0.5);
+  }
+  .tf__phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .tf__steps p { display: grid; gap: 2px; text-align: center; }
+  .tf__steps b { color: var(--ink); font-weight: 500; }
+  .tf__steps span { font-size: var(--fs-small); color: var(--ink-2); }
+  @media (max-width: 720px) {
+    .tf__steps { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 70%; overflow-x: auto; scroll-snap-type: x mandatory; }
+    .tf__steps li { scroll-snap-align: center; }
+  }
+</style>

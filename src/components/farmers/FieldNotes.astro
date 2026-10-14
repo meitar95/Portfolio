@@ -1,0 +1,36 @@
+---
+// Remote sessions: farmers shared their screen and used the real app while we watched.
+// Notes are Meitar's own, translated from Hebrew. Screens cropped to the app only.
+const notes = [
+  { id: 'dashboard', t: 'Looks tappable, isn\'t', d: 'Every card has a shadow and an icon. None of them open anything.' },
+  { id: 'list', t: 'Hints at a scroll that isn\'t there', d: 'The next cow peeks in from below, so people tried to scroll a list that didn\'t move.' },
+  { id: 'tooltip', t: 'A tooltip that won\'t let go', d: 'Tap the graph once and the tooltip stays on top until you take an action.' },
+];
+---
+<figure class="fn">
+  <ul class="fn__list">
+    {notes.map((n) => (
+      <li>
+        <div class="fn__shot"><img src={`/images/farmers/field-${n.id}.webp`} width="318" height="625" loading="lazy" decoding="async" alt={`The original app during a remote session: ${n.t.toLowerCase()}`} /></div>
+        <p><b>{n.t}</b><span>{n.d}</span></p>
+      </li>
+    ))}
+  </ul>
+  <figcaption>Captured in remote sessions with farmers using the live app. Notes translated from Hebrew.</figcaption>
+</figure>
+
+<style>
+  .fn { display: grid; gap: var(--s-2); margin: 0; }
+  .fn figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .fn__list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); }
+  .fn__list li { display: grid; gap: var(--s-2); align-content: start; }
+  .fn__shot { border-radius: var(--radius-md); overflow: hidden; background: var(--tint-1); aspect-ratio: 318 / 520; }
+  .fn__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .fn__list p { display: grid; gap: 2px; }
+  .fn__list b { color: var(--ink); font-weight: 500; }
+  .fn__list span { font-size: var(--fs-small); color: var(--ink-3); }
+  @media (max-width: 720px) {
+    .fn__list { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--s-1); }
+    .fn__list li { scroll-snap-align: start; }
+  }
+</style>

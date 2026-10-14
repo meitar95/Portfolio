@@ -1,0 +1,81 @@
+---
+title: From paper binders to 15,000 farms
+tagline: Farmers had the app and still used paper. It wasn't tech literacy, it was cognitive load. So we cut the app down to the day's work.
+card: Redesigned Afimilk's field app for dairy farmers. Grounded in research on working farms, it went from near-zero usage to daily use across ~15,000 farms in 50+ countries.
+order: 4
+cover: /images/farmers
+coverAlt: "Afimilk's redesigned farmer app on two phones, showing the daily task list"
+visual: farmers-before-after
+
+why: >-
+  Afimilk's sensors track every cow on the farm, but the data only pays off when
+  farmers log what they do: inseminations, treatments, new tags. The field app
+  existed for exactly that, and almost nobody used it. Farmers kept paper binders
+  in the barn and typed things in later, if at all.
+role: Product Designer. Owned the redesign end to end, mentored by 2 senior researchers.
+team: 2 senior UX researchers (mentors), product, engineering
+timeline: 6 months · 2024
+platform: Agri-tech, B2C mobile
+confidential: false
+
+outcomes:
+  - value: "~15K"
+    label: farms using the app daily, up from near zero
+  - value: "50+"
+    label: countries, validated on farms in New Zealand and Italy
+  - value: "~10×"
+    label: task events logged, 0.03M (2022) → 0.29M (2024)
+
+solution:
+  summary: >-
+    Less app, not more. The home screen became today's tasks, every task became one
+    short flow, and the wand farmers already carry became the fastest way in.
+  points:
+    - title: Today's work first
+      text: Home is a list of today's tasks with progress per group, not a dashboard of counters.
+    - title: One flow per task
+      text: Find the cow, do the thing, move to the next. Same flow from a task or from the cow card.
+    - title: Built for the wand
+      text: Type an ID or tap a tag with the wand. Bulk jobs like tagging stay open for the next cow.
+    - title: Nothing that only looks tappable
+      text: If it looks like a button it is one. Cards that only looked tappable and tooltips that wouldn't close are gone.
+
+learned: >-
+  Low adoption isn't always a skills problem. Farmers handle complex work all day;
+  what they couldn't spare was extra thinking between one cow and the next. We
+  stopped adding features and took away everything that stood between a farmer and
+  the task, and that's when the app replaced the binder.
+---
+
+import DataFindings from '../../components/farmers/DataFindings.astro';
+import FieldNotes from '../../components/farmers/FieldNotes.astro';
+import TagFlow from '../../components/farmers/TagFlow.astro';
+import GrowthChart from '../../components/farmers/GrowthChart.astro';
+
+## The problem
+
+The app could do a lot. Farmers opened it, found a cow, and left without logging anything. The task that makes the whole system work was the one nobody finished.
+
+<DataFindings />
+
+## The evidence
+
+The numbers told us what was happening, not why. So we went to the farms: visits, about 15 contextual interviews, and remote sessions where farmers shared their screen and used the app while we watched.
+
+<FieldNotes />
+
+### Not tech literacy, cognitive load
+
+Farmers manage complex herds and equipment every day. The problem wasn't skill. Between one cow and the next, the app asked them to think: which card opens, where the list ends, how to close a tooltip. Paper never asked them anything.
+
+### One flow, rebuilt around the barn
+
+Tag assignment is a good example. The data showed farms tag many cows in a row, long after setup, so the flow is built for a line of cows and a wand in hand.
+
+<TagFlow />
+
+We also looked at swipe and multi-select patterns from other apps. Long swipe gestures were ruled out early as a poor fit for our users.
+
+**Result:** the redesign shipped and held up in field testing in New Zealand and Italy with only minor bugs. Logging moved from paper into the app:
+
+<GrowthChart />

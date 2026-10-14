@@ -1,0 +1,69 @@
+---
+// What HQ analytics said (May 2022 – Nov 2024), from the team's review. Real numbers only.
+import Icon from '../Icon.astro';
+---
+<figure class="df">
+  <div class="df__grid">
+    <div class="df__card df__card--wide">
+      <p class="df__k"><Icon name="users" size={18} /> Most farms never logged anything</p>
+      <div class="df__bars" role="img" aria-label="1,000 farms entered no data; 400 farms did">
+        <div class="df__bar df__bar--muted" style="--w: 100%"><b>1,000</b><span>farms entered no data</span></div>
+        <div class="df__bar" style="--w: 40%"><b>400</b><span>did</span></div>
+      </div>
+    </div>
+
+    <div class="df__card">
+      <p class="df__k"><Icon name="layers" size={18} /> Logged in bursts</p>
+      <p>Large batches entered seconds apart. Work was written down in the barn and typed in later, not done in the app.</p>
+    </div>
+
+    <div class="df__card">
+      <p class="df__k"><Icon name="grid" size={18} /> Tags assigned in bulk</p>
+      <p><b class="df__n">574</b> farms kept assigning tags long after setup, many at a time.</p>
+    </div>
+
+    <div class="df__card df__card--wide">
+      <p class="df__k"><Icon name="compass" size={18} /> Two ways in, used equally</p>
+      <div class="df__split" role="img" aria-label="Tasks logged: about half from the cow card or lists, half from the Add event button">
+        <span style="--w: 51%">From a cow card or list</span>
+        <span style="--w: 49%">From the Add event button</span>
+      </div>
+      <p class="df__sub">So both doors had to lead to the same short flow.</p>
+    </div>
+  </div>
+  <figcaption>From the team's analytics review, May 2022 – Nov 2024.</figcaption>
+</figure>
+
+<style>
+  .df { display: grid; gap: var(--s-2); margin: 0; }
+  .df figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .df__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-2); }
+  .df__card { display: grid; gap: var(--s-1); align-content: start; padding: var(--s-3); border-radius: var(--radius-md); background: var(--bg); }
+  .df__card--wide { grid-column: 1 / -1; }
+  .df__card p { font-size: var(--fs-small); }
+  .df__k { display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: var(--ink); font-size: 1rem !important; }
+  .df__k :global(svg) { color: var(--accent); flex: none; }
+  .df__n { font-family: 'Satoshi', sans-serif; font-weight: 500; font-size: 1.5rem; color: var(--ink); margin-right: 0.15rem; }
+  .df__sub { color: var(--ink-3); }
+
+  .df__bars { display: grid; gap: 6px; margin-top: var(--s-1); }
+  .df__bar {
+    width: var(--w); display: flex; align-items: baseline; gap: 0.5rem; padding: 0.5rem 0.75rem; border-radius: 8px;
+    background: var(--accent); color: #fff; min-width: max-content;
+  }
+  .df__bar--muted { background: var(--tint-3); color: var(--ink); }
+  .df__bar b { font-family: 'Satoshi', sans-serif; font-weight: 500; font-size: 1.25rem; }
+  .df__bar span { font-size: 0.875rem; }
+
+  .df__split { display: flex; gap: 4px; margin-top: var(--s-1); }
+  .df__split span {
+    flex: 0 0 calc(var(--w) - 2px); padding: 0.6rem 0.75rem; border-radius: 8px; font-size: 0.875rem;
+    background: var(--tint-3); color: var(--ink);
+  }
+  .df__split span + span { background: var(--tint-1); }
+  @media (max-width: 640px) {
+    .df__grid { grid-template-columns: 1fr; }
+    .df__split { flex-direction: column; }
+    .df__split span { flex-basis: auto; }
+  }
+</style>

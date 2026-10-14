@@ -17,6 +17,9 @@ hosted on Vercel. Every change pushed to GitHub republishes the site automatical
 | Case-study content (one file each; `.mdx` can embed visuals) | `src/content/work/*.md(x)` |
 | Filtering interactive prototype (before/after) | `src/components/filtering/FilterBeforeAfter.astro` |
 | Filtering evidence visuals | `src/components/filtering/*.astro` |
+| Sentrycs slider + visuals | `src/components/sentrycs/*.astro`, images in `public/images/sentrycs/` |
+| Farmers before/after + visuals | `src/components/farmers/*.astro`, images in `public/images/farmers/` |
+| YouTube link cards | `src/components/VideoLinks.astro` |
 | Icons (Untitled UI style) | `src/components/icons.ts`, `Icon.astro` |
 | Reference image with caption | `src/components/RefImage.astro` |
 | Images | `public/images/` |

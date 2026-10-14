@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-14 — Farmers case study (published)
+
+- Built from the Afi-App Figma board (analytics, field sessions, new design, wireframes).
+- Hero visual: old app next to the redesign, phone by phone (Daily tasks, Cow card).
+- "What the data said": 1,000 farms never logged vs 400 that did; logging in bursts;
+  574 farms tagging in bulk; tasks logged ~50/50 from cow card vs Add event.
+- Field notes: 3 real screens from remote sessions, cropped to the app only (no faces
+  or names), with the original critiques translated from Hebrew.
+- Tag assignment in 3 steps (type or scan with the wand → confirm → next cow).
+- Growth chart: task events 0.03M → 0.15M → 0.29M. Farmers is no longer a draft.
+
 ## 2026-10-14 — Sentrycs: team voice + videos
 
 - The concept-deck brief now reads "we" (the deck was a team effort).
