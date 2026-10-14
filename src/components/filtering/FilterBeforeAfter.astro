@@ -11,17 +11,12 @@ import Icon from '../Icon.astro';
 ---
 <figure class="fb" data-fb>
   <div class="fb__top">
-    <div class="fb__switch" role="group" aria-label="Compare before and after">
-      <span class="fb__thumb" aria-hidden="true"></span>
-      <button type="button" data-show="before" aria-pressed="false">Before</button>
-      <button type="button" data-show="after" aria-pressed="true">After</button>
-    </div>
-    <p class="fb__headline" aria-live="polite" data-headline>One filter bar, learned once, used in all six modules.</p>
+    <p class="fb__headline" aria-live="polite" data-headline>Same task, four different filter bars, each with its own words.</p>
   </div>
 
-  <div class="fb__stage">
-    <!-- ======================= BEFORE ======================= -->
-    <div class="fb__panel" data-panel="before" hidden>
+  <div class="fb__stage" data-stage style="--pos: 50%">
+    <!-- ======================= BEFORE (drawn over the live app, clipped by the handle) ======================= -->
+    <div class="fb__panel fb__before" data-panel="before">
       <div class="old">
         <p class="old__name">Findings</p>
         <div class="old__row">
@@ -138,10 +133,19 @@ import Icon from '../Icon.astro';
         <div class="toast" data-toast role="status" aria-live="polite"></div>
       </div>
     </div>
+
+    <!-- Handle: only the line and knob take pointer events, so the live app stays clickable -->
+    <div class="fb__handle" data-handle>
+      <button type="button" class="fb__knob" role="slider" aria-label="Compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" data-knob>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18-6-6 6-6M15 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+    <button type="button" class="fb__tag fb__tag--before" data-snap="100">Before</button>
+    <button type="button" class="fb__tag fb__tag--after" data-snap="0">After</button>
   </div>
 
   <figcaption class="fb__caption" data-caption>
-    Try it: tap a Quick Start, click <b>is</b> to flip it to <b>is not</b>, or ask AI in plain words.
+    Drag to compare, or tap <b>After</b> to open the new filter bar and try it: a Quick Start, <b>is</b> → <b>is not</b>, or ask AI in plain words.
   </figcaption>
 </figure>
 
@@ -220,23 +224,46 @@ import Icon from '../Icon.astro';
   document.querySelectorAll<HTMLElement>('[data-fb]').forEach((root) => {
     const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
 
-    // ---------- Before / After switch with a slow, quiet headline change ----------
+    // ---------- Before / After: drag the handle; the headline follows the bigger side ----------
     const headlines: Record<string, string> = {
       before: 'Same task, four different filter bars, each with its own words.',
       after: 'One filter bar, learned once, used in all six modules.',
     };
     const headline = $('[data-headline]');
-    const caption = $('[data-caption]');
-    const show = (which: string) => {
-      root.dataset.view = which;
-      root.querySelectorAll<HTMLButtonElement>('[data-show]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.show === which)));
-      root.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== which));
-      caption.hidden = which !== 'after';
-      headline.classList.add('is-out');
-      setTimeout(() => { headline.textContent = headlines[which]; headline.classList.remove('is-out'); }, 260);
+    const stage = $('[data-stage]');
+    const knob = $('[data-knob]');
+    let side = 'before';
+    const setPos = (v: number, animate = false) => {
+      v = Math.max(0, Math.min(100, Math.round(v)));
+      stage.classList.toggle('is-snapping', animate);
+      stage.style.setProperty('--pos', `${v}%`);
+      knob.setAttribute('aria-valuenow', String(v));
+      root.dataset.view = v < 50 ? 'after' : 'before';
+      const next = v < 50 ? 'after' : 'before';
+      if (next !== side) {
+        side = next;
+        headline.classList.add('is-out');
+        setTimeout(() => { headline.textContent = headlines[side]; headline.classList.remove('is-out'); }, 260);
+      }
     };
-    root.querySelectorAll<HTMLButtonElement>('[data-show]').forEach((b) => b.addEventListener('click', () => show(b.dataset.show!)));
-    root.dataset.view = 'after';
+    const fromX = (x: number) => { const r = stage.getBoundingClientRect(); return ((x - r.left) / r.width) * 100; };
+    const handle = $('[data-handle]');
+    handle.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); handle.setPointerCapture(e.pointerId); setPos(fromX(e.clientX));
+      const move = (ev: PointerEvent) => setPos(fromX(ev.clientX));
+      const up = () => { handle.removeEventListener('pointermove', move); handle.removeEventListener('pointerup', up); handle.removeEventListener('pointercancel', up); };
+      handle.addEventListener('pointermove', move); handle.addEventListener('pointerup', up); handle.addEventListener('pointercancel', up);
+    });
+    knob.addEventListener('keydown', (e) => {
+      const now = +knob.getAttribute('aria-valuenow')!;
+      const step = e.shiftKey ? 25 : 5;
+      if (e.key === 'ArrowLeft') { e.preventDefault(); setPos(now - step); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); setPos(now + step); }
+      if (e.key === 'Home') { e.preventDefault(); setPos(0, true); }
+      if (e.key === 'End') { e.preventDefault(); setPos(100, true); }
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-snap]').forEach((b) => b.addEventListener('click', () => setPos(+b.dataset.snap!, true)));
+    root.dataset.view = 'before';
 
     // ---------- state ----------
     let views = [
@@ -544,23 +571,6 @@ import Icon from '../Icon.astro';
   /* ===== Wrapper (site styles) ===== */
   .fb { display: grid; gap: var(--s-3); margin: 0; }
   .fb__top { display: grid; gap: var(--s-2); justify-items: start; }
-  .fb__switch {
-    position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 4px;
-    background: var(--tint-1); border-radius: var(--radius-pill);
-  }
-  .fb__thumb {
-    position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px);
-    background: #fff; border-radius: var(--radius-pill);
-    box-shadow: 0 1px 2px rgb(31 21 21 / 0.08), 0 2px 8px -2px rgb(31 21 21 / 0.12);
-    transition: transform 0.45s var(--ease);
-  }
-  .fb[data-view='after'] .fb__thumb { transform: translateX(100%); }
-  .fb__switch button {
-    position: relative; z-index: 1; border: 0; background: none; cursor: pointer;
-    min-width: 6.5rem; min-height: 40px; padding: 0 1.25rem; border-radius: var(--radius-pill);
-    font-weight: 500; font-size: var(--fs-small); color: var(--ink-3); transition: color 0.3s;
-  }
-  .fb__switch button[aria-pressed='true'] { color: var(--ink); }
   .fb__headline {
     font-size: var(--fs-body); color: var(--ink); min-height: 1.6em;
     transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), filter 0.5s var(--ease);
@@ -568,9 +578,10 @@ import Icon from '../Icon.astro';
   .fb__headline.is-out { opacity: 0; transform: translateY(4px); filter: blur(3px); transition-duration: 0.25s; }
   .fb__caption { font-size: var(--fs-small); color: var(--ink-3); }
   .fb__caption b { color: var(--ink); font-weight: 500; }
-  @media (prefers-reduced-motion: reduce) { .fb__thumb, .fb__headline { transition: none; } }
+  @media (prefers-reduced-motion: reduce) { .fb__headline, .fb__stage.is-snapping .fb__before, .fb__stage.is-snapping .fb__handle { transition: none !important; } }
 
   .fb__stage {
+    position: relative; overflow: hidden;
     background: #fafafa; border: 1px solid var(--line); border-radius: var(--radius-md);
     padding: clamp(0.875rem, 2.5vw, 1.5rem);
     box-shadow: 0 1px 2px rgb(31 21 21 / 0.04), 0 16px 40px -16px rgb(31 21 21 / 0.14);
@@ -581,6 +592,34 @@ import Icon from '../Icon.astro';
     -webkit-font-smoothing: antialiased;
   }
   .fb__stage button, .fb__stage input, .fb__stage select { font-family: inherit; }
+
+  /* Before sits on top of the live app and is clipped to the left of the handle */
+  .fb__before {
+    position: absolute; inset: 0; z-index: 8; overflow: hidden; background: #fafafa;
+    padding: clamp(0.875rem, 2.5vw, 1.5rem);
+    clip-path: inset(0 calc(100% - var(--pos)) 0 0);
+  }
+  .fb__handle {
+    position: absolute; top: 0; bottom: 0; left: var(--pos); z-index: 9; width: 28px; margin-left: -14px;
+    cursor: ew-resize; touch-action: none;
+  }
+  .fb__handle::before { content: ''; position: absolute; top: 0; bottom: 0; left: 13px; width: 2px; background: #fff; box-shadow: 0 0 0 1px rgb(36 49 101 / 0.18); }
+  .fb__knob {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%;
+    background: #fff; color: var(--ink); box-shadow: 0 4px 16px rgb(16 22 42 / 0.25); cursor: ew-resize; touch-action: none;
+  }
+  .fb__knob:focus-visible { outline: 3px solid var(--tint-5); outline-offset: 2px; }
+  .fb__stage.is-snapping .fb__before { transition: clip-path 0.5s var(--ease); }
+  .fb__stage.is-snapping .fb__handle { transition: left 0.5s var(--ease); }
+  .fb__tag {
+    position: absolute; bottom: 12px; z-index: 10; padding: 0.3rem 0.7rem; border: 0; border-radius: 6px; cursor: pointer;
+    background: rgb(36 49 101 / 0.75); color: #fff; font: 500 0.875rem/1.2 var(--sans);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background 0.2s;
+  }
+  .fb__tag:hover { background: rgb(36 49 101 / 0.95); }
+  .fb__tag--before { left: 12px; }
+  .fb__tag--after { right: 12px; }
   .app { transition: padding-bottom 0.25s var(--ease); }
 
   /* ===== BEFORE (the old patterns, as they shipped) ===== */
@@ -812,7 +851,6 @@ import Icon from '../Icon.astro';
     .arow .sel--btn { grid-column: 2 / 4; grid-row: 2; }
     .rows { min-height: 0; }
     .panel { left: 0 !important; }
-    .fb [data-panel] { min-height: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
     .chip, .pop, .rows.is-refresh span, .ai__pill.is-thinking .ai__spark { animation: none; }

@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-14 — Floating laptop, Filtering slider, new Herd screens
+
+- Cybersixgill: the laptop mockup is cut out (transparent background) and floats with
+  a soft shadow. `RefImage` has a new `bare` option for cut-out mockups.
+- Filtering: the Before/After switch is now the same drag-to-compare slider as Sentrycs
+  and Herd, drawn over the live prototype. Only the handle takes clicks, so the new
+  filter bar stays usable; tap "After" to slide fully open, "Before" to slide back.
+  Arrow keys move the handle. The headline still changes, following the bigger side.
+- Herd: Dashboard, Herd view and Settings replaced with the latest screens.
+
 ## 2026-10-14 — Flow chart, Cybersixgill and Herd
 
 **Template**
