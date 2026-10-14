@@ -1,18 +1,18 @@
 ---
-title: A herd system built around the job
-tagline: "Everyone said it doesn't look good. Underneath was a cluttered system new users couldn't find their way around."
-card: Redesigned Afimilk's herd-management platform for milking, health and fertility data — restructured navigation and a new visual system, tested with farmers.
+title: When everyone says "it doesn't look good"
+tagline: Clients and management both said the herd system didn't look good. Under the surface, new users couldn't find their way around.
+card: I redesigned Afimilk's herd management platform for milking, health and fertility data, with cleaner navigation and a new visual system tested with farmers.
 order: 5
 cover: /images/herd
 coverAlt: "Afimilk herd-management concept with a Daily Tasks view for fertility and health"
 visual: herd-before-after
 
 why: >-
-  Afimilk's herd system runs 15,000+ dairy farms in 50+ countries and tracks more
-  than 10 million cows: milk yield, fat and protein, conductivity, the signals that
-  catch mastitis or ketosis early. Its users are farm directors and farmers aged 30
-  to 70 who spend most of the day outdoors and come to the office to log data and
-  check on the herd. If they can't find what they need, the data never turns into action.
+  Afimilk's herd system runs 15,000+ dairy farms in 50+ countries and tracks over 10
+  million cows. Milk yield, fat and protein, conductivity, all the signals that catch
+  things like mastitis early. The people using it are farm managers and farmers, 30 to
+  70 years old, who spend most of the day outside and come into the office to log data
+  and check on the herd. If they can't find what they need, all that data just sits there.
 role: Detail designer, promoted to lead designer during the project
 team: Head of user research, UX specialist, UI art director, project manager, veterinarian consultant, engineers
 timeline: ~3 years · the last as lead designer
@@ -22,28 +22,30 @@ outcomes:
   - value: "15K+"
     label: dairy farms in 50+ countries on the redesigned system
   - value: "Beta"
-    label: testing with real users confirmed onboarding got easier
+    label: testing with real users showed onboarding got easier
   - value: "Lead"
-    label: promoted to lead designer, then led the field app redesign
+    label: I was promoted to lead designer and took on the field app next
 
 solution:
   summary: >-
-    Every screen focused on the job. Minimal, organized, data first. Features built
-    for the office that farmers didn't use in the field were cleaned out.
+    We focused every screen on the job farmers came to do. Less decoration, more data,
+    and the features that only made sense in the office got cleaned out.
   points:
     - title: Data first
-      text: Decoration out, numbers in. Tables carry more columns and still read calmer.
-    - title: Progress, not counts
-      text: Tasks grouped by type, each showing what's done and what's left today.
-    - title: Built from use, not assumptions
-      text: Feedback showed what farmers don't use. Office-only features were removed.
-    - title: One language
-      text: Dashboard, herd view, tasks and settings share one set of components and colors.
+      text: Decoration out, numbers in. The tables hold more columns now and still feel calmer.
+    - title: Progress at a glance
+      text: Tasks are grouped by type, and each one shows what's done today and what's left.
+    - title: Based on real use
+      text: Feedback showed us what farmers don't use, so office-only features came out.
+    - title: One look everywhere
+      text: Dashboard, herd view, tasks and settings all share the same components and colors.
 
 learned: >-
-  Ask what people don't use, not only what they want. Afimilk's close contact with
-  farmers showed us which features only made sense in the office, and cutting them
-  did more for new users than anything we added.
+  My biggest takeaway was to ask people what they don't use. Afimilk is really close to
+  its farmers, and that showed us which features only made sense in the office. Cutting
+  them helped new users more than anything we added. Next time I'd ask sharper
+  questions too. There was one small data point I simplified instead of digging into,
+  and I still wonder what was behind it.
 ---
 
 import Flow from '../../components/Flow.astro';
@@ -52,28 +54,28 @@ import ScreenTabs from '../../components/ScreenTabs.astro';
 
 ## The problem
 
-The system had tried to look trendy and elegant, and got lost in graphic add-ons that didn't age well. New users struggled to find key features, and the design system couldn't carry the amount of data on screen.
+The system had tried to be trendy and elegant, and got buried under graphic add-ons that didn't age well. New users struggled to find key features, and the design system couldn't handle the amount of data on screen.
 
 <Flow lanes={[
   { label: 'How we got to a brief', steps: [
     { t: '"It doesn\'t look good"', d: 'Honest feedback from clients and management' },
-    { t: 'Name the real issue', d: 'Outdated, cluttered, too many add-ons' },
-    { t: 'What does look good?', d: 'The team named Monday, Jira, Adobe CC, Figma' },
-    { t: 'The brief', d: 'Minimal, organized, elegant. Data first.', kind: 'end' },
+    { t: "What's actually wrong?", d: 'Outdated, cluttered, too many add-ons' },
+    { t: 'What does look good?', d: 'The team named Monday, Jira, Adobe CC and Figma' },
+    { t: 'The brief', d: 'Minimal, organized, elegant, and data first', kind: 'end' },
   ]},
 ]} />
 
 ## The evidence
 
-### Two details, zoomed in
+### Two details, up close
 
-The page farmers open every morning, Daily Tasks, shows the approach best: keep the data, remove what makes it hard to read.
+Daily Tasks is the page farmers open every morning, so it shows the approach best. Keep the data, lose whatever makes it hard to read.
 
 <DetailCompare />
 
-### One language, every screen
+### One look across every screen
 
-The same components and colors carry from the dashboard to a single cow's history to settings.
+The same components and colors run from the dashboard, to a single cow's history, to settings.
 
 <ScreenTabs w={1600} h={900} caption="Latest designs. Demo data." screens={[
   { src: '/images/herd/dashboard', label: 'Dashboard', note: 'Fertility, health and herd routine at a glance, with today\'s tasks on the left.', alt: 'Dashboard with fertility and health rings, herd routine chart and KPI bars' },
@@ -81,4 +83,4 @@ The same components and colors carry from the dashboard to a single cow's histor
   { src: '/images/herd/settings', label: 'Settings', note: 'Task rules in plain controls: a toggle per task, a slider per threshold, and search on top.', alt: 'Task settings with searchable menu, a toggle per task and pregnancy check reasons with a days-since-insemination slider' },
 ]} />
 
-**Result:** beta users confirmed in testing that onboarding improved. We used that data to make the case that the field workers' app needed the same care, and [I led that project next](/work/farmers/).
+**Result:** beta users told us in testing that onboarding got easier. We used that to make the case that the field workers' app needed the same love, and [I led that project next](/work/farmers/).

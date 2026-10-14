@@ -49,6 +49,19 @@ The build fails if a required field is missing, so the structure can't drift.
 2. Fill in the fields at the top, then write *The problem* and *The evidence* below.
 3. Keep `draft: true` until it's finished: drafts show in preview, never on the live site.
 
+## Voice (how the copy should sound)
+
+Picked together on 2026-10-14: warm and personal, light hooks, I + we.
+
+- **I** for my own calls and work ("I decided where it lives"). **We** for team work and results.
+- Talk like a designer explaining the project to a friend in the field: plain words,
+  short sentences, UX terms only where they're the precise word (cognitive load, power users, design QA).
+- Personal is good: what surprised me, what I loved, what I'd do differently. Only real moments.
+- Titles get a light hook plus the fact ("From paper binders to 15,000 farms").
+- Avoid the usual AI tells: "X, not Y" slogans, "It wasn't X, it was Y", a colon before a
+  big reveal, three-adjective lists, neat one-liner morals, and words like seamless,
+  leverage, elevate, robust.
+
 ## Design rules
 
 - Two type families only: Lustria (headings), Satoshi (body).

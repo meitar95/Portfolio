@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-14 — Copy rewrite in Meitar's voice
+
+- Picked together: warm and personal, light-hook titles, "I" for my calls and "we" for team work.
+  The rules are written down in README → Voice.
+- Rewrote every case study (titles, taglines, card text, why, solution, learned, body),
+  the homepage hero and experience bullets, the footer, and the captions inside visuals.
+- Removed the usual AI tells: "X, not Y" slogans, "it wasn't X, it was Y", colon reveals,
+  three-adjective lists and tidy one-line morals.
+- New titles: Filtering → "From four filter bars to one"; Sentrycs → "A counter-drone
+  system that finally looks the part"; Herd → "When everyone says 'it doesn't look good'".
+
 ## 2026-10-14 — Floating laptop, Filtering slider, new Herd screens
 
 - Cybersixgill: the laptop mockup is cut out (transparent background) and floats with

@@ -1,16 +1,17 @@
 ---
-title: Unifying filtering across a security platform
-tagline: Our most-used feature looked like a success. Session recordings showed power users fighting it.
-card: Our most-used feature looked like a success, until session recordings showed power users fighting it. I unified four filter patterns into one AI-assisted system.
+title: From four filter bars to one
+tagline: Every meeting opened with how much people used filtering. Then I watched the session recordings.
+card: Everyone saw filtering as our most-used feature. The recordings showed power users fighting it. I turned four filter patterns into one, with an AI helper built in.
 order: 1
 visual: filtering-before-after
 
 why: >-
-  Filtering was the most-used feature in the product, and every meeting opened with that
-  number. The team read it as success. When I dug in, recordings showed power users at
-  3 clients clicking the same filters again and again, then leaving mid-search, several
-  times a day. They weren't going to tell us. They would have quietly stopped using the
-  product, and that could have cost us more than one client.
+  Filtering was the most-used feature in the product, and every meeting started with
+  that number. Then, while working on a new page, I noticed the filters acting a bit
+  buggy and went looking. Session recordings showed power users at 3 clients clicking
+  the same filters over and over, then leaving mid-search, a few times a day. They
+  weren't going to complain. They'd just slowly stop using the product, and that could
+  have cost us more than one client.
 role: Sole Product Designer
 team: Product lead, PM, engineering, Customer Success
 timeline: 1 month · fast track · 2026
@@ -19,31 +20,31 @@ confidential: true
 
 outcomes:
   - value: "4 → 1"
-    label: filtering patterns, unified across 6 modules
+    label: filtering patterns, now one system across 6 modules
   - value: "3"
-    label: at-risk clients whose struggle I caught in recordings
+    label: at-risk clients I spotted in the recordings
   - value: "~10"
-    label: users validated the flow before engineering started
+    label: users tested the flow before engineering started
 
 solution:
   summary: >-
-    Filtering is basic data behavior. Users shouldn't have to learn a new way to do it.
-    So I gave them the familiar model they expect, in one system with one vocabulary,
-    across every module.
+    Filtering is basic stuff, and nobody should have to learn a new way to do it. So I
+    went with the classic model people already know from other tools, and made it work
+    the same way, with the same words, in every module.
   points:
     - title: Ask AI
-      text: Product asked for an AI helper; I decided where it lives and how it behaves. Instead of a side chat, it sits in the filter bar, so a plain-language request changes the table itself.
+      text: Product asked for an AI helper. I decided where it lives and how it behaves, right in the filter bar, so asking in plain words changes the table itself.
     - title: Simple / Advanced
-      text: The essentials up front; the classic field → operator → value builder one click away.
+      text: The basics up front. The classic field, operator and value builder is one click away for power users.
     - title: Grouped filters
-      text: 28 flat fields organized into families, showing only what applies to each customer.
+      text: 28 flat fields sorted into families, and each customer only sees the ones that apply to them.
     - title: Save View
-      text: Save a filter set and come back to it, with no repeated setup for daily investigations.
+      text: Build a filter set once and come back to it tomorrow, so daily investigations don't start from zero.
 
 learned: >-
-  High usage can be a symptom, not a success. Our most-used feature was where users
-  struggled most, and they blamed themselves instead of telling us. Now we watch what
-  people do before trusting what a dashboard says.
+  I used to read high usage as good news. This project changed that for me. Our
+  most-used feature was where people struggled the most, and they blamed themselves
+  instead of telling us. These days I watch a few recordings before I trust a dashboard.
 ---
 
 import SessionPattern from '../../components/filtering/SessionPattern.astro';
@@ -57,13 +58,13 @@ import RefImage from '../../components/RefImage.astro';
 
 ## The problem
 
-While designing a new Findings page, I noticed filters behaving oddly and asked the dev team to check. At the same time, I went to Amplitude to see how our power users actually experienced their most important daily tool.
+While designing a new Findings page, I noticed the filters acting weird and asked the dev team to take a look. Meanwhile I went into Amplitude to see how our power users were really doing with the tool they use most.
 
 <SessionPattern />
 
 <VoiceOfCustomer />
 
-Underneath, the cause was structural: the product had grown module by module, and filtering had grown with it.
+Under all of that was a structure problem. The product grew one module at a time, and every module got its own way to filter.
 
 <PatternMatrix />
 
@@ -71,7 +72,7 @@ Underneath, the cause was structural: the product had grown module by module, an
 
 ## The evidence
 
-Every step after the recordings was about one question: what do users already expect from filtering? The answers were out there; the job was to pick the most intuitive ones.
+From there I kept coming back to one question. What do people already expect a filter to do? Most of the answers were out there, in tools they use every day. My job was to pick the ones that felt most natural.
 
 <ProcessStrip />
 
@@ -79,6 +80,6 @@ Every step after the recordings was about one question: what do users already ex
 
 <FieldFamilies />
 
-<RefImage src="/images/filtering-advanced" alt="Final design in Figma: the filter bar with saved views, active chips, and the Advanced panel showing Severity is Medium, Low and Severity is not Critical" caption="The final Advanced panel in Figma: every condition reads as field → operator → value, the classic model users already know." />
+<RefImage src="/images/filtering-advanced" alt="Final design in Figma: the filter bar with saved views, active chips, and the Advanced panel showing Severity is Medium, Low and Severity is not Critical" caption="The final Advanced panel in Figma. Every condition reads field → operator → value, the classic model people already know." />
 
-**Result:** strong early client feedback, and the work contributed to closing new deals. It's rolling out to all clients now, measured against session recordings on the same flows, and filtering became the first proof point for consolidating all six modules into one coherent product.
+**Result:** early client feedback was really good, and the new filtering helped close new deals. It's rolling out to everyone now, and we're watching the same session recordings to see the difference. It was also our first real step toward making all six modules feel like one product.
