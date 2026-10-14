@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-14 — New Filtering card visual
+
+- `filtering/FilterFold.astro` replaces the cropped mini panel: the four old filter bars
+  (Findings, Log analysis, Achievements, Inventory) fold into the one new bar with chips and
+  a results table. Plays once when the card scrolls into view, replays on hover/focus.
+  Static "after" for reduced motion; 4:3 on phones.
+
 ## 2026-10-14 — Card buttons go light
 
 - Black buttons are now only for "Contact me". "Read case study" uses the light button

@@ -5,6 +5,7 @@ import HeroGlow from '../components/HeroGlow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import MotionReel from '../components/MotionReel.astro';
 import Button from '../components/Button.astro';
+import FilterFold from '../components/filtering/FilterFold.astro';
 
 // Drafts show in local preview only; production gets finished work only.
 const showDrafts = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS === 'true';
@@ -68,18 +69,7 @@ const experience = [
             coverAlt={w.data.coverAlt}
             draft={w.data.draft}
           >
-            {w.id === 'filtering' && (
-              <div slot="visual" class="mini" aria-hidden="true">
-                <div class="mini__bar"><span class="mini__ai">✦ Ask AI or search…</span><span>My special view</span><span>Critical AWS</span></div>
-                <div class="mini__panel">
-                  <b>Filter panel</b>
-                  <span class="mini__input">Describe what you want to see</span>
-                  <div class="mini__chips"><span>Critical only</span><span>Opened this week</span><span>Assigned to me</span></div>
-                  <div class="mini__tabs"><span class="on">Simple</span><span>Advanced</span></div>
-                  <span class="mini__row">Status</span><span class="mini__row">Severity</span><span class="mini__row">Category</span>
-                </div>
-              </div>
-            )}
+            {w.id === 'filtering' && <FilterFold slot="visual" />}
           </ProjectCard>
         ))}
       </div>
@@ -147,19 +137,6 @@ const experience = [
     background: var(--accent); color: #fff; border-radius: 10px;
     padding: 0.55rem 0.95rem; font-size: var(--fs-small); font-weight: 500;
   }
-
-  /* Mini product snippet on the Filtering card (real text, not a shrunken screenshot) */
-  .mini { aspect-ratio: 16 / 9; background: #fff; border-radius: var(--radius-md); padding: 1.1rem; display: grid; align-content: start; gap: 0.75rem; font-size: 0.875rem; color: #2c3346; overflow: hidden; }
-  .mini__bar { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
-  .mini__ai { border: 1px solid #2f63d6; color: #2f63d6; border-radius: 999px; padding: 0.25rem 0.7rem; }
-  .mini__panel { display: grid; gap: 0.5rem; border: 1px solid #e3e6ec; border-radius: 10px; padding: 0.8rem; max-width: 20rem; box-shadow: 0 8px 20px -10px rgb(20 30 60 / 0.2); }
-  .mini__input { background: #eef3fd; border: 1px solid #7da0ea; border-radius: 6px; padding: 0.3rem 0.6rem; color: #6b7180; }
-  .mini__chips { display: flex; gap: 0.35rem; flex-wrap: wrap; }
-  .mini__chips span { background: #e3f1f5; border-radius: 6px; padding: 0.15rem 0.5rem; }
-  .mini__tabs { display: flex; gap: 0.8rem; border-bottom: 1px solid #e3e6ec; }
-  .mini__tabs span { padding-bottom: 0.3rem; }
-  .mini__tabs .on { color: #2f63d6; border-bottom: 2px solid #2f63d6; }
-  .mini__row { color: #4a5163; }
 
   .exp { display: grid; gap: var(--s-1); padding-block: var(--s-4); border-top: 1px solid var(--line); }
   .exp__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-1) var(--s-3); align-items: baseline; }
