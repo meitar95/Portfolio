@@ -1,0 +1,48 @@
+---
+// The brief, from the concept deck: keep the UX operators trust, upgrade what they see.
+import Icon from '../Icon.astro';
+const keep = ['Layout & navigation', 'Operating principles', 'Microcopy'];
+const upgrade = ['Colors & contrast', 'A more advanced, modern design', 'Highlighting what makes the product unique'];
+const feel = [
+  { t: 'Simplicity', d: 'Practical · systemic · operational' },
+  { t: 'Energy', d: 'Light · gradient · layered depth' },
+  { t: 'Modern', d: 'Neon accents · glass · dark' },
+];
+---
+<figure class="viz">
+  <div class="pr">
+    <div class="pr__card">
+      <span class="pr__icon"><Icon name="check" size={18} /></span>
+      <p class="pr__k">Keep: the UX operators already trust</p>
+      <ul>{keep.map((k) => <li>{k}</li>)}</ul>
+    </div>
+    <div class="pr__card pr__card--up">
+      <span class="pr__icon"><Icon name="sparkle" size={18} /></span>
+      <p class="pr__k">Upgrade: everything they see</p>
+      <ul>{upgrade.map((k) => <li>{k}</li>)}</ul>
+    </div>
+  </div>
+  <ul class="pr__feel" aria-label="Look and feel">
+    {feel.map((f) => <li><b>{f.t}</b><span>{f.d}</span></li>)}
+  </ul>
+  <figcaption><b>The brief I pitched, in one line:</b> change the look, not the way people work. Grounded in Tractinsky's finding that what is beautiful is perceived as more usable.</figcaption>
+</figure>
+
+<style>
+  .viz { display: grid; gap: var(--s-2); margin: 0; }
+  .viz figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .viz figcaption b { color: var(--ink); font-weight: 500; }
+  .pr { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .pr__card { display: grid; gap: var(--s-1); align-content: start; padding: var(--s-3); border-radius: var(--radius-md); background: var(--bg); }
+  .pr__card--up { background: linear-gradient(160deg, #16305a, #0f1f3d); color: #c9d6ea; }
+  .pr__card--up .pr__k { color: #fff; }
+  .pr__icon { display: grid; place-items: center; width: 2.25rem; height: 2.25rem; border-radius: 10px; background: var(--tint-2); color: var(--accent); margin-bottom: 0.25rem; }
+  .pr__card--up .pr__icon { background: rgb(0 213 255 / 0.15); color: #00d5ff; }
+  .pr__k { font-weight: 500; color: var(--ink); }
+  .pr__card ul { padding-left: 1.1rem; display: grid; gap: 0.25rem; font-size: var(--fs-small); }
+  .pr__feel { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2); }
+  .pr__feel li { display: grid; gap: 2px; padding: var(--s-2) var(--s-3); border-radius: 12px; border: 1px solid var(--line); }
+  .pr__feel b { color: var(--ink); font-weight: 500; }
+  .pr__feel span { font-size: 0.875rem; color: var(--ink-3); }
+  @media (max-width: 640px) { .pr, .pr__feel { grid-template-columns: 1fr; } }
+</style>

@@ -10,6 +10,7 @@
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import FilterBeforeAfter from '../../components/filtering/FilterBeforeAfter.astro';
+import SentrycsSlider from '../../components/sentrycs/BeforeAfterSlider.astro';
 
 export async function getStaticPaths() {
   const all = (await getCollection('work', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
@@ -19,7 +20,7 @@ export async function getStaticPaths() {
 const { entry, next } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
-const visuals = { 'filtering-before-after': FilterBeforeAfter };
+const visuals = { 'filtering-before-after': FilterBeforeAfter, 'sentrycs-before-after': SentrycsSlider };
 const Visual = d.visual ? visuals[d.visual] : null;
 ---
 <Base title={`${d.title} — Meitar Mechoresh`} description={d.tagline}>
@@ -123,7 +124,8 @@ const Visual = d.visual ? visuals[d.visual] : null;
   .cs__body { display: grid; gap: var(--gap-content); }
   .cs__body :global(h2) { margin-top: calc(var(--gap-section) - var(--gap-content)); }
   .cs__body :global(h2:first-child) { margin-top: 0; }
-  .cs__body :global(h2 + p) { margin-top: calc(var(--gap-pair) - var(--gap-content)); }
+  .cs__body :global(h2 + p), .cs__body :global(h3 + p) { margin-top: calc(var(--gap-pair) - var(--gap-content)); }
+  .cs__body :global(h3) { margin-top: calc(var(--s-5) - var(--gap-content)); }
   .cs__body :global(strong) { color: var(--ink); font-weight: 500; }
   .cs__note { font-size: var(--fs-small); color: var(--ink-3); }
 

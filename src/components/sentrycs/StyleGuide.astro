@@ -1,0 +1,59 @@
+---
+// The style guide, shown through the parts that only exist because of this product.
+const terrains = [
+  { id: 'desert', label: 'Desert' }, { id: 'snow', label: 'Snow' },
+  { id: 'port', label: 'Port' }, { id: 'hills', label: 'Hills' },
+];
+---
+<div class="sg">
+  <figure class="sg__tile sg__tile--wide">
+    <div class="sg__img"><img src="/images/sentrycs/drone-states-1360.webp" width="1360" height="250" loading="lazy" decoding="async" alt="Drone icon states from the Sentrycs style guide: regular, mitigate, focused track, attempt mitigation and intercept, each in four list states and several sizes" /></div>
+    <figcaption><b>Drone states</b><span>Regular, mitigate, focused track, attempt mitigation, intercept. Each in allow-list, block-list, unknown and disconnected, in five sizes.</span></figcaption>
+  </figure>
+
+  <figure class="sg__tile sg__tile--wide">
+    <div class="sg__img"><img src="/images/sentrycs/nfz-states-1600.webp" srcset="/images/sentrycs/nfz-states-800.webp 800w, /images/sentrycs/nfz-states-1600.webp 1600w" sizes="(max-width: 1080px) 100vw, 1080px" width="1600" height="346" loading="lazy" decoding="async" alt="No-fly and alert zone states: regular, hover, tablet and tablet selected" /></div>
+    <figcaption><b>Zones, in every state</b><span>No-fly and alert zones: regular, hover, tablet and tablet-selected.</span></figcaption>
+  </figure>
+
+  <figure class="sg__tile sg__tile--wide">
+    <ul class="sg__terrain">
+      {terrains.map((t) => <li><img src={`/images/sentrycs/terrain-${t.id}.webp`} width="800" height="600" loading="lazy" decoding="async" alt={`${t.label} satellite background used to test map elements`} /><span>{t.label}</span></li>)}
+    </ul>
+    <figcaption><b>Tested on real terrain</b><span>Every map element was checked against the kinds of sites customers protect, so markers and zones stay readable on sand, snow, water and rock.</span></figcaption>
+  </figure>
+
+  <figure class="sg__tile">
+    <div class="sg__img"><img src="/images/sentrycs/tablet-sizing-790.webp" srcset="/images/sentrycs/tablet-sizing-600.webp 600w, /images/sentrycs/tablet-sizing-790.webp 790w" sizes="(max-width: 860px) 100vw, 530px" width="790" height="897" loading="lazy" decoding="async" alt="Tablet sizing note: on the 1920 by 1200 tablet, controls are 48px high, round buttons 56px and icons 24px" /></div>
+    <figcaption><b>Built for field tablets</b><span>On the 1920×1200 tablet: 48px controls, 56px round buttons, 24px icons.</span></figcaption>
+  </figure>
+
+  <figure class="sg__tile">
+    <div class="sg__img"><img src="/images/sentrycs/styleguide-index-1170.webp" srcset="/images/sentrycs/styleguide-index-600.webp 600w, /images/sentrycs/styleguide-index-1170.webp 1170w" sizes="(max-width: 860px) 100vw, 530px" width="1170" height="1250" loading="lazy" decoding="async" alt="Sentrycs style guide index: foundations, map elements, buttons, navigation, forms, panels, feedback and loaders" /></div>
+    <figcaption><b>A system the dev team adopted</b><span>Foundations, map elements, forms, panels, feedback and loaders, from atoms to complex components.</span></figcaption>
+  </figure>
+</div>
+
+<style>
+  .sg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s-4) var(--s-3); }
+  .sg__tile { margin: 0; display: grid; gap: var(--s-2); align-content: start; }
+  .sg__tile--wide { grid-column: 1 / -1; }
+  .sg__img { background: #151a33; border-radius: var(--radius-md); overflow: hidden; }
+  .sg__img img { width: 100%; height: auto; display: block; }
+  .sg__tile:not(.sg__tile--wide) .sg__img { aspect-ratio: 1 / 1.05; }
+  .sg__tile:not(.sg__tile--wide) .sg__img img { height: 100%; object-fit: cover; object-position: top left; }
+  .sg__terrain { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-1); }
+  .sg__terrain li { position: relative; border-radius: 12px; overflow: hidden; }
+  .sg__terrain img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+  .sg__terrain span {
+    position: absolute; left: 8px; bottom: 8px; padding: 0.15rem 0.5rem; border-radius: 6px;
+    background: rgb(0 0 0 / 0.55); color: #fff; font-size: 0.8125rem; font-weight: 500;
+  }
+  .sg figcaption { display: grid; gap: 2px; }
+  .sg figcaption b { color: var(--ink); font-weight: 500; }
+  .sg figcaption span { font-size: var(--fs-small); color: var(--ink-3); }
+  @media (max-width: 720px) {
+    .sg { grid-template-columns: 1fr; }
+    .sg__terrain { grid-template-columns: 1fr 1fr; }
+  }
+</style>

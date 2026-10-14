@@ -1,0 +1,66 @@
+---
+// One screen, broken into parts. Hover or focus a part to light it up on the screen.
+// Boxes are in % of the 1920×944 frame.
+const parts = [
+  { name: 'System header', text: 'Connection and controller status, always in view.', box: [0, 0, 100, 5.3] },
+  { name: 'Side menu', text: 'Eight modules, one icon rail.', box: [0, 5.3, 3.4, 94.7] },
+  { name: 'Map tools', text: 'Coordinates, trail and layers, grouped top-right of the map.', box: [57.4, 6.4, 14.6, 18.5] },
+  { name: 'Drone markers', text: 'One icon system for every drone state, readable on any terrain.', box: [18, 26.5, 7, 15] },
+  { name: 'Zones', text: 'No-fly and alert zones in distinct, consistent strokes.', box: [38.5, 10.5, 31.5, 77.5] },
+  { name: 'Sky status', text: 'Every detected drone, sorted by what needs attention.', box: [73.1, 6.4, 26.4, 41.6] },
+  { name: 'Drone detail', text: 'Altitude, heading, speed and the actions an operator can take.', box: [73.1, 50.5, 26.4, 49.5] },
+  { name: 'Map controls', text: 'Zoom, compass and scale, sized for tablets.', box: [54.5, 90.5, 17.5, 9.5] },
+];
+---
+<figure class="anat" data-anat>
+  <div class="anat__screen">
+    <img src="/images/sentrycs/realtime-final-1600.webp" srcset="/images/sentrycs/realtime-final-800.webp 800w, /images/sentrycs/realtime-final-1600.webp 1600w"
+      sizes="(max-width: 1080px) 100vw, 1080px" width="1600" height="787" loading="lazy" decoding="async"
+      alt="The redesigned Sentrycs real-time screen: satellite map with drone markers and zones, and the sky status and drone detail panels on the right" />
+    {parts.map((p, i) => <span class="anat__box" data-box={i} style={`left:${p.box[0]}%;top:${p.box[1]}%;width:${p.box[2]}%;height:${p.box[3]}%`} aria-hidden="true"></span>)}
+  </div>
+  <ol class="anat__list">
+    {parts.map((p, i) => (
+      <li><button type="button" data-part={i}><b>{p.name}</b><span>{p.text}</span></button></li>
+    ))}
+  </ol>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-anat]').forEach((root) => {
+    const boxes = [...root.querySelectorAll<HTMLElement>('[data-box]')];
+    const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-part]')];
+    const on = (i: number | null) => {
+      root.classList.toggle('is-focus', i !== null);
+      boxes.forEach((b, k) => b.classList.toggle('is-on', k === i));
+      btns.forEach((b, k) => b.classList.toggle('is-on', k === i));
+    };
+    btns.forEach((b, i) => {
+      b.addEventListener('mouseenter', () => on(i)); b.addEventListener('focus', () => on(i));
+      b.addEventListener('click', () => on(i));
+      b.addEventListener('mouseleave', () => on(null)); b.addEventListener('blur', () => on(null));
+    });
+  });
+</script>
+
+<style>
+  .anat { display: grid; gap: var(--s-3); margin: 0; }
+  .anat__screen { position: relative; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 16px 40px -16px rgb(16 22 42 / 0.45); }
+  .anat__screen img { display: block; width: 100%; height: auto; transition: filter 0.35s var(--ease); }
+  .anat__box {
+    position: absolute; border-radius: 6px; opacity: 0;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 9999px rgb(10 14 28 / 0.55);
+    transition: opacity 0.3s var(--ease);
+  }
+  .anat__box.is-on { opacity: 1; }
+  .anat__list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+  .anat__list button {
+    display: grid; gap: 2px; width: 100%; text-align: left; border: 0; background: none; cursor: pointer;
+    padding: 0.625rem 0.875rem; border-radius: 10px; border-left: 2px solid transparent; transition: background 0.2s, border-color 0.2s;
+  }
+  .anat__list b { color: var(--ink); font-weight: 500; font-size: 0.9375rem; }
+  .anat__list span { color: var(--ink-3); font-size: 0.875rem; line-height: 1.4; }
+  .anat__list button.is-on { background: var(--tint-1); border-left-color: var(--accent); }
+  @media (max-width: 860px) { .anat__list { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .anat__list { grid-template-columns: 1fr; } }
+</style>

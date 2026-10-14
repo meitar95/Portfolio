@@ -1,0 +1,41 @@
+---
+// The readability problem, shown at real sizes: legacy 11–12px vs the new 16px body / 14px floor.
+const sample = { title: 'Drone 3 · DJI Matrice 600', meta: 'Alt 25.1 m · Speed 15 m/s · Sensor dist. 459 m' };
+---
+<figure class="viz">
+  <div class="rs">
+    <div class="rs__col">
+      <p class="rs__k">Before</p>
+      <div class="rs__panel rs__panel--old">
+        <p style="font-size:12px">{sample.title}</p>
+        <p style="font-size:11px">{sample.meta}</p>
+      </div>
+      <p class="rs__v">11–12px core text</p>
+    </div>
+    <div class="rs__col">
+      <p class="rs__k">After</p>
+      <div class="rs__panel rs__panel--new">
+        <p style="font-size:16px">{sample.title}</p>
+        <p style="font-size:14px">{sample.meta}</p>
+      </div>
+      <p class="rs__v">16px body, 14px floor</p>
+    </div>
+  </div>
+  <figcaption><b>Shown at real size.</b> Operators of every age read these on tablets in the field, where a missed alert has real consequences. The new scale was tested with ~20 users.</figcaption>
+</figure>
+
+<style>
+  .viz { display: grid; gap: var(--s-2); margin: 0; }
+  .viz figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .viz figcaption b { color: var(--ink); font-weight: 500; }
+  .rs { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); background: var(--bg); border-radius: var(--radius-md); padding: var(--s-3); }
+  .rs__col { display: grid; gap: var(--s-1); align-content: start; }
+  .rs__k { font-size: 0.8125rem; color: var(--ink-3); }
+  .rs__v { font-size: var(--fs-small); color: var(--ink); font-weight: 500; }
+  .rs__panel { border-radius: 10px; padding: 1rem 1.125rem; display: grid; gap: 0.375rem; font-family: 'Open Sans', system-ui, sans-serif; min-height: 6.5rem; align-content: center; }
+  .rs__panel p { max-width: none; line-height: 1.35; }
+  .rs__panel--old { background: #3a4252; color: #c9ced8; }
+  .rs__panel--new { background: linear-gradient(160deg, #16305a, #0f1f3d); color: #fff; }
+  .rs__panel--new p + p { color: #b8c6dd; }
+  @media (max-width: 560px) { .rs { grid-template-columns: 1fr; } }
+</style>

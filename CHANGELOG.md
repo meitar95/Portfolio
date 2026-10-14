@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-10-14 — Sentrycs case study
+
+- Built from the Sentrycs Figma file (Presentation + Style guide pages).
+- Hero visual: drag-to-compare slider with 3 real before/after pairs (Real time,
+  Analytics, Settings); legacy screens cropped from browser captures, same frame size.
+- "One screen, broken into parts": hover a part to spotlight it on the shipped screen.
+- Readability shown at real size (11–12px vs 16px / 14px floor).
+- The brief from the concept deck: keep the UX, upgrade the UI + look-and-feel pillars.
+- Style guide: drone states, zone states, 4 terrain backgrounds, tablet sizing, index.
+- Template: "What we learned" (team voice); h3 subheadings in the fold get the same
+  heading-to-paragraph rhythm.
+
 ## 2026-10-14 — Filtering story: usage ≠ success
 
 - Rewrote the Filtering story around the real discovery: the most-used feature was where

@@ -1,0 +1,80 @@
+---
+title: Redesigning a counter-drone command system
+tagline: Operators loved how it worked. It just didn't look like the advanced product it was. We changed the look, not the way people work.
+card: Operators loved the UX, but the UI looked dated for a cutting-edge defense product. I scaled one concept screen into an 8-module system and shipped it with engineering at ~90% fidelity.
+order: 2
+cover: /images/sentrycs
+coverAlt: "Sentrycs counter-drone sensor on a rooftop above a city skyline at dusk"
+visual: sentrycs-before-after
+
+why: >-
+  Sentrycs detects and takes control of unauthorized drones at airports, military
+  bases, prisons and ports. Operators were happy with how the system worked, but the
+  interface looked old and generic, a problem for a young company showing
+  cutting-edge security at conferences. And in the field, core text ran at 11–12px
+  on tablets, in a system where a missed alert has real consequences.
+role: Product Designer. UI designer under a senior lead, then sole designer for the final year.
+team: Design lead (year one), product, engineering
+timeline: ~2 years
+platform: Counter-drone defense, web + field tablets
+confidential: false
+
+outcomes:
+  - value: "1 → 8"
+    label: one concept screen scaled into an 8-module system
+  - value: "16px"
+    label: body text, up from 11–12px, tested with ~20 users
+  - value: "~90%"
+    label: design-to-code fidelity, against an 80% target
+
+solution:
+  summary: >-
+    Keep everything operators already know; upgrade everything they see. One visual
+    language, from the live map to analytics, built as a style guide the dev team
+    adopted.
+  points:
+    - title: UX preserved
+      text: Same layout, navigation, operating principles and microcopy, so nobody had to relearn a live defense tool.
+    - title: A readability system
+      text: 16px body and a 14px floor on a clean rem scale, validated with ~20 users on tablet and desktop.
+    - title: A map language
+      text: Drone states, markers and zones redrawn to market conventions and tested on real terrain.
+    - title: Glass that ships
+      text: Solved the Figma glass effect in code with engineering, and owned Design QA to ~90% fidelity.
+
+learned: >-
+  A redesign doesn't have to make people relearn. By protecting the UX operators
+  trusted and changing only what they see, we gave a cutting-edge product a face that
+  matched it, and it now leads Sentrycs' own marketing videos.
+---
+
+import ReadabilityScale from '../../components/sentrycs/ReadabilityScale.astro';
+import Principles from '../../components/sentrycs/Principles.astro';
+import ScreenAnatomy from '../../components/sentrycs/ScreenAnatomy.astro';
+import StyleGuide from '../../components/sentrycs/StyleGuide.astro';
+
+## The problem
+
+Two problems, both real. The product's look didn't match the technology behind it, and the text operators depend on in the field was too small to read safely.
+
+<ReadabilityScale />
+
+## The evidence
+
+The lead designer shaped the first concept screen. My job was to work out how that one screen becomes a full product, then, as sole designer, to get it shipped.
+
+<Principles />
+
+### One screen, broken into parts
+
+Every module is built from the same parts. Hover a part to see where it lives.
+
+<ScreenAnatomy />
+
+### A style guide built for this product
+
+Generic UI kits don't have drone states, no-fly zones or satellite terrain. This one does.
+
+<StyleGuide />
+
+**Result:** usability testing confirmed the UX was preserved, feedback from operators and stakeholders was strongly positive, and the redesign shipped. It now headlines Sentrycs' own public marketing videos.
