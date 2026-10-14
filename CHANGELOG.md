@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-14 — Filtering references from the FigJam board
+
+- `filtering/Benchmarks.astro` now shows real snapshots from the "filtering-ux" FigJam
+  reference board: Notion, Linear, monday.com and Kibana featured (with the pattern each
+  belongs to and what I took from it), plus Datadog, Jira, Cycode, Rapid7, Tenable,
+  Microsoft Foundry and SentinelOne in a swipeable row. Tap any snapshot to enlarge.
+
 ## 2026-10-14 — Result sections with the final flow
 
 - Fixed: the Filtering process cards had titles overlapping their text. The template's
