@@ -5,7 +5,7 @@ import HeroGlow from '../components/HeroGlow.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import MotionReel from '../components/MotionReel.astro';
 import Button from '../components/Button.astro';
-import FilterFold from '../components/filtering/FilterFold.astro';
+import FilterAICard from '../components/filtering/FilterAICard.astro';
 
 // Drafts show in local preview only; production gets finished work only.
 const showDrafts = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS === 'true';
@@ -69,7 +69,7 @@ const experience = [
             coverAlt={w.data.coverAlt}
             draft={w.data.draft}
           >
-            {w.id === 'filtering' && <FilterFold slot="visual" />}
+            {w.id === 'filtering' && <FilterAICard slot="visual" />}
           </ProjectCard>
         ))}
       </div>

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-14 — Filtering card: slow AI moment
+
+- Replaced the fast 4→1 fold with `filtering/FilterAICard.astro`: the Ask AI box opens, slowly
+  types "Critical AWS findings this week", thinks, then three filters arrive one by one, the
+  table narrows to 7 matches and a toast confirms. It lingers ~4s, then eases back to the start
+  and loops (~14s). Only runs while on screen; static end state for reduced motion.
+
 ## 2026-10-14 — New Filtering card visual
 
 - `filtering/FilterFold.astro` replaces the cropped mini panel: the four old filter bars

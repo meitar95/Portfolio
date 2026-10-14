@@ -1,0 +1,135 @@
+---
+// Homepage card visual for Filtering: a slow, looping "ask AI" moment.
+// Type a request → AI adds the filters → the table narrows → linger → gently reset.
+// Loops only while visible. Reduced motion: shows the finished state, no loop.
+// Decorative (aria-hidden); mirrors the real prototype in the case study.
+import '@fontsource/plus-jakarta-sans/latin-400.css';
+import '@fontsource/plus-jakarta-sans/latin-500.css';
+import '@fontsource/plus-jakarta-sans/latin-600.css';
+const query = 'Critical AWS findings this week';
+---
+<div class="fa" data-fa data-q={query} aria-hidden="true">
+  <div class="fa__top">
+    <span class="fa__ai"><span class="fa__spark">✦</span><span class="fa__text" data-text>Ask AI or search…</span><span class="fa__caret"></span></span>
+    <span class="fa__view">My Special View</span>
+    <span class="fa__view">Critical AWS</span>
+  </div>
+  <div class="fa__bar">
+    <span class="fa__chip" style="--d: 0"><i>Severity</i> is <b><em class="dot"></em>Critical</b> ×</span>
+    <span class="fa__chip" style="--d: 1"><i>Cloud</i> is <b>AWS</b> ×</span>
+    <span class="fa__chip" style="--d: 2"><i>Opened</i> is <b>This week</b> ×</span>
+    <span class="fa__add">+ Add filter</span>
+    <span class="fa__count"><b data-count>257</b> matching</span>
+  </div>
+  <div class="fa__rows">{Array.from({ length: 6 }).map((_, i) => <i style={`--r: ${i}`} class={i < 2 ? 'keep' : ''}></i>)}</div>
+  <span class="fa__toast">✓ AI added 3 filters</span>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-fa]').forEach((el) => {
+    const text = el.querySelector<HTMLElement>('[data-text]')!;
+    const count = el.querySelector<HTMLElement>('[data-count]')!;
+    const q = el.dataset.q!;
+    const placeholder = text.textContent!;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      text.textContent = q; count.textContent = '7'; el.classList.add('is-typing', 'is-done'); return;
+    }
+    let timers: number[] = []; let running = false;
+    const at = (ms: number, fn: () => void) => timers.push(window.setTimeout(fn, ms));
+    const stop = () => { timers.forEach(clearTimeout); timers = []; running = false; };
+    const cycle = () => {
+      running = true;
+      // 1 · focus the AI box, then type slowly
+      at(900, () => { el.classList.add('is-typing'); text.textContent = ''; });
+      [...q].forEach((ch, i) => at(1400 + i * 75, () => { text.textContent += ch; }));
+      const typed = 1400 + q.length * 75;
+      // 2 · think, then filters arrive one by one and the table narrows
+      at(typed + 300, () => el.classList.add('is-thinking'));
+      at(typed + 1300, () => { el.classList.remove('is-thinking'); el.classList.add('is-done'); });
+      at(typed + 2300, () => { count.textContent = '7'; });
+      // 3 · linger, then a slow return to the start
+      const linger = typed + 2300 + 4200;
+      at(linger, () => { el.classList.add('is-resetting'); el.classList.remove('is-done'); });
+      at(linger + 900, () => { count.textContent = '257'; el.classList.remove('is-typing'); text.textContent = placeholder; });
+      at(linger + 2200, () => { el.classList.remove('is-resetting'); cycle(); });
+    };
+    new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !running) cycle();
+      if (!e.isIntersecting && running) {
+        stop(); el.classList.remove('is-typing', 'is-thinking', 'is-done', 'is-resetting');
+        text.textContent = placeholder; count.textContent = '257';
+      }
+    }, { threshold: 0.4 }).observe(el);
+  });
+</script>
+
+<style>
+  .fa {
+    --ease-slow: cubic-bezier(0.33, 1, 0.68, 1);
+    position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--radius-md);
+    display: grid; grid-template-rows: auto auto 1fr; gap: 0.7rem; padding: 1rem;
+    background: #fafafa; box-shadow: inset 0 0 0 1px rgb(31 21 21 / 0.06);
+    font: 400 0.8125rem/1.2 'Plus Jakarta Sans', var(--sans); color: #243165;
+  }
+  .fa__top { display: flex; align-items: center; gap: 0.75rem; white-space: nowrap; min-width: 0; }
+  .fa__ai {
+    display: inline-flex; align-items: center; gap: 0.4rem; flex: 0 1 auto; min-width: 0; overflow: hidden;
+    padding: 0.4rem 0.75rem; border: 1px solid #4665ff; border-radius: 999px; background: #fff; color: #3665da;
+    transition: flex-basis 0.9s var(--ease-slow), border-radius 0.9s var(--ease-slow), box-shadow 0.6s var(--ease-slow);
+    flex-basis: 8.5rem;
+  }
+  .fa.is-typing .fa__ai { flex-basis: 100%; border-radius: 10px; box-shadow: 0 0 0 4px rgb(70 101 255 / 0.12); color: #243165; }
+  .fa__spark { color: #4665ff; }
+  .fa.is-thinking .fa__spark { animation: fa-spin 1.2s linear infinite; }
+  .fa__caret { width: 1px; height: 1em; background: #243165; opacity: 0; }
+  .fa.is-typing:not(.is-done) .fa__caret { animation: fa-blink 1s steps(1) infinite; }
+  .fa__view { color: #64748b; transition: opacity 0.6s var(--ease-slow); }
+  .fa.is-typing .fa__view { opacity: 0; }
+
+  .fa__bar { display: flex; align-items: center; gap: 0.45rem; white-space: nowrap; min-height: 30px; }
+  .fa__chip {
+    display: inline-flex; gap: 0.3rem; align-items: center; padding: 0.3rem 0.5rem; border-radius: 7px; background: #f2f2f2; color: #8390a3;
+    opacity: 0; transform: translateY(6px) scale(0.98); max-width: 0; padding-inline: 0; margin-right: -0.45rem;
+    transition: opacity 0.7s var(--ease-slow), transform 0.8s var(--ease-slow), max-width 0.8s var(--ease-slow), padding 0.8s var(--ease-slow), margin 0.8s var(--ease-slow);
+    overflow: hidden;
+  }
+  .fa__chip i { font-style: normal; color: #243165; }
+  .fa__chip b { font-weight: 600; color: #243165; display: inline-flex; align-items: center; gap: 0.25rem; }
+  .fa__chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #9b1c31; }
+  .fa.is-done .fa__chip {
+    opacity: 1; transform: none; max-width: 14rem; padding-inline: 0.5rem; margin-right: 0;
+    transition-delay: calc(var(--d) * 0.35s);
+  }
+  .fa.is-resetting .fa__chip { transition-duration: 0.9s; transition-delay: calc((2 - var(--d)) * 0.12s); }
+  .fa__add { color: #287be0; font-weight: 500; max-width: 7rem; overflow: hidden; transition: max-width 0.8s var(--ease-slow), opacity 0.6s var(--ease-slow); }
+  .fa.is-done .fa__add { max-width: 0; opacity: 0; }
+  .fa__bar { min-width: 0; overflow: hidden; }
+  .fa__count { margin-left: auto; color: #8390a3; }
+  .fa__count b { color: #243165; font-weight: 600; }
+
+  .fa__rows { display: grid; gap: 7px; align-content: start; }
+  .fa__rows i {
+    height: 22px; border-radius: 6px; background: linear-gradient(90deg, #eceef2 calc(94% - var(--r) * 8%), #f4f5f7 0);
+    transition: opacity 0.9s var(--ease-slow), transform 0.9s var(--ease-slow);
+  }
+  .fa.is-done .fa__rows i:not(.keep) { opacity: 0; transform: translateY(-4px); transition-delay: calc(1s + var(--r) * 0.06s); }
+  .fa.is-done .fa__rows i.keep { background: linear-gradient(90deg, #e3ebfb calc(94% - var(--r) * 8%), #f4f5f7 0); transition-delay: 1s; }
+
+  .fa__toast {
+    position: absolute; left: 50%; bottom: 0.9rem; translate: -50% 0; padding: 0.4rem 0.8rem; border-radius: 8px;
+    background: #243165; color: #fff; font-weight: 500; opacity: 0; transform: translateY(8px);
+    transition: opacity 0.6s var(--ease-slow), transform 0.6s var(--ease-slow);
+  }
+  .fa.is-done .fa__toast { opacity: 1; transform: none; transition-delay: 1.4s; }
+
+  @keyframes fa-blink { 50% { opacity: 1; } }
+  @keyframes fa-spin { to { transform: rotate(360deg); } }
+  .fa__spark { display: inline-block; }
+
+  @media (max-width: 560px) {
+    .fa { aspect-ratio: 4 / 3; }
+    .fa__count { display: none; }
+    .fa__bar { mask-image: linear-gradient(90deg, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) { .fa * { transition: none !important; animation: none !important; } }
+</style>
