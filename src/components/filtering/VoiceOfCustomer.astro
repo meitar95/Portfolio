@@ -1,0 +1,30 @@
+---
+// What Customer Success heard back from the 3 affected clients (paraphrased, not quotes).
+import Icon from '../Icon.astro';
+const heard = [
+  { icon: 'check', t: 'They wanted to use the product, every day.' },
+  { icon: 'toggle', t: 'Filtering didn’t behave like the classic filters they already know.' },
+  { icon: 'alert', t: 'The bugs were worse than we had seen internally.' },
+  { icon: 'users', t: 'They assumed it was their fault for not “getting” it.' },
+];
+---
+<figure class="viz">
+  <div class="voc">
+    <p class="voc__head"><Icon name="message" size={18} /> What Customer Success heard from all 3 clients</p>
+    <ul>{heard.map((h) => <li><Icon name={h.icon} size={16} /><span>{h.t}</span></li>)}</ul>
+  </div>
+  <figcaption><b>Nobody would have told us.</b> They would have quietly stopped using the product, and we could have lost more than one client.</figcaption>
+</figure>
+
+<style>
+  .viz { display: grid; gap: var(--s-2); margin: 0; }
+  .viz figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .viz figcaption b { color: var(--ink); font-weight: 500; }
+  .voc { display: grid; gap: var(--s-2); background: var(--bg); border-radius: var(--radius-md); padding: var(--s-3); }
+  .voc__head { display: flex; align-items: center; gap: 0.5rem; color: var(--ink); font-weight: 500; }
+  .voc__head :global(svg) { color: var(--accent); }
+  .voc ul { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2) var(--s-4); }
+  .voc li { display: flex; gap: 0.625rem; align-items: start; font-size: var(--fs-small); }
+  .voc li :global(svg) { flex: none; margin-top: 3px; color: var(--ink-3); }
+  @media (max-width: 640px) { .voc ul { grid-template-columns: 1fr; } }
+</style>

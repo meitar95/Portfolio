@@ -1,50 +1,53 @@
 ---
 title: Unifying filtering across a security platform
-tagline: Four filtering patterns became one AI-assisted system — learned once, used everywhere.
-card: Four inconsistent filtering patterns across six modules, unified into one AI-assisted system that users learn once and use everywhere.
+tagline: Our most-used feature looked like a success. Session recordings showed power users fighting it.
+card: Our most-used feature looked like a success, until session recordings showed power users fighting it. I unified four filter patterns into one AI-assisted system.
 order: 1
 visual: filtering-before-after
 
 why: >-
-  Filtering sits on the critical path to the platform's value: finding a security
-  issue and fixing it. As the product grew module by module, filtering grew with it —
-  six modules, four patterns, four vocabularies. Users found issues, then stalled
-  before resolving them, and less technical users stalled first.
+  Filtering was the most-used feature in the product, and every meeting opened with that
+  number. The team read it as success. When I dug in, recordings showed power users at
+  3 clients clicking the same filters again and again, then leaving mid-search, several
+  times a day. They weren't going to tell us. They would have quietly stopped using the
+  product, and that could have cost us more than one client.
 role: Sole Product Designer
-team: Product lead, PM, engineering
-timeline: 1 month · 2026
+team: Product lead, PM, engineering, Customer Success
+timeline: 1 month · fast track · 2026
 platform: WAF & API security, B2B SaaS
 confidential: true
 
 outcomes:
   - value: "4 → 1"
     label: filtering patterns, unified across 6 modules
+  - value: "3"
+    label: at-risk clients whose struggle I caught in recordings
   - value: "~10"
     label: users validated the flow before engineering started
-  - value: "1 cycle"
-    label: from discovery to a tested, shipped design
 
 solution:
   summary: >-
-    One filtering system with one shared vocabulary, built for everyone from a
-    first-time viewer to a daily power user.
+    Filtering is basic data behavior. Users shouldn't have to learn a new way to do it.
+    So I gave them the familiar model they expect, in one system with one vocabulary,
+    across every module.
   points:
     - title: Ask AI
       text: Product asked for an AI helper; I decided where it lives and how it behaves. Instead of a side chat, it sits in the filter bar, so a plain-language request changes the table itself.
     - title: Simple / Advanced
-      text: The essentials up front, full query depth one click away.
+      text: The essentials up front; the classic field → operator → value builder one click away.
     - title: Grouped filters
-      text: Related filters sit in collapsible groups, so complex queries stay readable.
+      text: 28 flat fields organized into families, showing only what applies to each customer.
     - title: Save View
-      text: Save a filter set and come back to it — no repeated setup for recurring investigations.
+      text: Save a filter set and come back to it, with no repeated setup for daily investigations.
 
 learned: >-
-  In a security product, the hard part isn't adding capability — it's making complexity
-  legible to people who aren't all security experts. One system tuned for a range of
-  fluency, plus AI to shorten the loop from idea to tested prototype, is how one
-  designer moved a product this complex in a month.
+  High usage can be a symptom, not a success. Our most-used feature was where users
+  struggled most, and they blamed themselves instead of telling us. Now I watch what
+  people do before trusting what a dashboard says.
 ---
 
+import SessionPattern from '../../components/filtering/SessionPattern.astro';
+import VoiceOfCustomer from '../../components/filtering/VoiceOfCustomer.astro';
 import PatternMatrix from '../../components/filtering/PatternMatrix.astro';
 import VocabMap from '../../components/filtering/VocabMap.astro';
 import ProcessStrip from '../../components/filtering/ProcessStrip.astro';
@@ -54,7 +57,13 @@ import RefImage from '../../components/RefImage.astro';
 
 ## The problem
 
-The same task, "show me what needs fixing", worked differently in every module. A user who learned to filter in one place had to relearn it in the next.
+While designing a new Findings page, I noticed filters behaving oddly and asked the dev team to check. At the same time, I went to Amplitude to see how our power users actually experienced their most important daily tool.
+
+<SessionPattern />
+
+<VoiceOfCustomer />
+
+Underneath, the cause was structural: the product had grown module by module, and filtering had grown with it.
 
 <PatternMatrix />
 
@@ -62,7 +71,7 @@ The same task, "show me what needs fixing", worked differently in every module. 
 
 ## The evidence
 
-I started by measuring what was broken, then let research, references and testing shape every decision.
+Every step after the recordings was about one question: what do users already expect from filtering? The answers were out there; the job was to pick the most intuitive ones.
 
 <ProcessStrip />
 
@@ -70,6 +79,6 @@ I started by measuring what was broken, then let research, references and testin
 
 <FieldFamilies />
 
-<RefImage src="/images/filtering-advanced" alt="Final design in Figma: the filter bar with saved views, active chips, and the Advanced panel showing Severity is Medium, Low and Severity is not Critical" caption="The final Advanced panel in Figma: every condition reads as field → operator → value." />
+<RefImage src="/images/filtering-advanced" alt="Final design in Figma: the filter bar with saved views, active chips, and the Advanced panel showing Severity is Medium, Low and Severity is not Critical" caption="The final Advanced panel in Figma: every condition reads as field → operator → value, the classic model users already know." />
 
-**Result:** strong early client feedback, and the work contributed to closing new deals. It's rolling out to all clients now, and filtering became the first proof point for consolidating all six modules into one coherent product.
+**Result:** strong early client feedback, and the work contributed to closing new deals. It's rolling out to all clients now, measured against session recordings on the same flows, and filtering became the first proof point for consolidating all six modules into one coherent product.

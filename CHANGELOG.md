@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-14 — Filtering story: usage ≠ success
+
+- Rewrote the Filtering story around the real discovery: the most-used feature was where
+  power users struggled most. Recordings (analyzed with Amplitude's AI agent) showed
+  repeated clicks and mid-search exits at 3 clients; Customer Success confirmed it, and
+  users blamed themselves.
+- New visuals: "dashboard vs. recordings" + a reconstructed session track
+  (`SessionPattern.astro`), and what Customer Success heard (`VoiceOfCustomer.astro`).
+- Process steps now start from questioning the assumption. Outcome "3 at-risk clients"
+  replaces "1 cycle". New "What I learned".
+- Font check: Geist vs Plus Jakarta Sans inside the mock; kept Plus Jakarta Sans to match
+  the shipped product and the Figma reference image.
+
 ## 2026-10-14 — Template rhythm, rebuilt prototype, visual evidence
 
 **Template**
