@@ -1,0 +1,21 @@
+---
+// What each reference product taught (from the competitive research, DES-201).
+const refs = [
+  { name: 'Notion', took: 'Field → operator → value, with is / is not built into every condition.' },
+  { name: 'Linear', took: 'Saved views live apart from filter chips, so they never look alike.' },
+  { name: 'monday.com', took: 'Save a view in place, right where you built the filter.' },
+  { name: 'Kibana', took: 'Proof that power users need include/exclude and grouped logic.' },
+];
+---
+<ul class="refs">
+  {refs.map((r) => <li><b>{r.name}</b><p>{r.took}</p></li>)}
+</ul>
+
+<style>
+  .refs { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-2); }
+  .refs li { display: grid; gap: var(--s-1); align-content: start; padding: var(--s-3); background: var(--bg); border-radius: var(--radius-md); }
+  .refs b { color: var(--ink); font-weight: 500; }
+  .refs p { font-size: var(--fs-small); }
+  @media (max-width: 960px) { .refs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 480px) { .refs { grid-template-columns: 1fr; } }
+</style>

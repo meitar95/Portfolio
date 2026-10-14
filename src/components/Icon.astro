@@ -1,0 +1,7 @@
+---
+// Renders one icon from ./icons.ts
+import { paths } from './icons';
+interface Props { name: keyof typeof paths | string; size?: number; class?: string; stroke?: number }
+const { name, size = 16, class: cls, stroke = 2 } = Astro.props;
+---
+<svg class={cls} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width={stroke} stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={paths[name]} />

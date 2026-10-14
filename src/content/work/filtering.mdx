@@ -45,31 +45,31 @@ learned: >-
   designer moved a product this complex in a month.
 ---
 
+import PatternMatrix from '../../components/filtering/PatternMatrix.astro';
+import VocabMap from '../../components/filtering/VocabMap.astro';
+import ProcessStrip from '../../components/filtering/ProcessStrip.astro';
+import Benchmarks from '../../components/filtering/Benchmarks.astro';
+import FieldFamilies from '../../components/filtering/FieldFamilies.astro';
+import RefImage from '../../components/RefImage.astro';
+
 ## The problem
 
-Six modules, four filtering patterns, four vocabularies. A user who learned to filter
-in one module had to relearn it in the next — different entry points, different
-labels, different ways to clear or save what they'd built.
+The same task, "show me what needs fixing", worked differently in every module. A user who learned to filter in one place had to relearn it in the next.
 
-Because filtering sits directly on the path to remediation, that friction quietly
-throttled adoption, especially for users who aren't security specialists.
+<PatternMatrix />
+
+<VocabMap />
 
 ## The evidence
 
-**Amplitude** showed where people got stuck: the same filters clicked over and over
-without reaching a finding, and dead ends on the path to fixing an issue.
+I started by measuring what was broken, then let research, references and testing shape every decision.
 
-**Power-user interviews** covered what they were trying to achieve, how they filter
-today, and how they filter in tools they already trust.
+<ProcessStrip />
 
-**Market benchmarking** compared filter conventions in tools like Linear, Notion and
-Jira, then turned them into a short list of behavior options.
+<Benchmarks />
 
-**Testing:** simplified A/B comparisons with power users picked a direction; an
-interactive prototype built with Claude and Dia was validated with about ten users —
-all inside one work cycle, before engineering wrote a line.
+<FieldFamilies />
 
-**Result:** strong early client feedback, and the work contributed to closing new
-deals. It's now rolling out to all clients, instrumented with session recordings
-against defined flows to measure the lift. Filtering became the first proof point for
-consolidating all six modules into one coherent product.
+<RefImage src="/images/filtering-advanced" alt="Final design in Figma: the filter bar with saved views, active chips, and the Advanced panel showing Severity is Medium, Low and Severity is not Critical" caption="The final Advanced panel in Figma: every condition reads as field → operator → value." />
+
+**Result:** strong early client feedback, and the work contributed to closing new deals. It's rolling out to all clients now, and filtering became the first proof point for consolidating all six modules into one coherent product.

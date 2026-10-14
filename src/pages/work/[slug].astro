@@ -1,10 +1,15 @@
 ---
 // THE case-study template. Every study renders through this file, in this order:
-//   Above the fold: title + payoff · role/team/timeline · outcome · why · solution · learned
-//   Below the fold: the problem · the evidence (Markdown body) · next study
+//   Above the fold: title + payoff · role/team/timeline · outcomes · why · solution · learned
+//   Below the fold: the problem · the evidence (Markdown/MDX body) · next study
+//
+// Spacing system (one rule, used everywhere on the page):
+//   --gap-section  between sections           (96px desktop → 64px phone)
+//   --gap-pair     heading → its paragraph    (12px: they read as one unit)
+//   --gap-content  paragraph → visual/list    (32px)
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
-import FilterBeforeAfter from '../../components/FilterBeforeAfter.astro';
+import FilterBeforeAfter from '../../components/filtering/FilterBeforeAfter.astro';
 
 export async function getStaticPaths() {
   const all = (await getCollection('work', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
@@ -19,46 +24,48 @@ const Visual = d.visual ? visuals[d.visual] : null;
 ---
 <Base title={`${d.title} — Meitar Mechoresh`} description={d.tagline}>
   <article class="cs">
-    <header class="container cs__hero">
-      <a class="cs__back" href="/#work">← All work</a>
-      <h1>{d.title}</h1>
-      <p class="cs__tagline">{d.tagline}</p>
+    <div class="container cs__flow">
+      <header class="cs__hero">
+        <div class="pair">
+          <h1>{d.title}</h1>
+          <p class="cs__tagline">{d.tagline}</p>
+        </div>
+        <dl class="cs__meta">
+          <div><dt>Role</dt><dd>{d.role}</dd></div>
+          <div><dt>Team</dt><dd>{d.team}</dd></div>
+          <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
+          <div><dt>Platform</dt><dd>{d.platform}</dd></div>
+        </dl>
+        <ul class="cs__outcomes" aria-label="Outcomes">
+          {d.outcomes.map((o) => <li><strong>{o.value}</strong><span>{o.label}</span></li>)}
+        </ul>
+      </header>
 
-      <dl class="cs__meta">
-        <div><dt>Role</dt><dd>{d.role}</dd></div>
-        <div><dt>Team</dt><dd>{d.team}</dd></div>
-        <div><dt>Timeline</dt><dd>{d.timeline}</dd></div>
-        <div><dt>Platform</dt><dd>{d.platform}</dd></div>
-      </dl>
+      <section class="pair reveal" aria-labelledby="why">
+        <h2 id="why">Why it mattered</h2>
+        <p class="lead">{d.why}</p>
+      </section>
 
-      <ul class="cs__outcomes" aria-label="Outcomes">
-        {d.outcomes.map((o) => <li><strong>{o.value}</strong><span>{o.label}</span></li>)}
-      </ul>
-    </header>
+      <section class="cs__solution" aria-labelledby="solution">
+        <div class="pair reveal">
+          <h2 id="solution">The solution</h2>
+          <p class="lead">{d.solution.summary}</p>
+        </div>
+        {Visual && <Visual />}
+        <ul class="cs__points reveal">
+          {d.solution.points.map((p) => <li><h3>{p.title}</h3><p>{p.text}</p></li>)}
+        </ul>
+      </section>
 
-    <section class="container cs__block reveal" aria-labelledby="why">
-      <h2 id="why">Why it mattered</h2>
-      <p class="cs__lead">{d.why}</p>
-    </section>
-
-    <section class="container cs__block" aria-labelledby="solution">
-      <h2 id="solution" class="reveal">The solution</h2>
-      <p class="cs__lead reveal">{d.solution.summary}</p>
-      {Visual && <div class="cs__visual"><Visual /></div>}
-      <ul class="cs__points reveal">
-        {d.solution.points.map((p) => <li><h3>{p.title}</h3><p>{p.text}</p></li>)}
-      </ul>
-    </section>
-
-    <section class="container cs__block reveal" aria-labelledby="learned">
-      <h2 id="learned">What I learned</h2>
-      <blockquote class="cs__quote"><p>{d.learned}</p></blockquote>
-    </section>
+      <section class="pair reveal" aria-labelledby="learned">
+        <h2 id="learned">What I learned</h2>
+        <blockquote class="cs__quote"><p>{d.learned}</p></blockquote>
+      </section>
+    </div>
 
     <div class="cs__fold">
-      <div class="container">
-        <p class="eyebrow">How we got there</p>
-        <div class="cs__body"><Content /></div>
+      <div class="container cs__body">
+        <Content />
         {d.confidential && <p class="cs__note">All visuals use generic, non-company data for confidentiality.</p>}
       </div>
     </div>
@@ -73,26 +80,36 @@ const Visual = d.visual ? visuals[d.visual] : null;
 </Base>
 
 <style>
-  .cs__hero { display: grid; gap: var(--s-3); padding-block: var(--s-5) var(--s-6); }
-  .cs__back { justify-self: start; color: var(--ink-3); text-decoration: none; font-size: var(--fs-small); padding-block: 0.6rem; }
-  .cs__back:hover { color: var(--accent); }
+  .cs {
+    --gap-section: clamp(4rem, 2.5rem + 4vw, 6rem);
+    --gap-pair: 0.75rem;
+    --gap-content: 2rem;
+  }
+  .cs__flow { display: grid; gap: var(--gap-section); padding-block: clamp(2.5rem, 1.5rem + 3vw, 4rem) var(--gap-section); }
+
+  /* A heading and its paragraph read as one unit */
+  .pair { display: grid; gap: var(--gap-pair); align-content: start; }
+  .lead { font-size: var(--fs-lead); line-height: 1.55; }
+
+  .cs__hero { display: grid; gap: var(--gap-content); }
   .cs__tagline { font-size: var(--fs-lead); color: var(--ink); max-width: 52ch; }
 
   .cs__meta {
     display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-3);
-    padding-block: var(--s-3); border-block: 1px solid var(--line); margin-top: var(--s-2);
+    padding-block: var(--s-3); border-block: 1px solid var(--line);
   }
   .cs__meta dt { font-size: var(--fs-small); color: var(--ink-3); }
-  .cs__meta dd { margin: 0; color: var(--ink); font-weight: 500; }
+  .cs__meta dd { margin: 0.25rem 0 0; color: var(--ink); font-weight: 500; }
 
-  .cs__outcomes { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-3); }
-  .cs__outcomes li { background: var(--tint-2); border-radius: var(--radius-md); padding: var(--s-3); display: grid; gap: var(--s-1); align-content: start; }
-  .cs__outcomes strong { font-family: var(--serif); font-weight: 400; font-size: var(--fs-h2); color: var(--ink); line-height: 1.1; }
-  .cs__outcomes span { color: var(--ink-2); font-size: var(--fs-small); }
+  .cs__outcomes { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-2); margin-top: calc(var(--s-2) - var(--gap-content)); }
+  .cs__outcomes li { background: var(--tint-2); border-radius: var(--radius-md); padding: var(--s-3); display: grid; gap: 0.375rem; align-content: start; }
+  .cs__outcomes strong {
+    font-family: var(--sans); font-weight: 500; letter-spacing: -0.02em;
+    font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem); color: var(--ink); line-height: 1.1;
+  }
+  .cs__outcomes span { color: var(--ink-2); font-size: var(--fs-small); line-height: 1.45; }
 
-  .cs__block { display: grid; gap: var(--s-3); padding-block: var(--s-5); }
-  .cs__lead { font-size: var(--fs-lead); line-height: 1.55; }
-  .cs__visual { margin-block: var(--s-2); }
+  .cs__solution { display: grid; gap: var(--gap-content); }
   .cs__points { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--s-4) var(--s-3); }
   .cs__points li { display: grid; gap: var(--s-1); align-content: start; padding-top: var(--s-2); border-top: 2px solid var(--tint-4); }
   .cs__points h3 { font-size: 1.125rem; }
@@ -101,15 +118,16 @@ const Visual = d.visual ? visuals[d.visual] : null;
   .cs__quote { border-left: 3px solid var(--accent); padding-left: var(--s-3); }
   .cs__quote p { font-family: var(--serif); font-size: var(--fs-h3); color: var(--ink); line-height: 1.45; max-width: 46ch; }
 
-  .cs__fold { background: var(--surface); margin-top: var(--s-5); padding-block: var(--s-6); }
-  .cs__body { display: grid; gap: var(--s-3); margin-top: var(--s-2); }
-  .cs__body :global(h2) { margin-top: var(--s-4); }
+  /* Below the fold: same rhythm, white surface */
+  .cs__fold { background: var(--surface); padding-block: var(--gap-section); }
+  .cs__body { display: grid; gap: var(--gap-content); }
+  .cs__body :global(h2) { margin-top: calc(var(--gap-section) - var(--gap-content)); }
   .cs__body :global(h2:first-child) { margin-top: 0; }
+  .cs__body :global(h2 + p) { margin-top: calc(var(--gap-pair) - var(--gap-content)); }
   .cs__body :global(strong) { color: var(--ink); font-weight: 500; }
-  .cs__body :global(img) { border-radius: var(--radius-md); }
-  .cs__note { margin-top: var(--s-4); font-size: var(--fs-small); color: var(--ink-3); }
+  .cs__note { font-size: var(--fs-small); color: var(--ink-3); }
 
-  .cs__next { padding-block: var(--s-6); display: grid; gap: var(--s-1); }
+  .cs__next { padding-block: var(--gap-section); display: grid; gap: var(--s-1); }
   .cs__next a { font-family: var(--serif); font-size: var(--fs-h2); color: var(--ink); text-decoration: none; }
   .cs__next a:hover { color: var(--accent); }
 

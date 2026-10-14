@@ -1,0 +1,57 @@
+---
+// Current-state audit (DES-200): which filter pattern each module used.
+// Source: Meitar's "Platform Filter Mapping" FigJam board, Aug 2026.
+const patterns = [
+  { id: 'a', name: 'Add-filter dropdown', note: 'flat list' },
+  { id: 'b', name: 'Pill row', note: '+ “see more”' },
+  { id: 'c', name: 'Chips', note: '+ show/hide toggle' },
+  { id: 'd', name: 'Category pills', note: 'one-click tabs' },
+];
+const modules: [string, string[]][] = [
+  ['Overview', ['d']],
+  ['Insights', ['a', 'd']],
+  ['Log analysis', ['b']],
+  ['Inventory', ['a', 'c']],
+  ['Profiling', ['a']],
+  ['Automations', ['a']],
+];
+---
+<figure class="viz">
+  <div class="matrix" role="table" aria-label="Filter pattern used by each module">
+    <div class="matrix__row matrix__row--head" role="row">
+      <span role="columnheader"><span class="visually-hidden">Module</span></span>
+      {patterns.map((p) => <span role="columnheader"><b>{p.name}</b><small>{p.note}</small></span>)}
+    </div>
+    {modules.map(([m, used]) => (
+      <div class="matrix__row" role="row">
+        <span role="rowheader">{m}</span>
+        {patterns.map((p) => (
+          <span role="cell">{used.includes(p.id)
+            ? <i class={`mark mark--${p.id}`} aria-label="uses this pattern"></i>
+            : <i class="mark mark--off" aria-label="—"></i>}</span>
+        ))}
+      </div>
+    ))}
+  </div>
+  <figcaption><b>6 modules, 4 patterns.</b> Two modules mixed two patterns on the same screen.</figcaption>
+</figure>
+
+<style>
+  .viz { display: grid; gap: var(--s-2); margin: 0; }
+  .viz figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .viz figcaption b { color: var(--ink); font-weight: 500; }
+  .matrix { display: grid; background: var(--bg); border-radius: var(--radius-md); padding: var(--s-2) var(--s-3); overflow-x: auto; }
+  .matrix__row { display: grid; grid-template-columns: minmax(7rem, 1.2fr) repeat(4, minmax(4.5rem, 1fr)); align-items: center; min-height: 2.75rem; border-top: 1px solid var(--line); min-width: 30rem; }
+  .matrix__row--head { border-top: 0; align-items: end; padding-bottom: var(--s-1); }
+  .matrix__row > span { text-align: center; }
+  .matrix__row > span:first-child { text-align: left; color: var(--ink); font-weight: 500; }
+  .matrix__row--head span { display: grid; gap: 2px; font-size: 0.8125rem; color: var(--ink); line-height: 1.25; }
+  .matrix__row--head b { font-weight: 500; }
+  .matrix__row--head small { color: var(--ink-3); font-size: 0.75rem; }
+  .mark { display: inline-block; width: 14px; height: 14px; border-radius: 50%; }
+  .mark--off { width: 6px; height: 6px; background: var(--line); }
+  .mark--a { background: #3f6c88; }
+  .mark--b { background: #7fb9c4; }
+  .mark--c { background: #e3a87c; }
+  .mark--d { background: #b7a3d6; }
+</style>

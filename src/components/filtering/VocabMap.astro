@@ -1,0 +1,36 @@
+---
+// Vocabulary finding from the audit: the same concept, named per vendor.
+const rows = [
+  { terms: [['Zone', 'Vendor A'], ['Region', 'Vendor B'], ['Location', 'Vendor C']], to: 'Location' },
+  { terms: [['Ruleset kind', 'Vendor A'], ['Rule type', 'Vendor B']], to: 'Rule type' },
+];
+---
+<figure class="viz">
+  <div class="vocab">
+    {rows.map((r) => (
+      <div class="vocab__row">
+        <ul class="vocab__from">
+          {r.terms.map(([t, v]) => <li><span class="term">{t}</span><small>{v}</small></li>)}
+        </ul>
+        <svg class="vocab__arrow" viewBox="0 0 48 24" width="48" height="24" aria-hidden="true"><path d="M2 12h40m-8-8 8 8-8 8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="term term--to">{r.to}</span>
+      </div>
+    ))}
+  </div>
+  <figcaption><b>One concept, three names.</b> Each vendor brought its own words, so I normalized them into one shared vocabulary.</figcaption>
+</figure>
+
+<style>
+  .viz { display: grid; gap: var(--s-2); margin: 0; }
+  .viz figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .viz figcaption b { color: var(--ink); font-weight: 500; }
+  .vocab { display: grid; gap: var(--s-3); background: var(--bg); border-radius: var(--radius-md); padding: var(--s-3); }
+  .vocab__row { display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; }
+  .vocab__from { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: var(--s-1); }
+  .vocab__from li { display: grid; gap: 2px; justify-items: center; }
+  .vocab__from small { font-size: 0.75rem; color: var(--ink-3); }
+  .term { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 8px; background: #fff; border: 1px dashed #c9c3bf; color: var(--ink-2); font-size: var(--fs-small); text-decoration: line-through; text-decoration-color: rgb(31 21 21 / 0.25); }
+  .term--to { background: var(--accent); border: 0; color: #fff; text-decoration: none; font-weight: 500; }
+  .vocab__arrow { color: var(--ink-3); flex: none; margin-bottom: 1.1rem; }
+  @media (max-width: 520px) { .vocab__arrow { transform: rotate(90deg); margin: 0; } }
+</style>

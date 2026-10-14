@@ -14,8 +14,11 @@ hosted on Vercel. Every change pushed to GitHub republishes the site automatical
 | Homepage project card | `src/components/ProjectCard.astro` |
 | **Case-study template** (one layout for all studies) | `src/pages/work/[slug].astro` |
 | Template rules (required fields) | `src/content.config.ts` |
-| Case-study content (one file each) | `src/content/work/*.md` |
-| Filtering interactive before/after | `src/components/FilterBeforeAfter.astro` |
+| Case-study content (one file each; `.mdx` can embed visuals) | `src/content/work/*.md(x)` |
+| Filtering interactive prototype (before/after) | `src/components/filtering/FilterBeforeAfter.astro` |
+| Filtering evidence visuals | `src/components/filtering/*.astro` |
+| Icons (Untitled UI style) | `src/components/icons.ts`, `Icon.astro` |
+| Reference image with caption | `src/components/RefImage.astro` |
 | Images | `public/images/` |
 
 ## The case-study template

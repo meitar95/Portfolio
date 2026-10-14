@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-10-14 — Template rhythm, rebuilt prototype, visual evidence
+
+**Template**
+- Outcome numbers in Satoshi (no serif). "All work" link removed.
+- One spacing system: 96px between sections (64px on phones), 12px from a heading to
+  its paragraph, 32px from text to a visual. Applied above and below the fold.
+
+**Filtering prototype** (`components/filtering/FilterBeforeAfter.astro`), rebuilt from the Figma file
+- Figma tokens and the product font (Plus Jakarta Sans, only inside the mock).
+- Chips match the Figma anatomy: field | is | values | is not | values | ×, with color dots.
+- Works on a 257-row generic dataset, so "Matching" is always true; "My Special View"
+  shows 104 of 257, as in the Figma frame.
+- New interactions: click "is" to flip to "is not"; And/Or toggle; Simple panel with
+  grouped families → value list with Is/Is not per value; Advanced panel with
+  field → operator → value rows, add/remove; Quick Starts that add several filters
+  at once (e.g. Critical only = Severity: Critical + Status: Open, In progress);
+  Ask AI with suggested queries and free text; Save view (adds a tab), Reset, toasts.
+- Made-up numbered markers removed. Before/After is now a simple sliding switch,
+  with a headline below that changes slowly (fade + slight blur).
+- Phones: chips scroll sideways in one row; panel goes full width.
+
+**Evidence visuals** (from the research board, no invented data)
+- Pattern matrix (6 modules × 4 patterns), vocabulary map, process strip with icons,
+  benchmark cards, 28 → 8 families → ~10–14 fields, and the final Figma panel as a
+  reference image. Filtering is now MDX so visuals sit between paragraphs.
+
 ## 2026-10-13 — Feedback round 1
 
 - **Signature button restored** (`components/Button.astro`): peach dot grows into a circle

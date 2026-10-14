@@ -1,0 +1,55 @@
+---
+// 28 flat fields → 8 families → only the families for connected vendors.
+// Source: "Filter Families" section of the research board.
+const families = [
+  { name: 'Triage', n: 6, c: '#3f6c88', universal: true },
+  { name: 'Vendor & account', n: 4, c: '#5f8ea6', universal: true },
+  { name: 'Location & asset', n: 2, c: '#7fb9c4', universal: true },
+  { name: 'Vendor A IDs', n: 6, c: '#b9d7dc' },
+  { name: 'Vendor B IDs', n: 4, c: '#b9d7dc' },
+  { name: 'Other vendor IDs', n: 3, c: '#b9d7dc' },
+  { name: 'Rule refs', n: 2, c: '#9bc7cf', universal: true },
+  { name: 'Misc', n: 1, c: '#b9d7dc' },
+];
+const total = families.reduce((a, f) => a + f.n, 0); // 28
+---
+<figure class="viz">
+  <div class="fam">
+    <div class="fam__step">
+      <p class="fam__label"><b>{total}</b> fields, one flat list</p>
+      <div class="fam__dots">{Array.from({ length: total }, () => <i style="background:#d9d4cf"></i>)}</div>
+    </div>
+    <div class="fam__step">
+      <p class="fam__label"><b>8</b> families, grouped by meaning</p>
+      <div class="fam__groups">
+        {families.map((f) => (
+          <div class="fam__group">
+            <div class="fam__dots">{Array.from({ length: f.n }, () => <i style={`background:${f.c}`}></i>)}</div>
+            <small>{f.name}</small>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="fam__step">
+      <p class="fam__label"><b>~10–14</b> shown, only for vendors the customer connected</p>
+      <div class="fam__dots">{Array.from({ length: 12 }, (_, i) => <i style={`background:${i < 6 ? '#3f6c88' : i < 10 ? '#5f8ea6' : '#7fb9c4'}`}></i>)}</div>
+    </div>
+  </div>
+  <figcaption><b>Less to scan, nothing lost.</b> Universal triage fields stay on top; vendor-specific fields only show up when they apply.</figcaption>
+</figure>
+
+<style>
+  .viz { display: grid; gap: var(--s-2); margin: 0; }
+  .viz figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .viz figcaption b { color: var(--ink); font-weight: 500; }
+  .fam { display: grid; gap: var(--s-3); background: var(--bg); border-radius: var(--radius-md); padding: var(--s-3); }
+  .fam__step { display: grid; gap: var(--s-1); }
+  .fam__step + .fam__step { padding-top: var(--s-3); border-top: 1px solid var(--line); }
+  .fam__label { font-size: var(--fs-small); color: var(--ink-2); }
+  .fam__label b { color: var(--ink); font-weight: 500; font-size: 1.125rem; margin-right: 0.15rem; }
+  .fam__dots { display: flex; flex-wrap: wrap; gap: 5px; }
+  .fam__dots i { width: 14px; height: 14px; border-radius: 4px; }
+  .fam__groups { display: flex; flex-wrap: wrap; gap: var(--s-2) var(--s-3); }
+  .fam__group { display: grid; gap: 6px; }
+  .fam__group small { font-size: 0.75rem; color: var(--ink-3); }
+</style>

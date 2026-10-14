@@ -1,0 +1,820 @@
+---
+// Interactive before/after for the Filtering case study.
+// Rebuilt from the Figma file "Filtering Prototype — Grouped Filters + Save View"
+// (tokens, chip anatomy, panel, flows). Generic data for confidentiality.
+// Everything inside the mock uses the product font (Plus Jakarta Sans) to stay
+// faithful to the real UI; the page around it keeps the site's two fonts.
+import '@fontsource/plus-jakarta-sans/latin-400.css';
+import '@fontsource/plus-jakarta-sans/latin-500.css';
+import '@fontsource/plus-jakarta-sans/latin-600.css';
+import Icon from '../Icon.astro';
+---
+<figure class="fb" data-fb>
+  <div class="fb__top">
+    <div class="fb__switch" role="group" aria-label="Compare before and after">
+      <span class="fb__thumb" aria-hidden="true"></span>
+      <button type="button" data-show="before" aria-pressed="false">Before</button>
+      <button type="button" data-show="after" aria-pressed="true">After</button>
+    </div>
+    <p class="fb__headline" aria-live="polite" data-headline>One filter bar, learned once, used in all six modules.</p>
+  </div>
+
+  <div class="fb__stage">
+    <!-- ======================= BEFORE ======================= -->
+    <div class="fb__panel" data-panel="before" hidden>
+      <div class="old">
+        <p class="old__name">Findings</p>
+        <div class="old__row">
+          <span class="o-input">Search <Icon name="search" size={14} /></span>
+          <span class="o-icon o-icon--dot"><Icon name="layers" size={16} /></span>
+          <span class="o-chip o-chip--on">Active Only (2)</span>
+          <span class="o-icon"><Icon name="plus" size={14} /></span>
+          <span class="o-text o-text--strong">Show Filters <Icon name="chevronDown" size={14} /></span>
+          <span class="o-link">Clear All</span>
+          <span class="o-meta">104 Matching | 257 Total</span>
+          <span class="o-select"><b>GROUP BY:</b> Recipe → severity <Icon name="chevronDown" size={14} /></span>
+          <span class="o-seg"><span>View:</span><span class="on">Grouped</span><span>List</span></span>
+        </div>
+      </div>
+      <div class="old">
+        <p class="old__name">Log analysis</p>
+        <div class="old__row">
+          {['WAF', 'Domain', 'Action', 'Source IP'].map((l) => <span class="o-select">{l} <i>All</i> <Icon name="chevronDown" size={14} /></span>)}
+          <span class="o-select">Time <b>Last 7 Days</b> <Icon name="chevronDown" size={14} /></span>
+          <span class="o-select">URI pattern <i>E.g. /api/v1/users</i> <Icon name="chevronDown" size={14} /></span>
+          <span class="o-select">HTTP method <i>All</i> <Icon name="chevronDown" size={14} /></span>
+          <span class="o-select">Country <i>All</i> <Icon name="chevronDown" size={14} /></span>
+          <span class="o-meta">8,000 Results</span>
+          <span class="o-link">See Less filters</span>
+        </div>
+      </div>
+      <div class="old">
+        <p class="old__name">Achievements</p>
+        <div class="old__row">
+          <span class="o-input">Search achievements <Icon name="search" size={14} /></span>
+          {['All', 'Benchmark', 'Posture', 'Milestone', 'Efficiency'].map((l, i) => <span class:list={['o-pill', { 'o-pill--on': i === 0 }]}>{l}</span>)}
+        </div>
+      </div>
+      <div class="old">
+        <p class="old__name">Inventory</p>
+        <div class="old__row">
+          <span class="o-select">AWS <Icon name="chevronDown" size={14} /></span>
+          {['ACL', 'Rules', 'ALB', 'Target Groups', 'CloudFront', 'Route 53'].map((l, i) => <span class:list={['o-tab', { 'o-tab--on': i === 0 }]}>{l}</span>)}
+        </div>
+        <div class="old__row">
+          <span class="o-select">7 Days <Icon name="chevronDown" size={14} /></span>
+          <span class="o-input">search <Icon name="search" size={14} /></span>
+          <span class="o-icon"><Icon name="layers" size={16} /></span>
+          <span class="o-chip">Cool View (1)</span>
+          <span class="o-icon"><Icon name="plus" size={14} /></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================= AFTER ======================= -->
+    <div class="fb__panel" data-panel="after">
+      <div class="app" data-app>
+        <div class="app__widgets" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+        <div class="bar" data-bar>
+          <div class="bar__row">
+            <div class="bar__left">
+              <div class="ai">
+                <button type="button" class="ai__pill" data-ai-toggle aria-expanded="false" aria-haspopup="true">
+                  <span class="ai__spark"><Icon name="sparkle" size={14} /></span>
+                  <span data-ai-label>Ask AI or search…</span>
+                </button>
+                <div class="pop ai__pop" data-ai-pop hidden>
+                  <label class="field-ai">
+                    <Icon name="sparkle" size={14} />
+                    <span class="visually-hidden">Ask AI</span>
+                    <input data-ai-input placeholder="Describe what you want to see" autocomplete="off" />
+                  </label>
+                  <p class="pop__label">Suggested queries</p>
+                  <ul class="ai__list" data-ai-list></ul>
+                </div>
+              </div>
+              <div class="views" data-views></div>
+            </div>
+            <button type="button" class="icon-btn" aria-label="Expand table (decorative)"><Icon name="expand" size={16} /></button>
+          </div>
+
+          <div class="bar__row bar__row--filters">
+            <div class="filters" data-filters></div>
+            <div class="save" data-save hidden>
+              <button type="button" class="btn-text" data-reset><Icon name="reset" size={16} /> Reset</button>
+              <button type="button" class="btn-outline" data-save-toggle aria-expanded="false">Save View <Icon name="chevronDown" size={16} /></button>
+              <div class="pop save__pop" data-save-pop hidden>
+                <label class="visually-hidden" for="fb-view-name">View name</label>
+                <input id="fb-view-name" class="input" value="Lower severity's cleanup" />
+                <div class="save__actions">
+                  <button type="button" class="btn-text btn-text--action" data-save-cancel>Discard view</button>
+                  <button type="button" class="btn-solid" data-save-confirm>Save</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pop panel" data-fpanel hidden>
+            <p class="panel__title">Filter Panel</p>
+            <label class="field-ai">
+              <Icon name="sparkle" size={14} />
+              <span class="visually-hidden">Describe what you want to see</span>
+              <input data-panel-ai placeholder="Describe what you want to see" autocomplete="off" />
+            </label>
+            <div class="panel__quick">
+              <span class="panel__qlabel">Quick Start:</span>
+              <div class="panel__qchips" data-quick></div>
+            </div>
+            <div class="panel__tabs" role="tablist" aria-label="Filter mode">
+              <button type="button" role="tab" aria-selected="true" data-tab="simple">Simple</button>
+              <button type="button" role="tab" aria-selected="false" data-tab="adv">Advanced</button>
+            </div>
+            <div class="panel__body" data-pbody></div>
+          </div>
+        </div>
+
+        <div class="rows" data-rows aria-hidden="true"></div>
+        <div class="toast" data-toast role="status" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <figcaption class="fb__caption" data-caption>
+    Try it: tap a Quick Start, click <b>is</b> to flip it to <b>is not</b>, or ask AI in plain words.
+  </figcaption>
+</figure>
+
+<script>
+  import { paths } from '../icons';
+
+  // ---------- tiny helpers ----------
+  const ico = (n: string, s = 16) =>
+    `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[n]}</svg>`;
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!));
+  const clone = <T,>(x: T): T => JSON.parse(JSON.stringify(x));
+
+  // ---------- the data model (generic) ----------
+  type Val = { id: string; label: string; color?: string };
+  type Field = { label: string; values?: Val[]; boolean?: boolean };
+  const F: Record<string, Field> = {
+    crown: { label: 'Crown Jewel', boolean: true },
+    severity: { label: 'Severity', values: [
+      { id: 'critical', label: 'Critical', color: '#9D0039' }, { id: 'high', label: 'High', color: '#E5262C' },
+      { id: 'medium', label: 'Medium', color: '#FA9405' }, { id: 'low', label: 'Low', color: '#2893E0' }] },
+    status: { label: 'Status', values: [
+      { id: 'open', label: 'Open', color: '#E5262C' }, { id: 'progress', label: 'In progress', color: '#FA9405' },
+      { id: 'resolved', label: 'Resolved', color: '#09B299' }, { id: 'discarded', label: 'Discarded', color: '#94A3B8' }] },
+    category: { label: 'Category', values: [
+      { id: 'misconfig', label: 'Misconfiguration' }, { id: 'exposure', label: 'API exposure' },
+      { id: 'bot', label: 'Bot traffic' }, { id: 'owasp', label: 'OWASP Top 10' }] },
+    impact: { label: 'Financial impact', values: [
+      { id: 'i1', label: '< $1K' }, { id: 'i2', label: '$1K–10K' }, { id: 'i3', label: '$10K–50K' }, { id: 'i4', label: '> $50K' }] },
+    provider: { label: 'Cloud provider', values: [{ id: 'aws', label: 'AWS' }, { id: 'cloudflare', label: 'Cloudflare' }, { id: 'azure', label: 'Azure' }] },
+    account: { label: 'Account', values: [{ id: 'prod', label: 'Production' }, { id: 'staging', label: 'Staging' }] },
+    opened: { label: 'Opened', values: [{ id: 'week', label: 'This week' }, { id: 'month', label: 'This month' }, { id: 'older', label: 'Older' }] },
+    assignee: { label: 'Assigned to', values: [{ id: 'me', label: 'Me' }, { id: 'team', label: 'My team' }, { id: 'none', label: 'Unassigned' }] },
+  };
+  // Filter families, from the research: universal triage first, vendor-specific later.
+  const GROUPS = [
+    { name: 'Triage (Universal)', fields: ['crown', 'status', 'severity', 'category', 'impact'] },
+    { name: 'Vendor & Account', fields: ['provider', 'account'] },
+    { name: 'Time & Ownership', fields: ['opened', 'assignee'] },
+  ];
+  const valOf = (f: string, id: string) => F[f].values!.find((v) => v.id === id)!;
+
+  // 257 generic findings (seeded, so the numbers are stable)
+  let seed = 32; // chosen so “My Special View” shows 104 of 257, as in the Figma frame
+  const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const pick = (w: [string, number][]) => { let r = rnd(), a = 0; for (const [k, p] of w) { a += p; if (r < a) return k; } return w[w.length - 1][0]; };
+  const DATA = Array.from({ length: 257 }, () => ({
+    severity: pick([['critical', .14], ['high', .22], ['medium', .37], ['low', .27]]),
+    status: pick([['open', .42], ['progress', .2], ['resolved', .28], ['discarded', .1]]),
+    category: pick([['misconfig', .35], ['exposure', .25], ['bot', .2], ['owasp', .2]]),
+    impact: pick([['i1', .4], ['i2', .3], ['i3', .2], ['i4', .1]]),
+    provider: pick([['aws', .5], ['cloudflare', .35], ['azure', .15]]),
+    account: pick([['prod', .7], ['staging', .3]]),
+    opened: pick([['week', .24], ['month', .3], ['older', .46]]),
+    assignee: pick([['me', .2], ['team', .35], ['none', .45]]),
+    crown: rnd() < .63,
+  }));
+
+  type Cond = { f: string; inc: string[]; exc: string[] };
+  const C = (f: string, inc: string[] = [], exc: string[] = []): Cond => ({ f, inc, exc });
+  const isEmpty = (c: Cond) => !F[c.f].boolean && !c.inc.length && !c.exc.length;
+
+  const QUICK = [
+    { id: 'critical', label: 'Critical only', set: [C('severity', ['critical']), C('status', ['open', 'progress'])] },
+    { id: 'week', label: 'Opened this week', set: [C('opened', ['week'])] },
+    { id: 'mine', label: 'Assigned to me', set: [C('assignee', ['me']), C('status', ['open', 'progress'])] },
+    { id: 'aws', label: 'AWS findings', set: [C('provider', ['aws'])] },
+    { id: 'impact', label: 'Impact > $10K', set: [C('impact', ['i3', 'i4'])] },
+  ];
+  const SUGGEST = [
+    { label: 'Critical AWS findings this week', icon: 'alert', set: [C('severity', ['critical']), C('provider', ['aws']), C('opened', ['week'])] },
+    { label: 'Findings assigned to me', icon: 'users', set: [C('assignee', ['me']), C('status', ['open', 'progress'])] },
+    { label: 'Opened in the last 7 days', icon: 'reset', set: [C('opened', ['week'])] },
+    { label: 'High severity, still unresolved', icon: 'chart', set: [C('severity', ['critical', 'high']), C('status', [], ['resolved', 'discarded'])] },
+  ];
+
+  document.querySelectorAll<HTMLElement>('[data-fb]').forEach((root) => {
+    const $ = <T extends HTMLElement = HTMLElement>(s: string) => root.querySelector<T>(s)!;
+
+    // ---------- Before / After switch with a slow, quiet headline change ----------
+    const headlines: Record<string, string> = {
+      before: 'Same task, four different filter bars, each with its own words.',
+      after: 'One filter bar, learned once, used in all six modules.',
+    };
+    const headline = $('[data-headline]');
+    const caption = $('[data-caption]');
+    const show = (which: string) => {
+      root.dataset.view = which;
+      root.querySelectorAll<HTMLButtonElement>('[data-show]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.show === which)));
+      root.querySelectorAll<HTMLElement>('[data-panel]').forEach((p) => (p.hidden = p.dataset.panel !== which));
+      caption.hidden = which !== 'after';
+      headline.classList.add('is-out');
+      setTimeout(() => { headline.textContent = headlines[which]; headline.classList.remove('is-out'); }, 260);
+    };
+    root.querySelectorAll<HTMLButtonElement>('[data-show]').forEach((b) => b.addEventListener('click', () => show(b.dataset.show!)));
+    root.dataset.view = 'after';
+
+    // ---------- state ----------
+    let views = [
+      { id: 'special', name: 'My Special View', conds: [C('severity', ['medium', 'low'], ['critical']), C('crown')] },
+      { id: 'aws', name: 'Critical AWS Findings', conds: [C('severity', ['critical']), C('provider', ['aws'])] },
+    ];
+    let activeView: string | null = 'special';
+    let conds: Cond[] = clone(views[0].conds);
+    let join: 'and' | 'or' = 'and';
+    let tab: 'simple' | 'adv' = 'simple';
+    let drill: string | null = null;          // field shown in the Simple value list
+    let openGroups = new Set([GROUPS[0].name]);
+    let advOpen: number | null = null;        // advanced row whose value list is open
+
+    // ---------- logic ----------
+    const matchRow = (r: any, c: Cond) => {
+      if (F[c.f].boolean) return r[c.f] === true;
+      return (!c.inc.length || c.inc.includes(r[c.f])) && !c.exc.includes(r[c.f]);
+    };
+    const live = () => conds.filter((c) => !isEmpty(c));
+    const count = () => {
+      const l = live(); if (!l.length) return DATA.length;
+      return DATA.filter((r) => (join === 'and' ? l.every((c) => matchRow(r, c)) : l.some((c) => matchRow(r, c)))).length;
+    };
+    const merge = (set: Cond[]) => {
+      for (const s of set) {
+        const ex = conds.find((c) => c.f === s.f);
+        if (!ex) { conds.push(clone(s)); continue; }
+        ex.inc = [...new Set([...ex.inc.filter((v) => !s.exc.includes(v)), ...s.inc])];
+        ex.exc = [...new Set([...ex.exc.filter((v) => !s.inc.includes(v)), ...s.exc])];
+      }
+    };
+    const has = (set: Cond[]) => set.every((s) => {
+      const c = conds.find((x) => x.f === s.f); if (!c) return false;
+      return s.inc.every((v) => c.inc.includes(v)) && s.exc.every((v) => c.exc.includes(v));
+    });
+    const baseline = () => (activeView ? views.find((v) => v.id === activeView)!.conds : []);
+    const dirty = () => JSON.stringify(live()) !== JSON.stringify(baseline().filter((c) => !isEmpty(c)));
+
+    // Plain-language parser behind "Ask AI" (a stand-in for the real model)
+    const parse = (q: string): Cond[] => {
+      const t = q.toLowerCase(), out: Cond[] = [];
+      const sev = ['critical', 'high', 'medium', 'low'].filter((s) => t.includes(s));
+      if (sev.length) out.push(C('severity', sev));
+      const prov = ['aws', 'cloudflare', 'azure'].filter((p) => t.includes(p));
+      if (prov.length) out.push(C('provider', prov));
+      if (/(week|7 days|recent|new)/.test(t)) out.push(C('opened', ['week']));
+      if (/(\bme\b|mine|my )/.test(t)) out.push(C('assignee', ['me']));
+      if (/(unresolved|open|active|todo)/.test(t)) out.push(C('status', ['open', 'progress']));
+      if (/(crown|jewel|critical asset)/.test(t)) out.push(C('crown'));
+      if (/(bot)/.test(t)) out.push(C('category', ['bot']));
+      if (/(misconfig)/.test(t)) out.push(C('category', ['misconfig']));
+      if (/(\$|impact|expensive|cost)/.test(t)) out.push(C('impact', ['i3', 'i4']));
+      return out;
+    };
+
+    // ---------- rendering ----------
+    const dots = (f: string, ids: string[]) => {
+      const cs = ids.map((id) => valOf(f, id).color).filter(Boolean).slice(0, 3);
+      return cs.length ? `<span class="dots">${cs.map((c) => `<i style="background:${c}"></i>`).join('')}</span>` : '';
+    };
+    const vals = (f: string, ids: string[]) => ids.map((id) => valOf(f, id).label).join(', ');
+
+    const chip = (c: Cond, i: number) => {
+      const x = `<button type="button" class="chip__x" data-remove="${i}" aria-label="Remove ${F[c.f].label} filter">${ico('x', 12)}</button>`;
+      if (F[c.f].boolean) return `<div class="chip"><span class="chip__op">is</span><i class="sep"></i><button type="button" class="chip__val" data-edit="${i}">${F[c.f].label}</button>${x}</div>`;
+      const seg = (part: 'inc' | 'exc') => {
+        const ids = c[part]; if (!ids.length) return '';
+        return `<i class="sep"></i><button type="button" class="chip__op" data-flip="${i}" data-part="${part}" title="Click to flip">${part === 'inc' ? 'is' : 'is not'}</button><i class="sep"></i><button type="button" class="chip__val" data-edit="${i}">${dots(c.f, ids)}${vals(c.f, ids)}</button>`;
+      };
+      return `<div class="chip" data-chip="${i}"><button type="button" class="chip__field" data-edit="${i}">${F[c.f].label}</button>${seg('inc')}${seg('exc')}${x}</div>`;
+    };
+
+    const renderViews = () => {
+      $('[data-views]').innerHTML = views.map((v, i) =>
+        `${i ? '<i class="vsep"></i>' : ''}<button type="button" class="view${v.id === activeView ? ' view--on' : ''}" data-view="${v.id}" aria-pressed="${v.id === activeView}">${esc(v.name)}</button>`
+      ).join('') + `<i class="vsep"></i><button type="button" class="btn-text btn-text--action" data-add-view>${ico('plus')} Add View</button>`;
+    };
+
+    const renderFilters = () => {
+      const l = conds.map((c, i) => ({ c, i })).filter(({ c }) => !isEmpty(c));
+      const parts = l.map(({ c, i }, k) => (k ? `<div class="chip chip--join"><button type="button" data-join title="Switch And / Or">${join === 'and' ? 'And' : 'Or'}</button></div>` : '') + chip(c, i));
+      const n = count();
+      $('[data-filters]').innerHTML = `<div class="chips">${parts.join('')}</div>` +
+        `<button type="button" class="btn-text btn-text--action" data-add-filter aria-expanded="${!$('[data-fpanel]').hidden}">${ico('plus')} Add Filter</button>` +
+        (l.length ? '<button type="button" class="btn-text" data-clear>Clear all</button>' : '') +
+        `<span class="meta">${l.length ? `<b>${n}</b> Matching&nbsp;&nbsp;|&nbsp;&nbsp;` : ''}${DATA.length} Total</span>`;
+      $('[data-save]').hidden = !dirty() || !l.length;
+    };
+
+    const renderRows = () => {
+      const n = count(), shown = Math.min(n, 8);
+      const rows = $('[data-rows]');
+      rows.innerHTML = n === 0
+        ? `<div class="rows__empty">No findings match. <button type="button" class="btn-text btn-text--action" data-clear>Clear all</button></div>`
+        : Array.from({ length: shown }, (_, k) => `<span style="--w:${55 + ((k * 37) % 40)}%"></span>`).join('');
+      rows.classList.remove('is-refresh'); void rows.offsetWidth; rows.classList.add('is-refresh');
+    };
+
+    const renderQuick = () => {
+      $('[data-quick]').innerHTML = QUICK.map((q) => `<button type="button" class="qchip" data-q="${q.id}" aria-pressed="${has(q.set)}">${q.label}</button>`).join('');
+    };
+
+    const checkRow = (f: string, v: Val, ci: number | null) => {
+      const c = ci === null ? undefined : conds[ci];
+      const inc = !!c?.inc.includes(v.id), exc = !!c?.exc.includes(v.id);
+      return `<li class="vrow${exc ? ' vrow--not' : ''}">
+        <label><input type="checkbox" data-check="${f}" value="${v.id}" ${inc || exc ? 'checked' : ''} />
+        ${v.color ? `<i class="dot" style="background:${v.color}"></i>` : ''}<span>${v.label}</span></label>
+        <button type="button" class="is-pill" data-isnot="${f}" data-v="${v.id}" aria-pressed="${exc}" title="Switch is / is not">${exc ? 'Is not' : 'Is'}</button>
+      </li>`;
+    };
+
+    const renderSimple = () => {
+      if (drill) {
+        const ci = conds.findIndex((c) => c.f === drill);
+        return `<button type="button" class="drill-back" data-back>${ico('chevronLeft')} ${F[drill].label}</button>
+          <ul class="vlist">${F[drill].values!.map((v) => checkRow(drill!, v, ci < 0 ? null : ci)).join('')}</ul>`;
+      }
+      return GROUPS.map((g) => {
+        const open = openGroups.has(g.name);
+        return `<div class="group${open ? ' group--open' : ''}">
+          <button type="button" class="group__head" data-group="${g.name}" aria-expanded="${open}">${g.name}${ico('chevronDown')}</button>
+          ${open ? `<ul class="flist">${g.fields.map((f) => F[f].boolean
+            ? `<li><label class="frow"><input type="checkbox" data-crown ${conds.some((c) => c.f === 'crown') ? 'checked' : ''} /> ${F[f].label}</label></li>`
+            : `<li><button type="button" class="frow" data-drill="${f}"><span>${F[f].label}</span>${(() => { const c = conds.find((x) => x.f === f); const n = c ? c.inc.length + c.exc.length : 0; return n ? `<b class="badge">${n}</b>` : ''; })()}${ico('chevronRight')}</button></li>`).join('')}</ul>` : ''}
+        </div>`;
+      }).join('');
+    };
+
+    const fieldSelect = (i: number, cur: string) =>
+      `<select class="sel" data-field="${i}" aria-label="Field">${Object.entries(F).map(([k, v]) => `<option value="${k}"${k === cur ? ' selected' : ''}>${v.label}</option>`).join('')}</select>`;
+
+    const renderAdv = () => {
+      // Each "is" / "is not" part of a chip is its own row (type → operator → value)
+      const rows: { i: number; part: 'inc' | 'exc' | 'bool' }[] = [];
+      conds.forEach((c, i) => {
+        if (F[c.f].boolean) rows.push({ i, part: 'bool' });
+        else { if (c.inc.length || !c.exc.length) rows.push({ i, part: 'inc' }); if (c.exc.length) rows.push({ i, part: 'exc' }); }
+      });
+      const html = rows.map((r, k) => {
+        const c = conds[r.i], key = r.i * 2 + (r.part === 'exc' ? 1 : 0);
+        const lead = k ? `<button type="button" class="join-pill" data-join>${join === 'and' ? 'And' : 'Or'}</button>` : '<span class="join-pill join-pill--ghost">Where</span>';
+        if (r.part === 'bool') return `<div class="arow">${lead}${fieldSelect(r.i, c.f)}<span class="op-pill">Is</span><span class="sel sel--static">Yes</span><button type="button" class="icon-btn" data-remove="${r.i}" aria-label="Remove">${ico('trash')}</button></div>`;
+        const ids = c[r.part as 'inc' | 'exc'];
+        return `<div class="arow">${lead}${fieldSelect(r.i, c.f)}
+          <button type="button" class="op-pill" data-flip="${r.i}" data-part="${r.part}">${r.part === 'inc' ? 'Is' : 'Is not'}</button>
+          <button type="button" class="sel sel--btn" data-advvals="${key}" aria-expanded="${advOpen === key}">${ids.length ? dots(c.f, ids) + `<span class="sel__txt">${vals(c.f, ids)}</span>` : '<span class="ph">Choose values</span>'}${ico('chevronDown')}</button>
+          <button type="button" class="icon-btn" data-remove-part="${r.i}" data-part="${r.part}" aria-label="Remove">${ico('trash')}</button>
+          ${advOpen === key ? `<ul class="vlist vlist--inline">${F[c.f].values!.map((v) => `<li class="vrow"><label><input type="checkbox" data-advcheck="${r.i}" data-part="${r.part}" value="${v.id}" ${ids.includes(v.id) ? 'checked' : ''}/>${v.color ? `<i class="dot" style="background:${v.color}"></i>` : ''}<span>${v.label}</span></label></li>`).join('')}</ul>` : ''}
+        </div>`;
+      }).join('');
+      return html + `<div class="arow arow--add">${rows.length ? `<span class="join-pill join-pill--ghost">${join === 'and' ? 'And' : 'Or'}</span>` : ''}<button type="button" class="btn-text btn-text--action" data-adv-add>${ico('plus')} Add Filter</button></div>`;
+    };
+
+    const placePanel = () => {
+      // Sit under "Add Filter" on wide screens; full width on phones (CSS)
+      const bar = $('[data-bar]'), add = root.querySelector<HTMLElement>('[data-add-filter]');
+      const left = add ? Math.min(add.offsetLeft, bar.clientWidth - panel.offsetWidth) : 0;
+      panel.style.left = `${Math.max(0, left)}px`;
+      // Grow the frame only as much as the open panel needs, so nothing spills out
+      const app = $('[data-app]'); app.style.paddingBottom = '';
+      if (!panel.hidden) {
+        const over = panel.getBoundingClientRect().bottom - app.getBoundingClientRect().bottom + 16;
+        if (over > 0) app.style.paddingBottom = `${over}px`;
+      }
+    };
+    const renderPanel = () => {
+      root.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
+      panel.classList.toggle('panel--wide', tab === 'adv');
+      $('[data-pbody]').innerHTML = tab === 'simple' ? renderSimple() : renderAdv();
+      renderQuick(); placePanel();
+    };
+
+    const render = () => { renderViews(); renderFilters(); renderRows(); if (!$('[data-fpanel]').hidden) renderPanel(); };
+
+    // ---------- toast ----------
+    let tt: number;
+    const toast = (msg: string) => {
+      const t = $('[data-toast]'); t.innerHTML = `${ico('check', 14)} ${esc(msg)}`; t.classList.add('is-on');
+      clearTimeout(tt); tt = window.setTimeout(() => t.classList.remove('is-on'), 2400);
+    };
+
+    // ---------- popovers ----------
+    const panel = $('[data-fpanel]'), aiPop = $('[data-ai-pop]'), savePop = $('[data-save-pop]');
+    const closeAll = (except?: HTMLElement) => {
+      [panel, aiPop, savePop].forEach((p) => { if (p !== except) p.hidden = true; });
+      if (panel.hidden) $('[data-app]').style.paddingBottom = '';
+      $('[data-ai-toggle]').setAttribute('aria-expanded', String(!aiPop.hidden));
+      $('[data-save-toggle]').setAttribute('aria-expanded', String(!savePop.hidden));
+    };
+    const openPanel = (field?: string) => {
+      closeAll(panel); panel.hidden = false;
+      if (field) { tab = 'simple'; drill = F[field].boolean ? null : field; }
+      render();
+    };
+
+    // ---------- AI ----------
+    const runAI = (set: Cond[], label: string) => {
+      closeAll();
+      const pill = $('[data-ai-toggle]'), lab = $('[data-ai-label]');
+      pill.classList.add('is-thinking'); lab.textContent = 'Thinking…';
+      setTimeout(() => {
+        pill.classList.remove('is-thinking'); lab.textContent = 'Ask AI or search…';
+        if (!set.length) { toast('Try “critical AWS findings this week”'); return; }
+        conds = clone(set); activeView = null; join = 'and';
+        render(); toast(`AI added ${set.length} filter${set.length > 1 ? 's' : ''} for “${label}”`);
+      }, 650);
+    };
+    $('[data-ai-list]').innerHTML = SUGGEST.map((s, i) => `<li><button type="button" data-suggest="${i}">${ico(s.icon, 14)} ${s.label}</button></li>`).join('');
+
+    // ---------- events (one delegated listener) ----------
+    root.addEventListener('click', (e) => {
+      const t = (e.target as HTMLElement).closest<HTMLElement>('button, input, label, select');
+      if (!t || !root.contains(t)) return;
+      const d = t.dataset;
+
+      if ('aiToggle' in d) { const o = aiPop.hidden; closeAll(); aiPop.hidden = !o; t.setAttribute('aria-expanded', String(o)); if (o) $<HTMLInputElement>('[data-ai-input]').focus(); return; }
+      if ('suggest' in d) { const s = SUGGEST[+d.suggest!]; runAI(s.set, s.label); return; }
+      if ('view' in d) { activeView = d.view!; conds = clone(views.find((v) => v.id === activeView)!.conds); join = 'and'; closeAll(); render(); return; }
+      if ('addView' in d || 'saveToggle' in d) {
+        if (!live().length) { toast('Add a filter first, then save it as a view'); return; }
+        const o = savePop.hidden; closeAll(); $('[data-save]').hidden = false; savePop.hidden = !o;
+        $('[data-save-toggle]').setAttribute('aria-expanded', String(o)); if (o) $<HTMLInputElement>('#fb-view-name').select(); return;
+      }
+      if ('saveCancel' in d) { closeAll(); return; }
+      if ('saveConfirm' in d) {
+        const name = $<HTMLInputElement>('#fb-view-name').value.trim() || 'New view';
+        const id = 'v' + Date.now(); views.push({ id, name, conds: clone(live()) }); activeView = id;
+        closeAll(); render(); toast(`View “${name}” saved`); return;
+      }
+      if ('reset' in d) { conds = clone(baseline()); join = 'and'; closeAll(); render(); return; }
+      if ('addFilter' in d) { panel.hidden ? openPanel() : closeAll(); return; }
+      if ('clear' in d) { conds = []; activeView = null; render(); return; }
+      if ('remove' in d) { conds.splice(+d.remove!, 1); render(); return; }
+      if ('removePart' in d) { const c = conds[+d.removePart!]; c[d.part as 'inc' | 'exc'] = []; if (isEmpty(c)) conds.splice(+d.removePart!, 1); advOpen = null; render(); return; }
+      if ('flip' in d) {
+        const c = conds[+d.flip!], from = d.part as 'inc' | 'exc', to = from === 'inc' ? 'exc' : 'inc';
+        c[to] = [...new Set([...c[to], ...c[from]])]; c[from] = []; render(); return;
+      }
+      if ('join' in d) { join = join === 'and' ? 'or' : 'and'; render(); return; }
+      if ('edit' in d) { openPanel(conds[+d.edit!].f); return; }
+      if ('q' in d) {
+        const q = QUICK.find((x) => x.id === d.q)!;
+        if (has(q.set)) { // toggle off: remove what this quick start added
+          for (const s of q.set) { const c = conds.find((x) => x.f === s.f); if (c) { c.inc = c.inc.filter((v) => !s.inc.includes(v)); if (isEmpty(c)) conds.splice(conds.indexOf(c), 1); } }
+        } else merge(q.set);
+        render(); return;
+      }
+      if ('tab' in d) { tab = d.tab as any; drill = null; advOpen = null; renderPanel(); return; }
+      if ('group' in d) { openGroups.has(d.group!) ? openGroups.delete(d.group!) : openGroups.add(d.group!); renderPanel(); return; }
+      if ('drill' in d) { drill = d.drill!; renderPanel(); return; }
+      if ('back' in d) { drill = null; renderPanel(); return; }
+      if ('isnot' in d) {
+        const f = d.isnot!, v = d.v!; let c = conds.find((x) => x.f === f);
+        if (!c) { c = C(f); conds.push(c); }
+        if (c.exc.includes(v)) { c.exc = c.exc.filter((x) => x !== v); c.inc.push(v); }
+        else { c.inc = c.inc.filter((x) => x !== v); c.exc.push(v); }
+        render(); return;
+      }
+      if ('advvals' in d) { advOpen = advOpen === +d.advvals! ? null : +d.advvals!; renderPanel(); return; }
+      if ('advAdd' in d) {
+        const used = new Set(conds.map((c) => c.f)); const f = Object.keys(F).find((k) => !used.has(k) && !F[k].boolean) || 'category';
+        conds.push(C(f)); advOpen = (conds.length - 1) * 2; render(); return;
+      }
+    });
+
+    root.addEventListener('change', (e) => {
+      const t = e.target as HTMLInputElement | HTMLSelectElement; const d = t.dataset;
+      if ('check' in d) {
+        const f = d.check!, v = t.value, on = (t as HTMLInputElement).checked; let c = conds.find((x) => x.f === f);
+        if (!c) { c = C(f); conds.push(c); }
+        if (on) c.inc = [...new Set([...c.inc, v])]; else { c.inc = c.inc.filter((x) => x !== v); c.exc = c.exc.filter((x) => x !== v); }
+        if (isEmpty(c)) conds.splice(conds.indexOf(c), 1);
+        render();
+      }
+      if ('crown' in d) { const i = conds.findIndex((c) => c.f === 'crown'); (t as HTMLInputElement).checked ? i < 0 && conds.push(C('crown')) : i >= 0 && conds.splice(i, 1); render(); }
+      if ('advcheck' in d) {
+        const c = conds[+d.advcheck!], part = d.part as 'inc' | 'exc', v = t.value;
+        c[part] = (t as HTMLInputElement).checked ? [...new Set([...c[part], v])] : c[part].filter((x) => x !== v);
+        render();
+      }
+      if ('field' in d) { conds[+d.field!] = C(t.value); advOpen = F[t.value].boolean ? null : +d.field! * 2; render(); }
+    });
+
+    const submitAI = (input: HTMLInputElement) => { const q = input.value.trim(); if (!q) return; runAI(parse(q), q); input.value = ''; };
+    root.addEventListener('keydown', (e) => {
+      const t = e.target as HTMLElement;
+      if (e.key === 'Enter' && t.matches('[data-ai-input], [data-panel-ai]')) { e.preventDefault(); submitAI(t as HTMLInputElement); }
+      if (e.key === 'Enter' && t.matches('#fb-view-name')) { e.preventDefault(); $('[data-save-confirm]').click(); }
+      if (e.key === 'Escape') closeAll();
+    });
+    // Click outside closes popovers
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (!t.isConnected) return; // element re-rendered by our own handler
+      if (!t.closest('.pop, [data-ai-toggle], [data-add-filter], [data-save-toggle], [data-add-view], [data-edit]')) closeAll();
+    });
+
+    render();
+  });
+</script>
+
+<style is:global>
+  /* ===== Wrapper (site styles) ===== */
+  .fb { display: grid; gap: var(--s-3); margin: 0; }
+  .fb__top { display: grid; gap: var(--s-2); justify-items: start; }
+  .fb__switch {
+    position: relative; display: inline-grid; grid-template-columns: 1fr 1fr; padding: 4px;
+    background: var(--tint-1); border-radius: var(--radius-pill);
+  }
+  .fb__thumb {
+    position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px);
+    background: #fff; border-radius: var(--radius-pill);
+    box-shadow: 0 1px 2px rgb(31 21 21 / 0.08), 0 2px 8px -2px rgb(31 21 21 / 0.12);
+    transition: transform 0.45s var(--ease);
+  }
+  .fb[data-view='after'] .fb__thumb { transform: translateX(100%); }
+  .fb__switch button {
+    position: relative; z-index: 1; border: 0; background: none; cursor: pointer;
+    min-width: 6.5rem; min-height: 40px; padding: 0 1.25rem; border-radius: var(--radius-pill);
+    font-weight: 500; font-size: var(--fs-small); color: var(--ink-3); transition: color 0.3s;
+  }
+  .fb__switch button[aria-pressed='true'] { color: var(--ink); }
+  .fb__headline {
+    font-size: var(--fs-body); color: var(--ink); min-height: 1.6em;
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease), filter 0.5s var(--ease);
+  }
+  .fb__headline.is-out { opacity: 0; transform: translateY(4px); filter: blur(3px); transition-duration: 0.25s; }
+  .fb__caption { font-size: var(--fs-small); color: var(--ink-3); }
+  .fb__caption b { color: var(--ink); font-weight: 500; }
+  @media (prefers-reduced-motion: reduce) { .fb__thumb, .fb__headline { transition: none; } }
+
+  .fb__stage {
+    background: #fafafa; border: 1px solid var(--line); border-radius: var(--radius-md);
+    padding: clamp(0.875rem, 2.5vw, 1.5rem);
+    box-shadow: 0 1px 2px rgb(31 21 21 / 0.04), 0 16px 40px -16px rgb(31 21 21 / 0.14);
+    /* Product typography & tokens, straight from the Figma file */
+    font-family: 'Plus Jakarta Sans', var(--sans); font-size: 0.875rem; line-height: 1.4; color: #243165;
+    --p-text: #243165; --p-muted: #8390a3; --p-chip: #f2f2f2; --p-action: #287be0; --p-action-strong: #3665da;
+    --p-view: #eff4fb; --p-divider: #cbd5e1; --p-secondary: #64748b; --p-primary: #17181d; --p-ai: #4665ff;
+    -webkit-font-smoothing: antialiased;
+  }
+  .fb__stage button, .fb__stage input, .fb__stage select { font-family: inherit; }
+  .app { transition: padding-bottom 0.25s var(--ease); }
+
+  /* ===== BEFORE (the old patterns, as they shipped) ===== */
+  .old { display: grid; gap: 0.625rem; padding: 1rem 0; border-top: 1px solid #e5e7eb; }
+  .old:first-child { border-top: 0; padding-top: 0.25rem; }
+  .old__name { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--p-muted); }
+  .old__row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+  .o-input, .o-select, .o-chip, .o-icon, .o-pill, .o-tab, .o-seg {
+    display: inline-flex; align-items: center; gap: 0.375rem; min-height: 34px; padding: 0 0.75rem;
+    border: 1px solid #dfe3ea; border-radius: 8px; background: #fff; color: #374151; white-space: nowrap;
+  }
+  .o-input { min-width: 9rem; justify-content: space-between; color: #9aa1ad; }
+  .o-icon { padding: 0 0.5rem; position: relative; }
+  .o-icon--dot::after { content: ''; position: absolute; top: 5px; right: 5px; width: 6px; height: 6px; border-radius: 50%; background: #e5262c; }
+  .o-chip--on { background: #e8eefb; border-color: #8ea6e8; color: #2848a8; }
+  .o-select i { font-style: normal; color: #b0b6c0; }
+  .o-select b { font-weight: 600; }
+  .o-text { display: inline-flex; align-items: center; gap: 0.25rem; }
+  .o-text--strong { font-weight: 600; color: #1f2937; }
+  .o-link { color: var(--p-action); }
+  .o-meta { color: var(--p-secondary); }
+  .o-pill { border-radius: 8px; font-weight: 500; }
+  .o-pill--on { background: #e8eefb; border-color: #8ea6e8; }
+  .o-tab { border-color: transparent; background: none; color: #6b7280; }
+  .o-tab--on { background: #e9ecf2; color: #1f2937; font-weight: 600; }
+  .o-seg { gap: 0; padding: 3px; }
+  .o-seg span { padding: 0.25rem 0.6rem; border-radius: 6px; color: var(--p-secondary); }
+  .o-seg .on { background: #f1f3f7; color: #1f2937; font-weight: 600; }
+
+  /* ===== AFTER: the product ===== */
+  .app { position: relative; display: grid; gap: 1rem; }
+  .app__widgets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .app__widgets span { height: 4.5rem; border-radius: 6px; background: #f2f2f2; }
+
+  .bar { position: relative; display: grid; gap: 1rem; }
+  .bar__row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+  .bar__row--filters { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; }
+  .bar__left { display: flex; align-items: center; gap: 1rem; min-width: 0; flex-wrap: wrap; }
+
+  .ai { position: relative; }
+  .ai__pill {
+    display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.25rem 0.75rem; min-height: 30px;
+    border: 1px solid var(--p-ai); border-radius: 20px; background: #fff; color: var(--p-action); cursor: pointer;
+    font-size: 0.875rem; transition: box-shadow 0.2s;
+  }
+  .ai__pill:hover, .ai__pill[aria-expanded='true'] { box-shadow: 0 0 0 3px rgb(70 101 255 / 0.12); }
+  .ai__pill.is-thinking .ai__spark { animation: spin 0.9s linear infinite; }
+  .ai__spark { display: inline-flex; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .ai__pop { top: calc(100% + 0.5rem); left: 0; width: min(22rem, 80vw); }
+  .ai__list { list-style: none; padding: 0; display: grid; }
+  .ai__list button {
+    display: flex; align-items: center; gap: 0.5rem; width: 100%; text-align: left; border: 0; background: none;
+    padding: 0.5rem; border-radius: 6px; color: var(--p-text); cursor: pointer;
+  }
+  .ai__list button:hover { background: var(--p-view); color: var(--p-action-strong); }
+  .ai__list svg { color: var(--p-muted); flex: none; }
+
+  .views { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .view {
+    border: 0; background: none; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 4px;
+    font-size: 0.875rem; color: var(--p-primary); white-space: nowrap;
+  }
+  .view:hover { background: #f4f6fa; }
+  .view--on { background: var(--p-view); color: var(--p-action-strong); font-weight: 600; }
+  .vsep { width: 1px; height: 1.25rem; background: var(--p-divider); }
+
+  .btn-text {
+    display: inline-flex; align-items: center; gap: 0.25rem; border: 0; background: none; cursor: pointer;
+    padding: 0.25rem; font-size: 0.875rem; font-weight: 500; color: var(--p-secondary); white-space: nowrap;
+  }
+  .btn-text--action { color: var(--p-action); }
+  .btn-text:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .btn-outline { /* solid in the final Figma screens */
+    display: inline-flex; align-items: center; gap: 0.25rem; padding: 0.25rem 0.625rem; min-height: 28px;
+    border: 1px solid var(--p-action); border-radius: 6px; background: var(--p-action); color: #fff;
+    font-size: 0.875rem; font-weight: 500; cursor: pointer;
+  }
+  .btn-solid {
+    border: 0; border-radius: 6px; padding: 0.375rem 0.75rem; background: var(--p-action); color: #fff;
+    font-size: 0.875rem; font-weight: 500; cursor: pointer;
+  }
+  .icon-btn { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 6px; background: none; color: var(--p-secondary); cursor: pointer; }
+  .icon-btn:hover { background: #eef1f5; color: var(--p-text); }
+
+  .filters { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+  .chips { display: contents; }
+  .chip { white-space: nowrap; }
+  .meta { font-size: 0.75rem; color: var(--p-secondary); white-space: nowrap; }
+  .meta b { font-weight: 600; color: var(--p-text); }
+
+  /* Chip: field | is | values | is not | values | × */
+  .chip {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.5rem; border-radius: 4px;
+    background: var(--p-chip); font-size: 0.75rem; font-weight: 500; line-height: 1.2; animation: chip-in 0.3s var(--ease);
+  }
+  .chip button { border: 0; background: none; padding: 0; font: inherit; cursor: pointer; color: inherit; display: inline-flex; align-items: center; gap: 0.25rem; }
+  .chip__field { color: var(--p-text); }
+  .chip__op { color: var(--p-muted); border-radius: 2px; padding: 1px 3px !important; margin: -1px -3px; transition: background 0.2s, color 0.2s; }
+  button.chip__op:hover { background: #e2eaf5; color: var(--p-text); }
+  .chip__val { color: var(--p-text); font-weight: 600 !important; }
+  .chip__x { color: var(--p-muted) !important; }
+  .chip__x:hover { color: var(--p-text) !important; }
+  .chip--join button { color: var(--p-muted); }
+  .chip--join button:hover { color: var(--p-text); }
+  .sep { width: 1px; align-self: stretch; background: #d9dee6; }
+  .dots { display: inline-flex; }
+  .dots i, .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; }
+  .dots i + i { margin-left: -1px; }
+  @keyframes chip-in { from { opacity: 0; transform: translateY(2px); } }
+
+  .save { position: relative; display: flex; align-items: center; gap: 1rem; }
+  .save__pop { top: calc(100% + 0.5rem); right: 0; width: min(18rem, 80vw); display: grid; gap: 0.5rem; }
+  .save__actions { display: flex; justify-content: flex-end; align-items: center; gap: 0.75rem; }
+  .input { font: inherit; color: var(--p-text); padding: 0.5rem 0.625rem; border: 1px solid #c9d1dd; border-radius: 6px; width: 100%; }
+  .input:focus { outline: 2px solid rgb(40 123 224 / 0.3); border-color: var(--p-action); }
+
+  .pop {
+    position: absolute; z-index: 5; padding: 0.875rem; background: #fff; border: 1px solid #e3e7ee; border-radius: 10px;
+    box-shadow: 0 16px 36px -12px rgb(20 30 60 / 0.25); animation: pop-in 0.2s var(--ease);
+  }
+  .pop__label { font-size: 0.75rem; color: var(--p-muted); margin: 0.75rem 0 0.25rem; }
+  @keyframes pop-in { from { opacity: 0; transform: translateY(-4px); } }
+
+  /* Filter panel */
+  .panel { top: calc(100% + 0.5rem); width: min(26rem, 100%); display: grid; gap: 0.75rem; }
+  .panel--wide { width: min(38rem, 100%); }
+  .panel__title { font-weight: 600; padding-bottom: 0.5rem; border-bottom: 1px solid #edf0f4; }
+  .field-ai {
+    display: flex; align-items: center; gap: 0.5rem; min-height: 38px; padding: 0 0.75rem;
+    border: 1px solid #7da0ea; background: #eaf2fd; border-radius: 6px; color: var(--p-action);
+  }
+  .field-ai input { flex: 1; min-width: 0; border: 0; background: none; outline: none; color: var(--p-text); font-size: 0.875rem; font-style: italic; }
+  .field-ai input:not(:placeholder-shown) { font-style: normal; }
+  .field-ai:focus-within { box-shadow: 0 0 0 3px rgb(40 123 224 / 0.15); }
+  .panel__quick { display: flex; gap: 0.5rem; align-items: baseline; padding-bottom: 0.75rem; border-bottom: 1px solid #edf0f4; }
+  .panel__qlabel { font-size: 0.75rem; color: var(--p-secondary); white-space: nowrap; }
+  .panel__qchips { display: flex; flex-wrap: wrap; gap: 0.375rem; }
+  .qchip {
+    border: 0; border-radius: 4px; padding: 0.2rem 0.5rem; background: #e3f2f7; color: var(--p-text);
+    font-size: 0.75rem; cursor: pointer; transition: background 0.2s, color 0.2s;
+  }
+  .qchip:hover { background: #d3e9f1; }
+  .qchip[aria-pressed='true'] { background: var(--p-action); color: #fff; }
+  .panel__tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid #edf0f4; }
+  .panel__tabs button {
+    border: 0; background: none; cursor: pointer; padding: 0.375rem 0.5rem; margin-bottom: -1px;
+    color: var(--p-primary); border-bottom: 2px solid transparent; font-size: 0.875rem;
+  }
+  .panel__tabs button[aria-selected='true'] { color: var(--p-action-strong); border-color: var(--p-action-strong); }
+  .panel__body { display: grid; gap: 0.25rem; max-height: 15.5rem; overflow-y: auto; overscroll-behavior: contain; }
+
+  .group__head {
+    display: flex; justify-content: space-between; align-items: center; width: 100%; border: 0; background: none; cursor: pointer;
+    padding: 0.5rem 0.375rem; font-size: 0.75rem; color: var(--p-muted);
+  }
+  .group + .group { border-top: 1px solid #edf0f4; }
+  .group__head svg { transition: transform 0.25s var(--ease); }
+  .group--open .group__head svg { transform: rotate(180deg); }
+  .flist, .vlist { list-style: none; padding: 0; display: grid; }
+  .frow {
+    display: flex; align-items: center; gap: 0.5rem; width: 100%; border: 0; background: none; cursor: pointer;
+    padding: 0.4rem 0.5rem; border-radius: 6px; color: var(--p-text); font-size: 0.875rem; text-align: left;
+  }
+  .frow span { flex: 1; }
+  .frow svg { color: var(--p-muted); }
+  .frow:hover { background: var(--p-view); }
+  .badge { min-width: 1.25rem; padding: 0 0.3rem; border-radius: 10px; background: var(--p-action); color: #fff; font-size: 0.6875rem; text-align: center; }
+  .drill-back { display: inline-flex; align-items: center; gap: 0.25rem; border: 0; background: none; cursor: pointer; padding: 0.375rem 0.25rem; color: var(--p-secondary); font-size: 0.875rem; }
+  .vrow { display: flex; align-items: center; justify-content: space-between; padding: 0.25rem 0.5rem; border-radius: 6px; }
+  .vrow:hover { background: var(--p-view); }
+  .vrow label { display: flex; align-items: center; gap: 0.5rem; flex: 1; cursor: pointer; padding: 0.2rem 0; color: var(--p-text); }
+  .vrow input, .frow input { width: 14px; height: 14px; accent-color: var(--p-action); }
+  .vrow--not span { text-decoration: line-through; text-decoration-color: var(--p-muted); }
+  .is-pill { border: 0; border-radius: 4px; padding: 0.15rem 0.45rem; background: #e2eaf5; color: var(--p-text); font-size: 0.75rem; cursor: pointer; opacity: 0; transition: opacity 0.15s; }
+  .vrow:hover .is-pill, .is-pill:focus-visible, .is-pill[aria-pressed='true'] { opacity: 1; }
+  .is-pill[aria-pressed='true'] { background: #fde8ec; color: #9d0039; }
+  @media (hover: none) { .is-pill { opacity: 1; } }
+
+  /* Advanced: type → operator → value rows */
+  .arow { display: grid; grid-template-columns: 3.25rem minmax(0, 1fr) auto minmax(0, 1.35fr) 28px; align-items: center; gap: 0.5rem; padding: 0.25rem 0; }
+  .arow--add { display: flex; }
+  .sel--btn { min-width: 0; justify-content: space-between; }
+  .sel__txt { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; }
+  .join-pill { min-width: 3rem; border: 0; border-radius: 4px; padding: 0.25rem 0.4rem; background: #eef1f5; color: var(--p-text); font-size: 0.75rem; cursor: pointer; text-align: center; }
+  .join-pill--ghost { background: none; color: var(--p-muted); cursor: default; }
+  .sel {
+    display: inline-flex; align-items: center; gap: 0.375rem; min-height: 32px; padding: 0 0.5rem;
+    border: 1px solid #dfe3ea; border-radius: 6px; background: #fff; color: var(--p-text); font-size: 0.875rem; cursor: pointer;
+  }
+  select.sel { appearance: none; padding-right: 1.6rem; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238390a3' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.5rem center; }
+  .sel--static { cursor: default; }
+  .sel .ph { color: var(--p-muted); }
+  .op-pill { border: 0; border-radius: 4px; padding: 0.3rem 0.5rem; background: #eef1f5; color: var(--p-text); font-size: 0.8125rem; cursor: pointer; }
+  .op-pill:hover { background: #e2eaf5; }
+  .vlist--inline { grid-column: 2 / -1; padding: 0.375rem; border: 1px solid #e3e7ee; border-radius: 8px; background: #fff; }
+  .arow--add { padding-top: 0.5rem; }
+
+  /* Table placeholder rows (as in the Figma file) */
+  .rows { display: grid; gap: 0.5rem; min-height: 19.5rem; align-content: start; }
+  .rows span { height: 2.125rem; border-radius: 4px; background: linear-gradient(90deg, #f2f2f2 var(--w), #f7f7f7 var(--w)); }
+  .rows.is-refresh span { animation: row-in 0.4s var(--ease) both; }
+  .rows.is-refresh span:nth-child(2) { animation-delay: 30ms; } .rows.is-refresh span:nth-child(3) { animation-delay: 60ms; }
+  .rows.is-refresh span:nth-child(4) { animation-delay: 90ms; } .rows.is-refresh span:nth-child(5) { animation-delay: 120ms; }
+  .rows.is-refresh span:nth-child(n+6) { animation-delay: 150ms; }
+  @keyframes row-in { from { opacity: 0.3; } }
+  .rows__empty { display: flex; align-items: center; gap: 0.5rem; padding: 2rem 0; color: var(--p-secondary); }
+
+  .toast {
+    position: absolute; left: 50%; bottom: 0.5rem; transform: translate(-50%, 8px); opacity: 0; pointer-events: none;
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.875rem; border-radius: 8px;
+    background: #243165; color: #fff; font-size: 0.8125rem; white-space: nowrap; max-width: 90%;
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+  .toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 809px) {
+    .app__widgets { display: none; }
+    .bar__row--filters { grid-template-columns: minmax(0, 1fr); }
+    .filters { min-width: 0; }
+    .bar__row > .icon-btn { display: none; }
+    /* Phones: chips stay whole and scroll sideways in one row; actions sit below */
+    .chips {
+      display: flex; gap: 0.5rem; flex: 1 0 100%; min-width: 0; max-width: 100%; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px;
+      mask-image: linear-gradient(90deg, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+    }
+    .chips::-webkit-scrollbar { display: none; }
+    .arow { grid-template-columns: 3rem minmax(0, 1fr) auto 28px; }
+    .arow .sel--btn { grid-column: 2 / 4; grid-row: 2; }
+    .rows { min-height: 0; }
+    .panel { left: 0 !important; }
+    .fb [data-panel] { min-height: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .chip, .pop, .rows.is-refresh span, .ai__pill.is-thinking .ai__spark { animation: none; }
+  }
+</style>
