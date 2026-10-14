@@ -7,6 +7,15 @@ import '@fontsource/plus-jakarta-sans/latin-400.css';
 import '@fontsource/plus-jakarta-sans/latin-500.css';
 import '@fontsource/plus-jakarta-sans/latin-600.css';
 const query = 'Critical AWS findings this week';
+// Faded demo rows. The first two are the critical AWS findings that stay after the AI filters.
+const rows = [
+  { t: 'Public S3 bucket allows listing', sev: 'Critical', c: '#9D0039', cloud: 'AWS' },
+  { t: 'Security group open on port 22', sev: 'Critical', c: '#9D0039', cloud: 'AWS' },
+  { t: 'SQL injection attempt on /search', sev: 'High', c: '#E5262C', cloud: 'Cloudflare' },
+  { t: 'Bot traffic spike on /login', sev: 'Medium', c: '#FA9405', cloud: 'Azure' },
+  { t: 'API endpoint missing rate limit', sev: 'High', c: '#E5262C', cloud: 'AWS' },
+  { t: 'Outdated TLS policy on load balancer', sev: 'Low', c: '#2893E0', cloud: 'Cloudflare' },
+];
 ---
 <div class="fa" data-fa data-q={query} aria-hidden="true">
   <div class="fa__top">
@@ -22,7 +31,13 @@ const query = 'Critical AWS findings this week';
     <span class="fa__add">+ Add filter</span>
     <span class="fa__count"><b data-count>257</b> matching</span>
   </div>
-  <div class="fa__rows">{Array.from({ length: 6 }).map((_, i) => <i style={`--r: ${i}`} class={i < 2 ? 'keep' : ''}></i>)}</div>
+  <div class="fa__rows">{rows.map((r, i) => (
+    <div style={`--r: ${i}`} class={i < 2 ? 'keep' : ''}>
+      <span class="fa__t">{r.t}</span>
+      <span class="fa__sev"><em style={`background: ${r.c}`}></em>{r.sev}</span>
+      <span class="fa__cloud">{r.cloud}</span>
+    </div>
+  ))}</div>
   <span class="fa__toast">✓ <span class="fa__long">AI added 3 filters · 7 matching</span><span class="fa__short">7 matching</span></span>
 </div>
 
@@ -112,13 +127,21 @@ const query = 'Critical AWS findings this week';
   .fa__count { margin-left: auto; color: #8390a3; }
   .fa__count b { color: #243165; font-weight: 600; }
 
-  .fa__rows { display: grid; gap: 7px; align-content: start; }
-  .fa__rows i {
-    height: 22px; border-radius: 6px; background: linear-gradient(90deg, #eceef2 calc(94% - var(--r) * 8%), #f4f5f7 0);
-    transition: opacity 0.9s var(--ease-slow), transform 0.9s var(--ease-slow);
+  .fa__rows {
+    display: grid; align-content: start; overflow: hidden; border-radius: 8px;
+    mask-image: linear-gradient(#000 70%, transparent); -webkit-mask-image: linear-gradient(#000 70%, transparent);
   }
-  .fa.is-done .fa__rows i:not(.keep) { opacity: 0; transform: translateY(-4px); transition-delay: calc(1s + var(--r) * 0.06s); }
-  .fa.is-done .fa__rows i.keep { background: linear-gradient(90deg, #e3ebfb calc(94% - var(--r) * 8%), #f4f5f7 0); transition-delay: 1s; }
+  .fa__rows > div {
+    display: grid; grid-template-columns: minmax(0, 1fr) 5.5rem 5rem; gap: 0.75rem; align-items: center;
+    padding: 0.5rem 0.75rem; border-top: 1px solid #f0f2f5; background: #fff; color: #8a94a6; white-space: nowrap;
+    transition: opacity 0.9s var(--ease-slow), transform 0.9s var(--ease-slow), background 0.9s var(--ease-slow), color 0.9s var(--ease-slow);
+  }
+  .fa__rows > div:first-child { border-top: 0; }
+  .fa__t { overflow: hidden; text-overflow: ellipsis; color: #6b7588; }
+  .fa__sev { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .fa__sev em { width: 6px; height: 6px; border-radius: 50%; opacity: 0.7; }
+  .fa.is-done .fa__rows > div:not(.keep) { opacity: 0; transform: translateY(-4px); transition-delay: calc(1s + var(--r) * 0.06s); }
+  .fa.is-done .fa__rows > .keep { background: #f3f6fd; color: #5b6578; transition-delay: 1s; }
 
   .fa__toast {
     position: absolute; left: 50%; bottom: 0.9rem; translate: -50% 0; padding: 0.4rem 0.8rem; border-radius: 8px;
@@ -140,7 +163,8 @@ const query = 'Critical AWS findings this week';
     .fa { font-size: 0.75rem; gap: 0.55rem; padding: 0.8rem; }
     .fa__view:last-child { display: none; }
     .fa__chip { padding-block: 0.25rem; }
-    .fa__rows i { height: 18px; }
+    .fa__rows > div { grid-template-columns: minmax(0, 1fr) 4.75rem; padding-block: 0.4rem; }
+    .fa__cloud { display: none; }
     .fa__toast { bottom: 0.7rem; }
   }
   @container (max-width: 480px) { .fa__count { display: none; } }

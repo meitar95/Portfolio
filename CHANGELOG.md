@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-14 · Filtering: mock table instead of grey placeholders
+
+- Prototype: the grey bars are now a faded findings table (finding, severity, status, cloud)
+  built from the same demo data the filters run on, so every filter visibly changes the rows.
+  The four grey widgets became summary cards (total, critical, open, crown jewels). Phones
+  show finding + severity only. Seeded counts unchanged (104 of 257).
+- Homepage card: the bars are faded finding rows; after the AI adds filters, the two critical
+  AWS rows stay highlighted and the rest fade out.
+- Result flow: all six prototype captures retaken with the table.
+
 ## 2026-10-14 · Filtering before/after on phones
 
 - Under 640px the drag slider is replaced by a Before / After switch. Each side gets the full

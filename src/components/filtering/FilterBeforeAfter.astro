@@ -73,7 +73,7 @@ import Icon from '../Icon.astro';
     <!-- ======================= AFTER ======================= -->
     <div class="fb__panel" data-panel="after">
       <div class="app" data-app>
-        <div class="app__widgets" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <div class="app__widgets" aria-hidden="true" data-widgets></div>
 
         <div class="bar" data-bar>
           <div class="bar__row">
@@ -207,6 +207,19 @@ import Icon from '../Icon.astro';
     assignee: pick([['me', .2], ['team', .35], ['none', .45]]),
     crown: rnd() < .63,
   }));
+  // Separate generator for the names, so the seeded counts above (104 of 257) stay exactly as in Figma
+  // Names go round-robin within each severity + category, so rows next to each other rarely repeat
+  const rr: Record<string, number> = {};
+  DATA.forEach((r: any) => { const k = r.severity + r.category; r.t = rr[k] = ((rr[k] ?? -1) + 1); });
+  // Mock finding names per category, so the table reads like a real findings list (faded, demo data)
+  const TITLES: Record<string, string[]> = {
+    misconfig: ['Public S3 bucket allows listing', 'WAF rule left in count mode', 'Outdated TLS policy on load balancer', 'CDN distribution without WAF', 'Security group open on port 22', 'Logging disabled on API gateway', 'Wildcard CORS policy', 'Expired certificate on staging'],
+    exposure: ['API endpoint missing rate limit', 'Unauthenticated /admin route', 'Shadow API discovered', 'API key exposed in response', 'Deprecated API version still live', 'PII returned by /users'],
+    bot: ['Bot traffic spike on /login', 'Credential stuffing on /auth', 'Scraping on /pricing', 'Fake account sign-ups', 'Carding attempts on /checkout'],
+    owasp: ['SQL injection attempt on /search', 'XSS payload in query string', 'Path traversal attempt', 'SSRF attempt via webhook URL', 'Broken object level auth on /orders'],
+  };
+  const titleOf = (r: any) => { const l = TITLES[r.category]; return l[r.t % l.length]; };
+  const SEV_RANK: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
 
   type Cond = { f: string; inc: string[]; exc: string[] };
   const C = (f: string, inc: string[] = [], exc: string[] = []): Cond => ({ f, inc, exc });
@@ -271,6 +284,13 @@ import Icon from '../Icon.astro';
     root.querySelectorAll<HTMLButtonElement>('[data-snap]').forEach((b) => b.addEventListener('click', () => setPos(+b.dataset.snap!, true)));
     root.dataset.view = 'before';
 
+    // Summary widgets above the table, counted from the same demo data
+    const by = (f: string, id: string) => DATA.filter((r: any) => r[f] === id).length;
+    $('[data-widgets]').innerHTML = [
+      ['Total findings', DATA.length], ['Critical', by('severity', 'critical')],
+      ['Open', by('status', 'open')], ['Crown jewels', DATA.filter((r) => r.crown).length],
+    ].map(([k, v]) => `<span><small>${k}</small><b>${v}</b></span>`).join('');
+
     // ---------- state ----------
     let views = [
       { id: 'special', name: 'My Special View', conds: [C('severity', ['medium', 'low'], ['critical']), C('crown')] },
@@ -290,10 +310,11 @@ import Icon from '../Icon.astro';
       return (!c.inc.length || c.inc.includes(r[c.f])) && !c.exc.includes(r[c.f]);
     };
     const live = () => conds.filter((c) => !isEmpty(c));
-    const count = () => {
-      const l = live(); if (!l.length) return DATA.length;
-      return DATA.filter((r) => (join === 'and' ? l.every((c) => matchRow(r, c)) : l.some((c) => matchRow(r, c)))).length;
+    const matches = () => {
+      const l = live(); if (!l.length) return DATA;
+      return DATA.filter((r) => (join === 'and' ? l.every((c) => matchRow(r, c)) : l.some((c) => matchRow(r, c))));
     };
+    const count = () => matches().length;
     const merge = (set: Cond[]) => {
       for (const s of set) {
         const ex = conds.find((c) => c.f === s.f);
@@ -361,11 +382,13 @@ import Icon from '../Icon.astro';
     };
 
     const renderRows = () => {
-      const n = count(), shown = Math.min(n, 8);
+      const list = matches().slice().sort((a, b) => SEV_RANK[a.severity] - SEV_RANK[b.severity]).slice(0, 7);
       const rows = $('[data-rows]');
-      rows.innerHTML = n === 0
+      const cell = (f: string, id: string) => { const v = valOf(f, id); return `<span class="tcell tcell--${f}">${v.color ? `<i style="background:${v.color}"></i>` : ''}${esc(v.label)}</span>`; };
+      rows.innerHTML = list.length === 0
         ? `<div class="rows__empty">No findings match. <button type="button" class="btn-text btn-text--action" data-clear>Clear all</button></div>`
-        : Array.from({ length: shown }, (_, k) => `<span style="--w:${55 + ((k * 37) % 40)}%"></span>`).join('');
+        : `<div class="trow trow--head"><span>Finding</span><span>Severity</span><span class="tcell--status">Status</span><span class="tcell--provider">Cloud</span></div>`
+          + list.map((r) => `<div class="trow"><span class="tcell tcell--title">${esc(titleOf(r))}</span>${cell('severity', r.severity)}${cell('status', r.status)}${cell('provider', r.provider)}</div>`).join('');
       rows.classList.remove('is-refresh'); void rows.offsetWidth; rows.classList.add('is-refresh');
     };
 
@@ -658,7 +681,9 @@ import Icon from '../Icon.astro';
   /* ===== AFTER: the product ===== */
   .app { position: relative; display: grid; gap: 1rem; }
   .app__widgets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .app__widgets span { height: 4.5rem; border-radius: 6px; background: #f2f2f2; }
+  .app__widgets span { display: grid; gap: 0.25rem; align-content: center; height: 4.5rem; padding: 0 1rem; border-radius: 6px; background: #fff; border: 1px solid #eef0f4; }
+  .app__widgets small { font-size: 0.8125rem; color: #94a3b8; }
+  .app__widgets b { font-size: 1.375rem; font-weight: 600; color: #7b869a; }
 
   .bar { position: relative; display: grid; gap: 1rem; }
   .bar__row { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
@@ -826,11 +851,20 @@ import Icon from '../Icon.astro';
 
   /* Table placeholder rows (as in the Figma file) */
   .rows { display: grid; gap: 0.5rem; min-height: 19.5rem; align-content: start; }
-  .rows span { height: 2.125rem; border-radius: 4px; background: linear-gradient(90deg, #f2f2f2 var(--w), #f7f7f7 var(--w)); }
-  .rows.is-refresh span { animation: row-in 0.4s var(--ease) both; }
-  .rows.is-refresh span:nth-child(2) { animation-delay: 30ms; } .rows.is-refresh span:nth-child(3) { animation-delay: 60ms; }
-  .rows.is-refresh span:nth-child(4) { animation-delay: 90ms; } .rows.is-refresh span:nth-child(5) { animation-delay: 120ms; }
-  .rows.is-refresh span:nth-child(n+6) { animation-delay: 150ms; }
+  /* Mock findings table: real-looking rows, faded so the filter bar stays the hero */
+  .rows { gap: 0; }
+  .trow {
+    display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0.8fr); gap: 0.75rem; align-items: center;
+    min-height: 2.5rem; padding: 0 0.75rem; border-bottom: 1px solid #eef0f4; color: #7b869a; background: #fff;
+  }
+  .trow--head { min-height: 2.25rem; background: #f5f6f8; border-radius: 6px 6px 0 0; border-bottom: 0; color: #94a3b8; font-weight: 500; font-size: 0.8125rem; }
+  .tcell { display: inline-flex; align-items: center; gap: 0.4rem; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tcell--title { display: block; color: #5b6578; }
+  .tcell i { flex: none; width: 7px; height: 7px; border-radius: 50%; opacity: 0.7; }
+  .rows.is-refresh .trow { animation: row-in 0.4s var(--ease) both; }
+  .rows.is-refresh .trow:nth-child(2) { animation-delay: 30ms; } .rows.is-refresh .trow:nth-child(3) { animation-delay: 60ms; }
+  .rows.is-refresh .trow:nth-child(4) { animation-delay: 90ms; } .rows.is-refresh .trow:nth-child(5) { animation-delay: 120ms; }
+  .rows.is-refresh .trow:nth-child(n+6) { animation-delay: 150ms; }
   @keyframes row-in { from { opacity: 0.3; } }
   .rows__empty { display: flex; align-items: center; gap: 0.5rem; padding: 2rem 0; color: var(--p-secondary); }
 
@@ -856,6 +890,9 @@ import Icon from '../Icon.astro';
     .arow { grid-template-columns: 3rem minmax(0, 1fr) auto 28px; }
     .arow .sel--btn { grid-column: 2 / 4; grid-row: 2; }
     .rows { min-height: 0; }
+    .trow { grid-template-columns: minmax(0, 1fr) auto; }
+    .toast { white-space: normal; width: max-content; line-height: 1.35; }
+    .tcell--status, .tcell--provider { display: none; }
     .panel { left: 0 !important; }
   }
   /* Phones: the drag slider squeezed two desktop screens into half a screen each.
@@ -877,6 +914,6 @@ import Icon from '../Icon.astro';
     .old__name { font-size: 0.8125rem; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .chip, .pop, .rows.is-refresh span, .ai__pill.is-thinking .ai__spark { animation: none; }
+    .chip, .pop, .rows.is-refresh .trow, .ai__pill.is-thinking .ai__spark { animation: none; }
   }
 </style>
