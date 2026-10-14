@@ -30,6 +30,7 @@ const parts = [
   document.querySelectorAll<HTMLElement>('[data-anat]').forEach((root) => {
     const boxes = [...root.querySelectorAll<HTMLElement>('[data-box]')];
     const btns = [...root.querySelectorAll<HTMLButtonElement>('[data-part]')];
+    const screen = root.querySelector<HTMLElement>('.anat__screen')!;
     const on = (i: number | null) => {
       root.classList.toggle('is-focus', i !== null);
       boxes.forEach((b, k) => b.classList.toggle('is-on', k === i));
@@ -37,15 +38,27 @@ const parts = [
     };
     btns.forEach((b, i) => {
       b.addEventListener('mouseenter', () => on(i)); b.addEventListener('focus', () => on(i));
-      b.addEventListener('click', () => on(i));
+      // Tap/click: if the screen is partly off-view, bring the whole figure into view first
+      b.addEventListener('click', () => {
+        on(i);
+        const r = screen.getBoundingClientRect();
+        if (r.top < 72 || r.bottom > innerHeight) {
+          const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          root.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+        }
+      });
       b.addEventListener('mouseleave', () => on(null)); b.addEventListener('blur', () => on(null));
     });
   });
 </script>
 
 <style>
-  .anat { display: grid; gap: var(--s-3); margin: 0; }
-  .anat__screen { position: relative; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 16px 40px -16px rgb(16 22 42 / 0.45); }
+  /* Screen + parts must fit in one viewport, so hovering a part never pushes the
+     screen under the sticky nav. The screen's width is capped by the height left
+     after the nav (72px), the parts list and gaps (~20rem in total). */
+  .anat { display: grid; gap: var(--s-3); margin: 0; scroll-margin-top: 88px; }
+  .anat__screen {
+    width: min(100%, calc((100svh - 20rem) * 1600 / 787)); justify-self: center; position: relative; border-radius: var(--radius-md); overflow: hidden; box-shadow: 0 16px 40px -16px rgb(16 22 42 / 0.45); }
   .anat__screen img { display: block; width: 100%; height: auto; transition: filter 0.35s var(--ease); }
   .anat__box {
     position: absolute; border-radius: 6px; opacity: 0;
@@ -61,6 +74,15 @@ const parts = [
   .anat__list b { color: var(--ink); font-weight: 500; font-size: 0.9375rem; }
   .anat__list span { color: var(--ink-3); font-size: 0.875rem; line-height: 1.4; }
   .anat__list button.is-on { background: var(--tint-1); border-left-color: var(--accent); }
-  @media (max-width: 860px) { .anat__list { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 480px) { .anat__list { grid-template-columns: 1fr; } }
+  /* Narrow screens: the parts become one swipeable row right under the screen */
+  @media (max-width: 860px) {
+    .anat__screen { width: 100%; }
+    .anat__list {
+      grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(200px, 42%);
+      overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--s-1);
+    }
+    .anat__list li { scroll-snap-align: start; }
+    .anat__list button { height: 100%; }
+  }
+  @media (max-width: 480px) { .anat__list { grid-auto-columns: 72%; } }
 </style>

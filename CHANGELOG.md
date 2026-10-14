@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-14 — Screen anatomy fits one screen
+
+- "One screen, broken into parts": the screenshot's width is now capped by the window
+  height, so the screen and all 8 parts fit together on laptops (checked 1024×700 up to
+  1920×1080). Hovering a part never hides the screen under the nav.
+- Tapping a part when the screen is partly off-view scrolls the whole figure into view.
+- Tablets and phones: the parts become one swipeable row directly under the screen.
+
 ## 2026-10-14 — Farmers case study (published)
 
 - Built from the Afi-App Figma board (analytics, field sessions, new design, wireframes).
