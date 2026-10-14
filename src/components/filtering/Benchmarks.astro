@@ -23,6 +23,7 @@ const src = (id: string) => `/images/filtering/refs/${id}.webp`;
     {featured.map((r) => (
       <li>
         <button type="button" class="bm__shot" data-zoom={src(r.id)} data-alt={`${r.name} filtering`} aria-label={`Enlarge ${r.name} screenshot`}>
+          <span class="zoom-btn" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
           <img src={src(r.id)} width={r.w} height={r.h} loading="lazy" decoding="async" alt={`${r.name} filtering`} />
         </button>
         <p class="bm__pattern">{r.pattern}</p>
@@ -37,6 +38,7 @@ const src = (id: string) => `/images/filtering/refs/${id}.webp`;
     {more.map((r) => (
       <li>
         <button type="button" class="bm__shot" data-zoom={src(r.id)} data-alt={`${r.name} filtering`} aria-label={`Enlarge ${r.name} screenshot`}>
+          <span class="zoom-btn" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
           <img src={src(r.id)} width={r.w} height={r.h} loading="lazy" decoding="async" alt={`${r.name} filtering`} />
         </button>
         <b>{r.name}</b>
@@ -46,20 +48,14 @@ const src = (id: string) => `/images/filtering/refs/${id}.webp`;
   </ul>
   <p class="bm__cap">11 products from my FigJam research board, sorted by filtering pattern. Tap any snapshot to enlarge.</p>
 
-  <dialog class="bm__dialog" data-dialog aria-label="Enlarged screenshot">
-    <form method="dialog"><button class="bm__close" aria-label="Close">×</button></form>
-    <img data-dialog-img alt="" />
-  </dialog>
 </div>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-bm]').forEach((root) => {
-    const dlg = root.querySelector<HTMLDialogElement>('[data-dialog]')!;
-    const img = root.querySelector<HTMLImageElement>('[data-dialog-img]')!;
+    // Same full-screen viewer as every other screen on the site
     root.querySelectorAll<HTMLButtonElement>('[data-zoom]').forEach((b) => b.addEventListener('click', () => {
-      img.src = b.dataset.zoom!; img.alt = b.dataset.alt!; dlg.showModal();
+      dispatchEvent(new CustomEvent('zoom', { detail: { items: [{ src: b.dataset.zoom!, label: b.dataset.alt! }] } }));
     }));
-    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
   });
 </script>
 
@@ -71,10 +67,11 @@ const src = (id: string) => `/images/filtering/refs/${id}.webp`;
   .bm__featured p { font-size: var(--fs-small); }
   .bm__pattern { color: var(--accent); font-weight: 500; margin-top: var(--s-1); }
   .bm__shot {
-    display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    position: relative; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
     background: #f4f5f7; cursor: zoom-in; aspect-ratio: 16 / 9; transition: box-shadow 0.25s, transform 0.25s var(--ease);
   }
   .bm__shot:hover { box-shadow: 0 12px 28px -14px rgb(16 22 42 / 0.35); transform: translateY(-2px); }
+  .bm__more .zoom-btn { width: 30px; height: 30px; top: 6px; right: 6px; }
   .bm__shot:focus-visible { outline: 3px solid var(--tint-5); outline-offset: 2px; }
   .bm__shot img { width: 100%; height: 100%; object-fit: contain; display: block; }
   .bm__more-label { font-size: var(--fs-small); font-weight: 500; color: var(--ink); margin-top: var(--s-2); }
@@ -86,10 +83,6 @@ const src = (id: string) => `/images/filtering/refs/${id}.webp`;
   .bm__more b { color: var(--ink); font-weight: 500; font-size: 0.9375rem; margin-top: 4px; }
   .bm__more span { font-size: 0.875rem; color: var(--ink-3); line-height: 1.4; }
   .bm__cap { font-size: var(--fs-small); color: var(--ink-3); }
-  .bm__dialog { max-width: min(1100px, 94vw); padding: 0; border: 0; border-radius: var(--radius-md); background: #fff; box-shadow: 0 30px 80px rgb(0 0 0 / 0.35); }
-  .bm__dialog::backdrop { background: rgb(16 22 42 / 0.6); }
-  .bm__dialog img { display: block; width: 100%; height: auto; max-height: 86vh; object-fit: contain; }
-  .bm__close { position: absolute; top: 8px; right: 8px; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgb(0 0 0 / 0.6); color: #fff; font-size: 1.5rem; cursor: pointer; }
   @media (max-width: 640px) {
     .bm__featured { grid-template-columns: 1fr; }
     .bm__more { grid-auto-columns: 70%; }

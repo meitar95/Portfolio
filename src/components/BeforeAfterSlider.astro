@@ -24,7 +24,7 @@ const first = pairs[0].id;
     <div class="bas__clip" aria-hidden="true">
       <img class="bas__img" data-before src={`${img(first, 'before')}-1600.webp`} srcset={`${img(first, 'before')}-800.webp 800w, ${img(first, 'before')}-1600.webp 1600w`} sizes="(max-width: 1080px) 100vw, 1080px" width={w} height={h} alt="" />
     </div>
-    <button type="button" class="zoom-btn" data-bas-zoom><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> Enlarge</button>
+    <button type="button" class="zoom-btn" data-bas-zoom aria-label="Enlarge before and after"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
     <span class="bas__tag bas__tag--before">Before</span>
     <span class="bas__tag bas__tag--after">After</span>
     <div class="bas__handle" aria-hidden="true"><span>
@@ -46,8 +46,8 @@ const first = pairs[0].id;
     const dir = root.dataset.dir!;
     const set = (v: number) => stage.style.setProperty('--pos', `${v}%`);
     range.addEventListener('input', () => set(+range.value));
-    root.querySelector('[data-bas-zoom]')!.addEventListener('click', () => dispatchEvent(new CustomEvent('zoom', { detail: [
-      { src: before.getAttribute('src')!, label: 'Before' }, { src: after.getAttribute('src')!, label: 'After' }] })));
+    root.querySelector('[data-bas-zoom]')!.addEventListener('click', () => dispatchEvent(new CustomEvent('zoom', { detail: { start: 1, items: [
+      { src: before.getAttribute('src')!, label: 'Before' }, { src: after.getAttribute('src')!, label: 'After' }] } })));
     // Click anywhere on the image to jump the handle there
     stage.addEventListener('pointerdown', (e) => {
       if (e.target === range || (e.target as HTMLElement).closest('[data-bas-zoom]')) return;

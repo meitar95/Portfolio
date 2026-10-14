@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-10-14 · One enlarge behaviour everywhere, real pinch zoom
+
+- `Zoom.astro` rewritten: the screen opens fitted to the phone, with real pinch-to-zoom,
+  drag to pan, double-tap to zoom in/out, scroll-wheel on desktop, and − / Fit / + buttons.
+  Before/after pairs open with a Before / After switch.
+- Same trigger on every screenshot: a small round expand icon in the corner, and tapping
+  the screen opens it. Applied to flow screens, screen tabs, reference images, the
+  benchmark snapshots (their old small dialog is gone) and the before/after sliders
+  (icon only there, since dragging moves the slider).
+- Flow chart steps: the arrows no longer scroll the whole page to the active step; only the
+  step row slides, and only when the step is out of view.
+- Vocabulary map on phones: old names, arrow down, new name, left aligned.
+- "~10–14" now reads "10 to 14".
+
 ## 2026-10-14 · Mobile review fixes
 
 - New shared full-screen viewer (`Zoom.astro`): every desktop flow screen and every

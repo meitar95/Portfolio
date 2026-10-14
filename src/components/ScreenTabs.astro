@@ -16,7 +16,8 @@ const { screens, w, h, caption, dark = false } = Astro.props;
     </div>
     <p class="st__note" data-note-out aria-live="polite">{screens[0].note}</p>
   </div>
-  <div class={`st__stage${dark ? ' st__stage--dark' : ''}`}>
+  <div class={`st__stage${dark ? ' st__stage--dark' : ''}`} data-st-stage>
+    <span class="zoom-btn" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></span>
     {screens.map((s, i) => (
       <img src={`${s.src}-1600.webp`} srcset={`${s.src}-800.webp 800w, ${s.src}-1600.webp 1600w`} sizes="(max-width: 1080px) 100vw, 1080px"
         width={w} height={h} alt={s.alt} class={i === 0 ? 'is-on' : ''} data-shot={i}
@@ -31,6 +32,11 @@ const { screens, w, h, caption, dark = false } = Astro.props;
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-i]')];
     const shots = [...root.querySelectorAll<HTMLImageElement>('[data-shot]')];
     const note = root.querySelector<HTMLElement>('[data-note-out]')!;
+    // Tap the screen to open it full screen (same viewer as everywhere else)
+    root.querySelector('[data-st-stage]')!.addEventListener('click', () => {
+      const on = shots.find((s) => s.classList.contains('is-on'))!;
+      dispatchEvent(new CustomEvent('zoom', { detail: { items: [{ src: on.getAttribute('src')!, label: on.alt }] } }));
+    });
     tabs.forEach((b) => b.addEventListener('click', () => {
       if (b.getAttribute('aria-selected') === 'true') return;
       tabs.forEach((t) => t.setAttribute('aria-selected', String(t === b)));
@@ -54,7 +60,7 @@ const { screens, w, h, caption, dark = false } = Astro.props;
   .st__note { color: var(--ink); transition: opacity 0.45s var(--ease), transform 0.45s var(--ease), filter 0.45s var(--ease); }
   .st__note.is-out { opacity: 0; transform: translateY(4px); filter: blur(3px); transition-duration: 0.2s; }
   .st__stage {
-    position: relative; aspect-ratio: var(--ratio); overflow: hidden; border-radius: var(--radius-md);
+    position: relative; cursor: zoom-in; aspect-ratio: var(--ratio); overflow: hidden; border-radius: var(--radius-md);
     background: #f4f6f8; box-shadow: 0 16px 40px -16px rgb(16 22 42 / 0.35); border: 1px solid var(--line);
   }
   .st__stage--dark { background: #0d1a33; border-color: transparent; }

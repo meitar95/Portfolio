@@ -27,7 +27,7 @@ const single = (s: string) => s.endsWith('.webp') || s.endsWith('.png');
 
   <div class={`fs__stage${dark ? ' fs__stage--dark' : ''}`}>
     <div class="fs__screen">
-      {frame === 'desktop' && <button type="button" class="zoom-btn" data-fs-zoom><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg> Enlarge</button>}
+      <button type="button" class="zoom-btn" data-fs-zoom aria-label="Enlarge this screen"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></button>
       {steps.map((s, i) => (
         <div class={`fs__shot${i === 0 ? ' is-on' : ''}`} data-shot={i}>
           {single(s.src)
@@ -57,13 +57,19 @@ const single = (s: string) => s.endsWith('.webp') || s.endsWith('.png');
       tabs.forEach((t, k) => { t.setAttribute('aria-selected', String(k === cur)); t.classList.toggle('is-done', k < cur); });
       shots.forEach((s, k) => s.classList.toggle('is-on', k === cur));
       count.textContent = `${cur + 1} / ${tabs.length}`;
-      tabs[cur].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+      // Phones: keep the active step visible by scrolling only the step row (never the page)
+      const list = tabs[cur].closest('ol')!, li = tabs[cur].parentElement!;
+      if (list.scrollWidth > list.clientWidth) {
+        const left = li.offsetLeft - list.offsetLeft, right = left + li.offsetWidth;
+        if (left < list.scrollLeft || right > list.scrollLeft + list.clientWidth) list.scrollTo({ left: Math.max(0, left - 8), behavior: 'smooth' });
+      }
     };
     tabs.forEach((t, i) => t.addEventListener('click', () => go(i)));
     root.querySelector('[data-prev]')!.addEventListener('click', () => go(cur - 1));
-    root.querySelector('[data-fs-zoom]')?.addEventListener('click', () => {
+    // Tap the screen (or its enlarge button) to open it full screen
+    root.querySelector('.fs__screen')!.addEventListener('click', () => {
       const img = shots[cur].querySelector('img')!;
-      dispatchEvent(new CustomEvent('zoom', { detail: [{ src: img.getAttribute('src')!, label: tabs[cur].querySelector('b')!.textContent! }] }));
+      dispatchEvent(new CustomEvent('zoom', { detail: { items: [{ src: img.getAttribute('src')!, label: tabs[cur].querySelector('b')!.textContent! }] } }));
     });
     root.querySelector('[data-next]')!.addEventListener('click', () => go(cur + 1));
     root.addEventListener('keydown', (e) => {
@@ -101,7 +107,7 @@ const single = (s: string) => s.endsWith('.webp') || s.endsWith('.png');
 
   .fs__stage { position: relative; display: grid; gap: var(--s-2); justify-items: center; padding: clamp(1rem, 3vw, 2rem); border-radius: var(--radius-md); background: linear-gradient(180deg, var(--tint-2), var(--tint-1)); }
   .fs__stage--dark { background: linear-gradient(180deg, #13213f, #0b1630); }
-  .fs__screen { position: relative; width: 100%; aspect-ratio: var(--ratio); overflow: hidden; border-radius: 12px; background: #fff; box-shadow: 0 20px 40px -20px rgb(16 22 42 / 0.45); }
+  .fs__screen { cursor: zoom-in; position: relative; width: 100%; aspect-ratio: var(--ratio); overflow: hidden; border-radius: 12px; background: #fff; box-shadow: 0 20px 40px -20px rgb(16 22 42 / 0.45); }
   .fs--phone .fs__screen { width: min(100%, 300px); border-radius: 28px; border: 6px solid #1f2430; }
   .fs__shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.4s var(--ease); }
   .fs__shot.is-on { opacity: 1; }

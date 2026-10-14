@@ -1,60 +1,162 @@
 ---
-// One shared full-screen viewer for product screens. Wide desktop screenshots are hard
-// to read on a phone, so any component can open them here at full resolution, where
-// they can be panned sideways and pinch-zoomed.
-//   window.dispatchEvent(new CustomEvent('zoom', { detail: [{ src, label? }, ...] }))
+// One shared full-screen viewer for every product screen on the site, so enlarging
+// works the same everywhere. The image opens fitted to the screen; pinch, double-tap,
+// scroll-wheel or the +/− buttons zoom, and dragging pans. Several images (e.g. Before
+// and After) get a switch at the top.
+//   dispatchEvent(new CustomEvent('zoom', { detail: { items: [{ src, label? }], start?: 0 } }))
+// Or mark any image (or its wrapper) with data-zoomable to open it on tap.
 ---
 <dialog class="zm" data-zoomer aria-label="Enlarged screen">
   <div class="zm__bar">
-    <span class="zm__hint">Swipe or pinch to look around</span>
+    <div class="zm__tabs" data-zm-tabs role="group" aria-label="Choose a screen"></div>
+    <p class="zm__label" data-zm-label></p>
     <form method="dialog"><button class="zm__close" aria-label="Close">×</button></form>
   </div>
-  <div class="zm__body" data-zoom-body></div>
+  <div class="zm__stage" data-zm-stage>
+    <img data-zm-img alt="" draggable="false" />
+  </div>
+  <div class="zm__foot">
+    <span class="zm__hint">Pinch to zoom</span>
+    <div class="zm__ctrl">
+      <button type="button" data-zm-out aria-label="Zoom out">−</button>
+      <button type="button" data-zm-fit aria-label="Fit to screen">Fit</button>
+      <button type="button" data-zm-in aria-label="Zoom in">+</button>
+    </div>
+  </div>
 </dialog>
 
 <script>
   const dlg = document.querySelector<HTMLDialogElement>('[data-zoomer]');
-  const body = document.querySelector<HTMLElement>('[data-zoom-body]');
-  if (dlg && body) {
+  if (dlg) {
+    const stage = dlg.querySelector<HTMLElement>('[data-zm-stage]')!;
+    const img = dlg.querySelector<HTMLImageElement>('[data-zm-img]')!;
+    const tabs = dlg.querySelector<HTMLElement>('[data-zm-tabs]')!;
+    const label = dlg.querySelector<HTMLElement>('[data-zm-label]')!;
+    type Item = { src: string; label?: string };
+    let items: Item[] = [];
+    let s = 1, x = 0, y = 0; // scale and offset, relative to the fitted image
+    const MAX = 5;
+
+    const apply = (animate = false) => {
+      img.style.transition = animate ? 'transform 0.25s ease' : 'none';
+      img.style.transform = `translate(${x}px, ${y}px) scale(${s})`;
+      stage.classList.toggle('is-zoomed', s > 1.01);
+    };
+    // Keep the zoomed image covering the stage (no panning off into empty space)
+    const clamp = () => {
+      const r = stage.getBoundingClientRect();
+      const w = img.offsetWidth * s, h = img.offsetHeight * s;
+      const mx = Math.max(0, (w - r.width) / 2), my = Math.max(0, (h - r.height) / 2);
+      x = Math.min(mx, Math.max(-mx, x)); y = Math.min(my, Math.max(-my, y));
+    };
+    // Zoom around a point (cx, cy), measured from the stage centre
+    const zoomTo = (next: number, cx = 0, cy = 0, animate = false) => {
+      next = Math.min(MAX, Math.max(1, next));
+      const k = next / s; x = cx - (cx - x) * k; y = cy - (cy - y) * k; s = next;
+      if (s === 1) { x = 0; y = 0; }
+      clamp(); apply(animate);
+    };
+    const reset = () => { s = 1; x = 0; y = 0; apply(); };
+    const fromCentre = (cx: number, cy: number) => { const r = stage.getBoundingClientRect(); return [cx - r.left - r.width / 2, cy - r.top - r.height / 2]; };
+
+    const show = (i: number) => {
+      img.src = items[i].src; img.alt = items[i].label ?? 'Enlarged screen';
+      label.textContent = items.length > 1 ? '' : (items[i].label ?? '');
+      tabs.querySelectorAll('button').forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
+      reset();
+    };
+
     addEventListener('zoom', (e) => {
-      const items = (e as CustomEvent<{ src: string; label?: string }[]>).detail;
-      body.innerHTML = '';
-      for (const it of items) {
-        const fig = document.createElement('figure');
-        if (it.label) { const l = document.createElement('figcaption'); l.textContent = it.label; fig.append(l); }
-        const sc = document.createElement('div'); sc.className = 'zm__scroll';
-        const img = document.createElement('img'); img.src = it.src; img.alt = it.label ?? 'Enlarged screen';
-        sc.append(img); fig.append(sc); body.append(fig);
-      }
-      dlg.showModal();
-      // Start each wide image centered-left, like reading a page
-      body.querySelectorAll('.zm__scroll').forEach((s) => (s.scrollLeft = 0));
+      const d = (e as CustomEvent<{ items: Item[]; start?: number }>).detail;
+      items = d.items;
+      tabs.innerHTML = items.length > 1 ? items.map((it, i) => `<button type="button" data-i="${i}">${it.label ?? i + 1}</button>`).join('') : '';
+      tabs.querySelectorAll<HTMLButtonElement>('button').forEach((b) => b.addEventListener('click', () => show(+b.dataset.i!)));
+      dlg.showModal(); document.documentElement.classList.add('zm-lock');
+      show(d.start ?? 0);
     });
-    dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    dlg.addEventListener('close', () => document.documentElement.classList.remove('zm-lock'));
+
+    // Pointer gestures: one finger pans (when zoomed), two fingers pinch, double-tap toggles
+    const pts = new Map<number, { x: number; y: number }>();
+    let startDist = 0, startS = 1, startMid = [0, 0], startXY = [0, 0], lastTap = 0, moved = false;
+    stage.addEventListener('pointerdown', (e) => {
+      stage.setPointerCapture(e.pointerId); pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); moved = false;
+      if (pts.size === 2) {
+        const [a, b] = [...pts.values()];
+        startDist = Math.hypot(a.x - b.x, a.y - b.y) || 1; startS = s;
+        startMid = fromCentre((a.x + b.x) / 2, (a.y + b.y) / 2); startXY = [x, y];
+      } else { startXY = [x - e.clientX, y - e.clientY]; }
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!pts.has(e.pointerId)) return;
+      const prev = pts.get(e.pointerId)!;
+      if (Math.hypot(prev.x - e.clientX, prev.y - e.clientY) > 2) moved = true;
+      pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (pts.size === 2) {
+        const [a, b] = [...pts.values()];
+        const next = Math.min(MAX, Math.max(1, startS * (Math.hypot(a.x - b.x, a.y - b.y) / startDist)));
+        const k = next / startS; s = next;
+        x = startMid[0] - (startMid[0] - startXY[0]) * k; y = startMid[1] - (startMid[1] - startXY[1]) * k;
+        clamp(); apply();
+      } else if (s > 1) { x = startXY[0] + e.clientX; y = startXY[1] + e.clientY; clamp(); apply(); }
+    });
+    const up = (e: PointerEvent) => {
+      const wasPinch = pts.size === 2; pts.delete(e.pointerId);
+      if (pts.size === 1) { const p = [...pts.values()][0]; startXY = [x - p.x, y - p.y]; }
+      if (wasPinch || moved) { lastTap = 0; return; }
+      const now = Date.now();
+      if (now - lastTap < 320) { const [cx, cy] = fromCentre(e.clientX, e.clientY); zoomTo(s > 1.01 ? 1 : 2.5, cx, cy, true); lastTap = 0; }
+      else lastTap = now;
+    };
+    stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+    stage.addEventListener('wheel', (e) => { e.preventDefault(); const [cx, cy] = fromCentre(e.clientX, e.clientY); zoomTo(s * (e.deltaY < 0 ? 1.15 : 1 / 1.15), cx, cy); }, { passive: false });
+    dlg.querySelector('[data-zm-in]')!.addEventListener('click', () => zoomTo(s * 1.6, 0, 0, true));
+    dlg.querySelector('[data-zm-out]')!.addEventListener('click', () => zoomTo(s / 1.6, 0, 0, true));
+    dlg.querySelector('[data-zm-fit]')!.addEventListener('click', () => zoomTo(1, 0, 0, true));
+    addEventListener('resize', () => { if (dlg.open) { clamp(); apply(); } });
   }
+
+  // Any element marked [data-zoomable] opens its image in the viewer on tap (one behaviour site-wide)
+  document.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-zoomable]');
+    if (!t) return;
+    const im = t.matches('img') ? (t as HTMLImageElement) : t.querySelector('img');
+    if (!im) return;
+    const src = t.dataset.zoomSrc || im.getAttribute('src')!;
+    dispatchEvent(new CustomEvent('zoom', { detail: { items: [{ src, label: t.dataset.zoomLabel || im.alt }] } }));
+  });
 </script>
 
 <style is:global>
+  .zm-lock, .zm-lock body { overflow: hidden; }
   .zm { width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; padding: 0; border: 0; background: #10162a; color: #fff; }
-  .zm::backdrop { background: rgb(16 22 42 / 0.85); }
-  .zm[open] { display: grid; grid-template-rows: auto 1fr; }
-  .zm__bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.5rem 0.5rem 0.5rem 1rem; }
-  .zm__hint { font-size: var(--fs-small); color: #b8c2d9; }
+  .zm::backdrop { background: #10162a; }
+  .zm[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; grid-template-columns: minmax(0, 1fr); }
+  .zm__bar { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.5rem 0.5rem 1rem; min-height: 60px; }
+  .zm__label { flex: 1; min-width: 0; max-width: none; font-size: var(--fs-small); font-weight: 500; color: #dfe5f2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .zm__tabs:empty { display: none; }
+  .zm__tabs { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: rgb(255 255 255 / 0.1); }
+  .zm__tabs button { min-height: 36px; padding: 0 1rem; border: 0; border-radius: 999px; background: none; color: #b8c2d9; font: 500 var(--fs-small)/1 var(--sans); cursor: pointer; }
+  .zm__tabs button[aria-pressed="true"] { background: #fff; color: var(--ink); }
+  .zm__bar form { margin-left: auto; }
   .zm__close { width: 44px; height: 44px; border: 0; border-radius: 50%; background: rgb(255 255 255 / 0.12); color: #fff; font-size: 1.75rem; line-height: 1; cursor: pointer; }
-  .zm__body { overflow-y: auto; display: grid; gap: 1.25rem; align-content: start; padding: 0 0 2rem; }
-  .zm__body figure { margin: 0; display: grid; gap: 0.5rem; }
-  .zm__body figcaption { padding: 0 1rem; font-size: var(--fs-small); font-weight: 500; color: #dfe5f2; }
-  .zm__scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  /* Wide screens open at a readable width (pan sideways); never smaller than the viewport */
-  .zm__scroll img { display: block; width: max(100%, 1000px); max-width: none; height: auto; }
-  @media (min-width: 1000px) { .zm__scroll img { width: min(100%, 1600px); margin-inline: auto; } }
-  /* Expand buttons placed on screens by FlowScreens and the before/after sliders */
+  .zm__stage { position: relative; overflow: hidden; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 0 0.75rem; touch-action: none; cursor: zoom-in; }
+  .zm__stage.is-zoomed { cursor: grab; }
+  .zm__stage img { min-width: 0; max-width: 100%; max-height: 100%; width: auto; height: auto; border-radius: 6px; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; transform-origin: center; will-change: transform; }
+  .zm__foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom)); }
+  .zm__hint { font-size: var(--fs-small); color: #b8c2d9; min-width: 0; }
+  @media (max-width: 420px) { .zm__hint { font-size: 0.875rem; } }
+  .zm__ctrl { display: inline-flex; gap: 6px; }
+  .zm__ctrl button { min-width: 44px; height: 44px; padding: 0 0.75rem; border: 0; border-radius: 999px; background: rgb(255 255 255 / 0.12); color: #fff; font: 500 1.125rem/1 var(--sans); cursor: pointer; }
+  .zm__ctrl [data-zm-fit] { font-size: var(--fs-small); }
+
+  /* The one "you can enlarge this" signal, used on every zoomable screen */
+  [data-zoomable] { cursor: zoom-in; }
   .zoom-btn {
-    position: absolute; top: 10px; right: 10px; z-index: 12; display: inline-flex; align-items: center; gap: 0.35rem;
-    min-height: 36px; padding: 0 0.75rem; border: 0; border-radius: 999px; cursor: pointer;
-    background: rgb(16 22 42 / 0.72); color: #fff; font: 500 0.875rem/1 var(--sans);
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    position: absolute; top: 10px; right: 10px; z-index: 12; display: grid; place-items: center;
+    width: 36px; height: 36px; padding: 0; border: 0; border-radius: 50%; cursor: zoom-in; pointer-events: auto;
+    background: rgb(16 22 42 / 0.66); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   }
-  .zoom-btn:hover { background: rgb(16 22 42 / 0.9); }
+  .zoom-btn:hover { background: rgb(16 22 42 / 0.88); }
   .zoom-btn:focus-visible { outline: 3px solid var(--tint-5); outline-offset: 2px; }
 </style>

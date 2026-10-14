@@ -32,5 +32,10 @@ const rows = [
   .term { display: inline-block; padding: 0.35rem 0.75rem; border-radius: 8px; background: #fff; border: 1px dashed #c9c3bf; color: var(--ink-2); font-size: var(--fs-small); text-decoration: line-through; text-decoration-color: rgb(31 21 21 / 0.25); }
   .term--to { background: var(--accent); border: 0; color: #fff; text-decoration: none; font-weight: 500; }
   .vocab__arrow { color: var(--ink-3); flex: none; margin-bottom: 1.1rem; }
-  @media (max-width: 520px) { .vocab__arrow { transform: rotate(90deg); margin: 0; } }
+  /* Phones: old names, then an arrow down, then the one shared name, all left aligned */
+  @media (max-width: 600px) {
+    .vocab__row { flex-direction: column; align-items: flex-start; gap: var(--s-1); }
+    .vocab__row + .vocab__row { padding-top: var(--s-3); border-top: 1px solid var(--line); }
+    .vocab__arrow { transform: rotate(90deg); margin: 0 0 0 0.5rem; width: 32px; height: 20px; }
+  }
 </style>
