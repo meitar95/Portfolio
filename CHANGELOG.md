@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-14 — Hero intro
+
+- Repositioned around security and complex B2B: "Founding designer at Huskeys, building WAF and API
+  security from zero. Almost 5 years turning complex B2B systems into tools people trust..."
+  Role line and meta description updated to match.
+
 ## 2026-10-14 — Filtering references from the FigJam board
 
 - `filtering/Benchmarks.astro` now shows real snapshots from the "filtering-ux" FigJam
