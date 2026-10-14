@@ -11,6 +11,10 @@ import Icon from '../Icon.astro';
 ---
 <figure class="fb" data-fb>
   <div class="fb__top">
+    <div class="fb__seg" role="group" aria-label="Show before or after">
+      <button type="button" data-snap="100" aria-pressed="true">Before</button>
+      <button type="button" data-snap="0" aria-pressed="false">After</button>
+    </div>
     <p class="fb__headline" aria-live="polite" data-headline>Same task, four different filter bars, each with its own words.</p>
   </div>
 
@@ -145,7 +149,8 @@ import Icon from '../Icon.astro';
   </div>
 
   <figcaption class="fb__caption" data-caption>
-    Drag to compare, or tap <b>After</b> to open the new filter bar and try it: a Quick Start, <b>is</b> → <b>is not</b>, or ask AI in plain words.
+    <span class="fb__cap-wide">Drag to compare, or tap <b>After</b> to open the new filter bar and try it: a Quick Start, <b>is</b> → <b>is not</b>, or ask AI in plain words.</span>
+    <span class="fb__cap-narrow">Switch to <b>After</b> and try it: a Quick Start, <b>is</b> → <b>is not</b>, or ask AI in plain words.</span>
   </figcaption>
 </figure>
 
@@ -239,6 +244,7 @@ import Icon from '../Icon.astro';
       stage.style.setProperty('--pos', `${v}%`);
       knob.setAttribute('aria-valuenow', String(v));
       root.dataset.view = v < 50 ? 'after' : 'before';
+      root.querySelectorAll('.fb__seg [data-snap]').forEach((b) => b.setAttribute('aria-pressed', String((b as HTMLElement).dataset.snap === (v < 50 ? '0' : '100'))));
       const next = v < 50 ? 'after' : 'before';
       if (next !== side) {
         side = next;
@@ -851,6 +857,24 @@ import Icon from '../Icon.astro';
     .arow .sel--btn { grid-column: 2 / 4; grid-row: 2; }
     .rows { min-height: 0; }
     .panel { left: 0 !important; }
+  }
+  /* Phones: the drag slider squeezed two desktop screens into half a screen each.
+     Instead, a Before / After switch shows one full-width side at a time. */
+  .fb__seg, .fb__cap-narrow { display: none; }
+  @media (max-width: 640px) {
+    .fb__seg {
+      display: inline-flex; padding: 4px; gap: 4px; border-radius: 999px; background: var(--bg); border: 1px solid var(--line);
+    }
+    .fb__seg button {
+      min-height: 40px; padding: 0 1.1rem; border: 0; border-radius: 999px; background: none; cursor: pointer;
+      font: 500 var(--fs-small)/1 var(--sans); color: var(--ink-3); transition: background 0.2s, color 0.2s;
+    }
+    .fb__seg button[aria-pressed="true"] { background: #fff; color: var(--ink); box-shadow: 0 1px 3px rgb(31 21 21 / 0.12); }
+    .fb__cap-wide { display: none; } .fb__cap-narrow { display: inline; }
+    .fb__handle, .fb__tag { display: none; }
+    .fb__before { position: relative; inset: auto; padding: 0; clip-path: none; background: none; }
+    .fb[data-view="before"] [data-panel="after"], .fb[data-view="after"] .fb__before { display: none; }
+    .old__name { font-size: 0.8125rem; }
   }
   @media (prefers-reduced-motion: reduce) {
     .chip, .pop, .rows.is-refresh span, .ai__pill.is-thinking .ai__spark { animation: none; }

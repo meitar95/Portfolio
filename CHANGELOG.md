@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-14 · Filtering before/after on phones
+
+- Under 640px the drag slider is replaced by a Before / After switch. Each side gets the full
+  width: the four old filter bars stacked, or the live new filter bar (still fully tappable:
+  Ask AI, Quick Start, is → is not, Save View). Desktop and tablet keep the slider.
+
 ## 2026-10-14 · Launch prep, facts check and full review
 
 **Facts**
