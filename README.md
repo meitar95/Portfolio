@@ -30,7 +30,7 @@ Every study renders in the same order:
 3. Outcomes (max 3 numbers)
 4. Why it mattered
 5. The solution (visual + 2–4 key points)
-6. What I learned
+6. What we learned
 7. *How we got there* → The problem, The evidence
 8. Next case study
 

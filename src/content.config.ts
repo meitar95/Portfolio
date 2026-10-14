@@ -33,7 +33,7 @@ const work = defineCollection({
       summary: z.string(),
       points: z.array(z.object({ title: z.string(), text: z.string() })).min(2).max(4),
     }),
-    // 4. What I learned
+    // 4. What we learned
     learned: z.string(),
     // 5 + 6 (The problem, The evidence) live in the Markdown body below the fold.
   }),
