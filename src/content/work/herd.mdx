@@ -48,9 +48,9 @@ learned: >-
   and I still wonder what was behind it.
 ---
 
+import FlowScreens from '../../components/FlowScreens.astro';
 import Flow from '../../components/Flow.astro';
 import DetailCompare from '../../components/herd/DetailCompare.astro';
-import ScreenTabs from '../../components/ScreenTabs.astro';
 
 ## The problem
 
@@ -73,14 +73,15 @@ Daily Tasks is the page farmers open every morning, so it shows the approach bes
 
 <DetailCompare />
 
-### One look across every screen
+## The result
 
-The same components and colors run from the dashboard, to a single cow's history, to settings.
+Beta users told us in testing that onboarding got easier. We used that to make the case that the field workers' app needed the same love, and [I led that project next](/work/farmers/).
 
-<ScreenTabs w={1600} h={900} caption="Latest designs. Demo data." screens={[
-  { src: '/images/herd/dashboard', label: 'Dashboard', note: 'Fertility, health and herd routine at a glance, with today\'s tasks on the left.', alt: 'Dashboard with fertility and health rings, herd routine chart and KPI bars' },
-  { src: '/images/herd/herdview', label: 'Herd view', note: 'One cow: where she is in her cycle, her routine against the norm, and events on the timeline.', alt: 'Herd view of a single cow with a pregnancy timeline, routine summary and a chart of rumination, eating and heat with events below' },
-  { src: '/images/herd/settings', label: 'Settings', note: 'Task rules in plain controls: a toggle per task, a slider per threshold, and search on top.', alt: 'Task settings with searchable menu, a toggle per task and pregnancy check reasons with a days-since-insemination slider' },
+Here's a farmer's morning on the latest screens. The same components and colors run through all of them.
+
+<FlowScreens w={1600} h={900} caption="Latest designs. Demo data." steps={[
+  { t: 'Start at the dashboard', d: 'Fertility, health, herd routine', src: '/images/herd/dashboard' },
+  { t: "Open today's tasks", d: 'Grouped, with progress', src: '/images/herd/tasks-after' },
+  { t: 'Check one cow', d: 'Her cycle and routine', src: '/images/herd/herdview' },
+  { t: 'Tune the rules', d: 'Toggles and thresholds', src: '/images/herd/settings' },
 ]} />
-
-**Result:** beta users told us in testing that onboarding got easier. We used that to make the case that the field workers' app needed the same love, and [I led that project next](/work/farmers/).

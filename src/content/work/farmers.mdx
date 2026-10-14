@@ -47,6 +47,7 @@ learned: >-
   further from the binder.
 ---
 
+import FlowScreens from '../../components/FlowScreens.astro';
 import DataFindings from '../../components/farmers/DataFindings.astro';
 import FieldNotes from '../../components/farmers/FieldNotes.astro';
 import TagFlow from '../../components/farmers/TagFlow.astro';
@@ -92,6 +93,18 @@ Tag assignment is a good example. The data showed farms tag lots of cows in a ro
 
 We also looked at swipe and multi-select patterns from other apps. Long swipes didn't fit how our users work, so we dropped them early.
 
-**Result:** the redesign shipped and held up in field tests in New Zealand and Italy, with only minor bugs. And logging finally moved from paper into the app:
+## The result
+
+The redesign shipped and held up in field tests in New Zealand and Italy, with only minor bugs. And logging finally moved from paper into the app:
 
 <GrowthChart />
+
+Here's the flow farmers use now, on the final screens.
+
+<FlowScreens frame="phone" w={362} h={780} caption="Final designs. Demo data." steps={[
+  { t: "Today's tasks", d: 'Right when the app opens', src: '/images/farmers/home-after.webp' },
+  { t: 'Pick a task', d: 'Progress per group', src: '/images/farmers/tasks-group.webp' },
+  { t: 'Open a group', d: 'Every cow that needs it', src: '/images/farmers/group-cows.webp' },
+  { t: 'Confirm', d: 'One tap per cow', src: '/images/farmers/cow-action.webp' },
+  { t: 'Or many at once', d: 'Long press to select', src: '/images/farmers/multi-select.webp' },
+]} />

@@ -48,6 +48,7 @@ learned: >-
   and center in Sentrycs' own marketing videos still makes me smile.
 ---
 
+import FlowScreens from '../../components/FlowScreens.astro';
 import ReadabilityScale from '../../components/sentrycs/ReadabilityScale.astro';
 import Principles from '../../components/sentrycs/Principles.astro';
 import ScreenAnatomy from '../../components/sentrycs/ScreenAnatomy.astro';
@@ -78,7 +79,18 @@ Generic UI kits don't come with drone states, no-fly zones or satellite maps, so
 
 <StyleGuide />
 
-**Result:** usability tests showed the workflow still felt familiar, operators and stakeholders were really positive, and it shipped. You can see it in Sentrycs' own marketing videos:
+## The result
+
+Usability tests showed the workflow still felt familiar, operators and stakeholders were really positive, and it shipped. Here's the operator's main loop on the final screens.
+
+<FlowScreens w={1600} h={787} dark caption="The shipped design. Demo data." steps={[
+  { t: 'Spot it on the map', d: 'Markers and zones, any terrain', src: '/images/sentrycs/realtime-final-1600.webp', focus: [3.4, 5.3, 69.4, 94.7] },
+  { t: 'Find it in Sky Status', d: 'Sorted by what needs attention', src: '/images/sentrycs/realtime-final-1600.webp', focus: [73.1, 6.4, 26.4, 41.6] },
+  { t: 'Check the details', d: 'Altitude, heading, speed', src: '/images/sentrycs/realtime-final-1600.webp', focus: [73.1, 50.5, 26.4, 49.5] },
+  { t: 'Look back later', d: 'Analytics, same visual language', src: '/images/sentrycs/analytics-after' },
+]} />
+
+And you can see it in Sentrycs' own marketing videos:
 
 <VideoLinks videos={[
   { id: 'rhE91jM3i3g', title: 'Counter-drone solutions: border security & protection' },

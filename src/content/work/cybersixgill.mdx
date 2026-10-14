@@ -45,7 +45,7 @@ learned: >-
   felt calm for the smallest one. That habit stuck with me.
 ---
 
-import Flow from '../../components/Flow.astro';
+import FlowScreens from '../../components/FlowScreens.astro';
 import NumberScale from '../../components/cybersixgill/NumberScale.astro';
 import WidgetGrid from '../../components/cybersixgill/WidgetGrid.astro';
 import RefImage from '../../components/RefImage.astro';
@@ -68,16 +68,18 @@ Instead of designing each dashboard from scratch, we set one rule every widget f
 
 Attack surface monitoring added thousands of assets per customer. We designed the flow so the list stays useful without anyone pruning it by hand.
 
-<Flow lanes={[
-  { tone: 'after', steps: [
-    { t: 'Scan finds assets', d: 'Domains, IPs, executives, BINs and more' },
-    { t: 'Inventory', d: 'New and at-risk items on top' },
-    { t: 'Inspect one', d: 'Location, cloud, related domains' },
-    { t: 'Act', d: 'Remove, or report a false positive' },
-    { t: 'Set a policy', d: 'What to watch, what to exclude', kind: 'end' },
-  ]},
+## The result
+
+This is the inventory flow we ended up with, on the final screens.
+
+<FlowScreens w={1600} h={874} dark caption="From the design files. Demo data." steps={[
+  { t: "See what's new", d: 'At-risk items on top', src: '/images/cybersixgill/inventory' },
+  { t: 'Inspect one', d: 'Location, cloud, related domains', src: '/images/cybersixgill/inventory', focus: [75.5, 40, 21.5, 57] },
+  { t: 'Clean it up', d: 'Remove, or report a false positive', src: '/images/cybersixgill/remove' },
+  { t: 'Set what to watch', d: 'A monitoring policy', src: '/images/cybersixgill/policies' },
+  { t: 'And what to skip', d: 'Exclusions', src: '/images/cybersixgill/exclusions' },
 ]} />
 
-**Result:** the look carried into the product Cybersixgill shipped, and it's what they showed on their own site:
+The look carried into the product Cybersixgill shipped, and it's what they showed on their own site:
 
 <RefImage bare w={1394} h={812} src="/images/cybersixgill/shipped" alt="Cybersixgill's threat hunting dashboard on a laptop, as shown on the company's website" caption="As shown on Cybersixgill's public website, 2023." />

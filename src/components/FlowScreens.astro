@@ -1,0 +1,116 @@
+---
+/**
+ * The final flow, interactive: a flow chart whose steps are tappable, each showing its
+ * real screen. Every case study ends its Result with one of these.
+ *
+ *   <FlowScreens frame="desktop" w={1600} h={900} label="The new flow" caption="..." steps={[
+ *     { t: 'Open your view', d: 'Saved filters, ready', src: '/images/x/step-1' },          // base path → -800/-1600.webp
+ *     { t: 'Check the details', src: '/images/x/screen.webp', focus: [73, 50, 27, 50] },   // single file + spotlight (% of image)
+ *   ]} />
+ */
+type Step = { t: string; d?: string; src: string; alt?: string; focus?: [number, number, number, number] };
+interface Props { steps: Step[]; w: number; h: number; frame?: 'desktop' | 'phone'; label?: string; caption?: string; dark?: boolean }
+const { steps, w, h, frame = 'desktop', label = 'The new flow', caption, dark = false } = Astro.props;
+const single = (s: string) => s.endsWith('.webp') || s.endsWith('.png');
+---
+<figure class={`fs fs--${frame}`} data-fs style={`--ratio: ${w} / ${h}`}>
+  <p class="fs__label">{label} <span>· tap a step to see it</span></p>
+  <ol class="fs__steps" role="tablist" aria-label={label} style={`--n: ${steps.length}`}>
+    {steps.map((s, i) => (
+      <li>
+        <button type="button" role="tab" aria-selected={i === 0 ? 'true' : 'false'} data-step={i}>
+          <b>{s.t}</b>{s.d && <span>{s.d}</span>}
+        </button>
+      </li>
+    ))}
+  </ol>
+
+  <div class={`fs__stage${dark ? ' fs__stage--dark' : ''}`}>
+    <div class="fs__screen">
+      {steps.map((s, i) => (
+        <div class={`fs__shot${i === 0 ? ' is-on' : ''}`} data-shot={i}>
+          {single(s.src)
+            ? <img src={s.src} width={w} height={h} alt={s.alt ?? s.t} loading="lazy" decoding="async" />
+            : <img src={`${s.src}-1600.webp`} srcset={`${s.src}-800.webp 800w, ${s.src}-1600.webp 1600w`} sizes="(max-width: 1080px) 100vw, 1080px" width={w} height={h} alt={s.alt ?? s.t} loading="lazy" decoding="async" />}
+          {s.focus && <span class="fs__focus" aria-hidden="true" style={`left:${s.focus[0]}%;top:${s.focus[1]}%;width:${s.focus[2]}%;height:${s.focus[3]}%`}></span>}
+        </div>
+      ))}
+    </div>
+    <div class="fs__nav">
+      <button type="button" data-prev aria-label="Previous step"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg></button>
+      <span data-count aria-live="polite">1 / {steps.length}</span>
+      <button type="button" data-next aria-label="Next step"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></button>
+    </div>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-fs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-step]')];
+    const shots = [...root.querySelectorAll<HTMLElement>('[data-shot]')];
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    let cur = 0;
+    const go = (i: number) => {
+      cur = (i + tabs.length) % tabs.length;
+      tabs.forEach((t, k) => { t.setAttribute('aria-selected', String(k === cur)); t.classList.toggle('is-done', k < cur); });
+      shots.forEach((s, k) => s.classList.toggle('is-on', k === cur));
+      count.textContent = `${cur + 1} / ${tabs.length}`;
+      tabs[cur].scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    };
+    tabs.forEach((t, i) => t.addEventListener('click', () => go(i)));
+    root.querySelector('[data-prev]')!.addEventListener('click', () => go(cur - 1));
+    root.querySelector('[data-next]')!.addEventListener('click', () => go(cur + 1));
+    root.addEventListener('keydown', (e) => {
+      if (!(e.target as HTMLElement).matches('[data-step]')) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1); tabs[cur].focus(); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); tabs[cur].focus(); }
+    });
+  });
+</script>
+
+<style>
+  .fs { display: grid; gap: var(--s-2); margin: 0; }
+  .fs figcaption { font-size: var(--fs-small); color: var(--ink-3); }
+  .fs__label { font-size: var(--fs-small); font-weight: 500; color: var(--ink); }
+  .fs__label span { font-weight: 400; color: var(--ink-3); }
+
+  /* The flow chart: equal steps with arrows between them */
+  .fs__steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 24px; }
+  .fs__steps li { position: relative; display: grid; }
+  .fs__steps li + li::before { content: ''; position: absolute; left: -19px; top: 1.45rem; width: 12px; height: 2px; background: var(--ink-3); opacity: 0.45; }
+  .fs__steps li + li::after { content: ''; position: absolute; left: -9px; top: calc(1.45rem - 4px); border: 5px solid transparent; border-left-color: var(--ink-3); opacity: 0.45; }
+  .fs__steps button {
+    display: grid; gap: 2px; align-content: start; text-align: left; width: 100%; cursor: pointer;
+    padding: 0.7rem 0.85rem; border-radius: 12px; border: 1px solid var(--tint-4); background: var(--tint-1);
+    transition: background 0.25s, border-color 0.25s, color 0.25s, box-shadow 0.25s;
+  }
+  .fs__steps b { font-weight: 500; color: var(--ink); line-height: 1.3; }
+  .fs__steps span { font-size: 0.875rem; color: var(--ink-3); line-height: 1.35; }
+  .fs__steps button:hover { border-color: var(--accent); }
+  .fs__steps button.is-done { background: #fff; }
+  .fs__steps button[aria-selected='true'] { background: var(--accent); border-color: var(--accent); box-shadow: 0 6px 16px -8px rgb(63 108 136 / 0.6); }
+  .fs__steps button[aria-selected='true'] b { color: #fff; }
+  .fs__steps button[aria-selected='true'] span { color: rgb(255 255 255 / 0.82); }
+  .fs__steps button:focus-visible { outline: 3px solid var(--tint-5); outline-offset: 2px; }
+
+  .fs__stage { position: relative; display: grid; gap: var(--s-2); justify-items: center; padding: clamp(1rem, 3vw, 2rem); border-radius: var(--radius-md); background: linear-gradient(180deg, var(--tint-2), var(--tint-1)); }
+  .fs__stage--dark { background: linear-gradient(180deg, #13213f, #0b1630); }
+  .fs__screen { position: relative; width: 100%; aspect-ratio: var(--ratio); overflow: hidden; border-radius: 12px; background: #fff; box-shadow: 0 20px 40px -20px rgb(16 22 42 / 0.45); }
+  .fs--phone .fs__screen { width: min(100%, 300px); border-radius: 28px; border: 6px solid #1f2430; }
+  .fs__shot { position: absolute; inset: 0; opacity: 0; transition: opacity 0.4s var(--ease); }
+  .fs__shot.is-on { opacity: 1; }
+  .fs__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .fs__focus { position: absolute; border-radius: 8px; box-shadow: 0 0 0 2px #fff, 0 0 0 9999px rgb(10 14 28 / 0.5); }
+  .fs__nav { display: inline-flex; align-items: center; gap: var(--s-1); font-size: var(--fs-small); color: var(--ink-3); }
+  .fs__stage--dark .fs__nav { color: #9fb2d3; }
+  .fs__nav button { display: grid; place-items: center; width: 40px; height: 40px; border: 0; border-radius: 50%; background: #fff; color: var(--ink); cursor: pointer; box-shadow: 0 2px 8px rgb(16 22 42 / 0.12); }
+  .fs__nav button:focus-visible { outline: 3px solid var(--tint-5); outline-offset: 2px; }
+
+  /* Phones: the flow chart becomes a swipeable row */
+  @media (max-width: 760px) {
+    .fs__steps { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: minmax(150px, 46%); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+    .fs__steps li { scroll-snap-align: start; }
+  }
+  @media (prefers-reduced-motion: reduce) { .fs__shot, .fs__steps button { transition: none; } }
+</style>

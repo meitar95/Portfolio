@@ -23,6 +23,7 @@ hosted on Vercel. Every change pushed to GitHub republishes the site automatical
 | Before/after drag slider (any case study) | `src/components/BeforeAfterSlider.astro` |
 | Screens behind tabs (any case study) | `src/components/ScreenTabs.astro` |
 | Cybersixgill / Herd visuals | `src/components/cybersixgill/*.astro`, `src/components/herd/*.astro` |
+| Final flow with clickable screens (every Result) | `src/components/FlowScreens.astro` — usage at the top of the file |
 | Flow chart (any case study) | `src/components/Flow.astro` — usage example at the top of the file |
 | Icons (Untitled UI style) | `src/components/icons.ts`, `Icon.astro` |
 | Reference image with caption | `src/components/RefImage.astro` |

@@ -128,10 +128,11 @@ const Visual = d.visual ? visuals[d.visual] : null;
   /* Below the fold: same rhythm, white surface */
   .cs__fold { background: var(--surface); padding-block: var(--gap-section); }
   .cs__body { display: grid; gap: var(--gap-content); }
-  .cs__body :global(h2) { margin-top: calc(var(--gap-section) - var(--gap-content)); }
-  .cs__body :global(h2:first-child) { margin-top: 0; }
-  .cs__body :global(h2 + p), .cs__body :global(h3 + p) { margin-top: calc(var(--gap-pair) - var(--gap-content)); }
-  .cs__body :global(h3) { margin-top: calc(var(--s-5) - var(--gap-content)); }
+  /* Direct children only (>), so headings inside visuals keep their own spacing */
+  .cs__body > :global(h2) { margin-top: calc(var(--gap-section) - var(--gap-content)); }
+  .cs__body > :global(h2:first-child) { margin-top: 0; }
+  .cs__body > :global(h2 + p), .cs__body > :global(h3 + p) { margin-top: calc(var(--gap-pair) - var(--gap-content)); }
+  .cs__body > :global(h3) { margin-top: calc(var(--s-5) - var(--gap-content)); }
   .cs__body :global(strong) { color: var(--ink); font-weight: 500; }
   .cs__note { font-size: var(--fs-small); color: var(--ink-3); }
 

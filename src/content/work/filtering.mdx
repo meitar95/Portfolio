@@ -47,6 +47,7 @@ learned: >-
   instead of telling us. These days I watch a few recordings before I trust a dashboard.
 ---
 
+import FlowScreens from '../../components/FlowScreens.astro';
 import SessionPattern from '../../components/filtering/SessionPattern.astro';
 import VoiceOfCustomer from '../../components/filtering/VoiceOfCustomer.astro';
 import PatternMatrix from '../../components/filtering/PatternMatrix.astro';
@@ -82,4 +83,17 @@ From there I kept coming back to one question. What do people already expect a f
 
 <RefImage src="/images/filtering-advanced" alt="Final design in Figma: the filter bar with saved views, active chips, and the Advanced panel showing Severity is Medium, Low and Severity is not Critical" caption="The final Advanced panel in Figma. Every condition reads field → operator → value, the classic model people already know." />
 
-**Result:** early client feedback was really good, and the new filtering helped close new deals. It's rolling out to everyone now, and we're watching the same session recordings to see the difference. It was also our first real step toward making all six modules feel like one product.
+## The result
+
+Early client feedback was really good, and the new filtering helped close new deals. It's rolling out to everyone now, and we're watching the same session recordings to see the difference. It was also our first real step toward making all six modules feel like one product.
+
+Here's the flow we wanted people to have, captured from the prototype at the top of this page.
+
+<FlowScreens w={1600} h={1126} caption="Screens from the working prototype. Demo data." steps={[
+  { t: 'Open your view', d: 'Saved filters, ready to go', src: '/images/filtering/flow-1-view' },
+  { t: 'Ask in plain words', d: 'Or pick a suggestion', src: '/images/filtering/flow-2-ask' },
+  { t: 'Filters appear', d: 'As normal, editable chips', src: '/images/filtering/flow-3-result' },
+  { t: 'Or a Quick Start', d: 'Several filters in one tap', src: '/images/filtering/flow-quick' },
+  { t: 'Fine-tune', d: 'Click is to flip it to is not', src: '/images/filtering/flow-4-flip' },
+  { t: 'Save the view', d: 'Back to it tomorrow', src: '/images/filtering/flow-5-save' },
+]} />

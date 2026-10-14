@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-10-14 — Result sections with the final flow
+
+- Fixed: the Filtering process cards had titles overlapping their text. The template's
+  heading spacing rule was reaching into visuals; it now only applies to the page's own headings.
+- New `components/FlowScreens.astro`: the final flow as a flow chart where every step is
+  clickable and shows its real screen (spotlighting the right part when steps share a screen).
+  Arrows, prev/next, keyboard arrows; swipeable steps on phones.
+- Every case study now ends with a "The result" section: the outcome, then the final flow.
+  - Filtering: 6 steps captured from the working prototype (view → ask AI → chips →
+    Quick Start → is / is not → save view).
+  - Sentrycs: the operator loop on the shipped screen (map → Sky Status → details → analytics).
+  - Cybersixgill: the inventory flow (moved here from the evidence section).
+  - Farmers: today's tasks → task → group → confirm → multi-select (phone frames).
+  - Herd: dashboard → tasks → one cow → settings (replaces the separate screen tabs).
+
 ## 2026-10-14 — Copy rewrite in Meitar's voice
 
 - Picked together: warm and personal, light-hook titles, "I" for my calls and "we" for team work.
