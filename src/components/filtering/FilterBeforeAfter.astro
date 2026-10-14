@@ -438,7 +438,7 @@ import Icon from '../Icon.astro';
       renderQuick(); placePanel();
     };
 
-    const render = () => { renderViews(); renderFilters(); renderRows(); if (!$('[data-fpanel]').hidden) renderPanel(); };
+    const render = () => { renderViews(); renderFilters(); renderRows(); if (!$('[data-fpanel]').hidden) { renderPanel(); requestAnimationFrame(placePanel); } };
 
     // ---------- toast ----------
     let tt: number;
@@ -620,7 +620,7 @@ import Icon from '../Icon.astro';
   .fb__tag:hover { background: rgb(36 49 101 / 0.95); }
   .fb__tag--before { left: 12px; }
   .fb__tag--after { right: 12px; }
-  .app { transition: padding-bottom 0.25s var(--ease); }
+  .app { }
 
   /* ===== BEFORE (the old patterns, as they shipped) ===== */
   .old { display: grid; gap: 0.625rem; padding: 1rem 0; border-top: 1px solid #e5e7eb; }

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-14 — Filtering: Quick Start step fixed
+
+- The "Or a Quick Start" screen in the final flow was captured on top of the AI result, so
+  the panel showed the wrong chips highlighted. Recaptured from a clean state: Critical only
+  selected, its two filters (Severity is Critical + Status is Open, In progress) in the bar.
+- Prototype bug: picking a Quick Start grew the bar but not the frame, so the open panel
+  spilled out. The frame now re-measures after every change.
+
 ## 2026-10-14 — Filtering card: responsive AI moment
 
 - The Ask AI box now takes the full row while typing (saved views slide out of the way).
