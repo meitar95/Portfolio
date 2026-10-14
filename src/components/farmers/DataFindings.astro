@@ -1,5 +1,5 @@
 ---
-// What HQ analytics said (May 2022 – Nov 2024), from the team's review. Real numbers only.
+// What the usage data showed before the redesign. Real numbers only, exact dates unknown.
 import Icon from '../Icon.astro';
 ---
 <figure class="df">
@@ -31,7 +31,7 @@ import Icon from '../Icon.astro';
       <p class="df__sub">So both doors had to lead to the same short flow.</p>
     </div>
   </div>
-  <figcaption>From the team's analytics review, May 2022 – Nov 2024.</figcaption>
+  <figcaption>What the app's usage data showed before the redesign.</figcaption>
 </figure>
 
 <style>
@@ -41,7 +41,7 @@ import Icon from '../Icon.astro';
   .df__card { display: grid; gap: var(--s-1); align-content: start; padding: var(--s-3); border-radius: var(--radius-md); background: var(--bg); }
   .df__card--wide { grid-column: 1 / -1; }
   .df__card p { font-size: var(--fs-small); }
-  .df__k { display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: var(--ink); font-size: 1rem !important; }
+  .df__k { display: flex; align-items: center; gap: 0.5rem; font-weight: 500; color: var(--ink); font-size: var(--fs-body) !important; }
   .df__k :global(svg) { color: var(--accent); flex: none; }
   .df__n { font-family: 'Satoshi', sans-serif; font-weight: 500; font-size: 1.5rem; color: var(--ink); margin-right: 0.15rem; }
   .df__sub { color: var(--ink-3); }
@@ -52,7 +52,7 @@ import Icon from '../Icon.astro';
     background: var(--accent); color: #fff; min-width: max-content;
   }
   .df__bar--muted { background: var(--tint-3); color: var(--ink); }
-  .df__bar b { font-family: 'Satoshi', sans-serif; font-weight: 500; font-size: 1.25rem; }
+  .df__bar b { font-family: 'Satoshi', sans-serif; font-weight: 500; font-size: 1.5rem; }
   .df__bar span { font-size: 0.875rem; }
 
   .df__split { display: flex; gap: 4px; margin-top: var(--s-1); }

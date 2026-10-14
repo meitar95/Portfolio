@@ -23,7 +23,7 @@ const steps = [
   .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-4) var(--s-3); }
   .steps li { display: grid; grid-template-columns: auto 1fr; gap: var(--s-2); align-items: start; }
   .steps__icon { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 12px; background: var(--tint-2); color: var(--accent); }
-  .steps h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+  .steps h3 { font-size: var(--fs-body); margin-bottom: 0.25rem; }
   .steps p { font-size: var(--fs-small); }
   @media (max-width: 960px) { .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } }

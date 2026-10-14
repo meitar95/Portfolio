@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-10-14 · Launch prep, facts check and full review
+
+**Facts**
+- Hero: dropped "Senior" from the role line and meta description.
+- Experience realigned to the CV summary from the Framer site.
+- Roles: Cybersixgill, Sentrycs and Herd all say "via UI Human Factors". Herd is "Lead
+  designer" with no promotion story; its third outcome is now "4 core areas on one shared set
+  of components".
+- Farmers: growth chart credits the check with Afimilk's analysts; usage findings no longer
+  claim exact dates.
+
+**Launch**
+- `public/og.png` (1200×630) for link previews, plus a `404` page.
+- Motion reel: three originals now served from `/public/lottie/`. Three are still on Framer's
+  CDN, and a tile that fails to load now removes itself instead of leaving a gap.
+- Satoshi still loads from Fontshare (the download is blocked from the build container).
+
+**Review at 1440, 1280, 1024, 834, 768, 600, 390, 360, 320**
+- No horizontal scroll or overlapping text on any page.
+- Type scale tightened: off-scale sizes (12, 13, 16, 18, 20px) in diagrams moved to 14, 17, 21 or
+  24px. Text under 14px is only left inside product mocks shown at true scale, and in the
+  Sentrycs "before" sample that shows the old 11 to 12px text on purpose.
+- Copy: removed repeated lines (Filtering "why" vs. tagline and problem; Sentrycs "tested with
+  ~20 users" said three times; Herd "same components" said three times), a couple of tidy
+  one-line morals, and the em dashes in page titles. Hero lead no longer repeats "AI-native".
+
 ## 2026-10-14 — Filtering: Quick Start step fixed
 
 - The "Or a Quick Start" screen in the final flow was captured on top of the AI result, so

@@ -29,7 +29,7 @@ const visuals = { 'filtering-before-after': FilterBeforeAfter, 'sentrycs-before-
   'herd-before-after': HerdSlider };
 const Visual = d.visual ? visuals[d.visual] : null;
 ---
-<Base title={`${d.title} — Meitar Mechoresh`} description={d.tagline}>
+<Base title={`${d.title} · Meitar Mechoresh`} description={d.tagline}>
   <article class="cs">
     <div class="container cs__flow">
       <header class="cs__hero">
@@ -119,7 +119,7 @@ const Visual = d.visual ? visuals[d.visual] : null;
   .cs__solution { display: grid; gap: var(--gap-content); }
   .cs__points { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--s-4) var(--s-3); }
   .cs__points li { display: grid; gap: var(--s-1); align-content: start; padding-top: var(--s-2); border-top: 2px solid var(--tint-4); }
-  .cs__points h3 { font-size: 1.125rem; }
+  .cs__points h3 { font-size: var(--fs-body); }
   .cs__points p { font-size: var(--fs-small); }
 
   .cs__quote { border-left: 3px solid var(--accent); padding-left: var(--s-3); }

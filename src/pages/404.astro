@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+<Base title="Page not found · Meitar Mechoresh" description="This page doesn't exist. Head back to see my work.">
+  <section class="nf">
+    <div class="container nf__inner">
+      <p class="nf__code">404</p>
+      <h1>This page wandered off</h1>
+      <p class="nf__text">The link might be old, or the page moved when I rebuilt the site. My work is all on the home page.</p>
+      <Button href="/#work" variant="light">See my work</Button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf { min-height: 70svh; display: grid; align-items: center; padding-block: var(--s-6, 6rem); }
+  .nf__inner { display: grid; gap: var(--s-2); justify-items: start; max-width: 40rem; }
+  .nf__code { font-size: var(--fs-small); font-weight: 500; color: var(--accent); }
+  .nf__text { color: var(--ink-2, var(--ink-3)); margin-bottom: var(--s-2); }
+</style>

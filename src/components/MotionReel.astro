@@ -3,13 +3,14 @@
 // The player (~45 KB gzipped) loads only when this section nears the screen,
 // plays while visible, pauses off-screen, and shows a still frame for
 // visitors who prefer reduced motion.
-// TODO: replace the Framer CDN URLs with the original .json files in /public/lottie/
-// before Framer is cancelled.
-const base = 'https://framerusercontent.com/assets/';
+// Originals live in /public/lottie/. Three are still on Framer's CDN (envelope, phone,
+// scroll): their source files weren't in the animations folder. Swap them in before
+// cancelling Framer.
+const framer = (id: string) => `https://framerusercontent.com/assets/${id}.json`;
 const files = [
-  'Pv5XOrHG6ZYvbSaqnnU4AQSvyhc', '6LZix3jk6QgSrtFDURUE9q1SYM', 'fvSKeIrkSMbYG7j97Bn7xrC3rM',
-  'VCcK2G04NgkzjYND0hr85hhIvw', 'YRuOwDptGv7Q7yRbjKOsk5OYWc', 'YkzUDWw2dyETnTLDW9V5aF2XPI',
-].map((id) => `${base}${id}.json`);
+  '/lottie/briefcase.json', '/lottie/coins.json', '/lottie/transaction.json',
+  framer('VCcK2G04NgkzjYND0hr85hhIvw'), framer('YRuOwDptGv7Q7yRbjKOsk5OYWc'), framer('YkzUDWw2dyETnTLDW9V5aF2XPI'),
+];
 ---
 <section class="section reel" aria-labelledby="reel-title" data-reel>
   <div class="container reel__inner">
@@ -36,6 +37,8 @@ const files = [
         const anim = lottie.loadAnimation({ container: el, renderer: 'svg', loop: true, autoplay: false, path: el.dataset.src!,
           rendererSettings: { preserveAspectRatio: 'xMidYMid meet' } });
         anim.addEventListener('DOMLoaded', () => (still ? anim.goToAndStop(0, true) : null));
+        // If a file can't load (e.g. a Framer-hosted one after Framer is cancelled), drop the empty tile.
+        anim.addEventListener('data_failed', () => el.closest('li')?.remove());
         if (!still) new IntersectionObserver(([v]) => (v.isIntersecting ? anim.play() : anim.pause())).observe(el);
       });
     }, { rootMargin: '400px' });
