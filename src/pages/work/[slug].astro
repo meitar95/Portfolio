@@ -1,7 +1,7 @@
 ---
 // THE case-study template. Every study renders through this file, in this order:
-//   Above the fold: title + payoff · role/team/timeline · outcomes · why · solution · learned
-//   Below the fold: the problem · the evidence (Markdown/MDX body) · next study
+//   Above the fold: title + payoff · role/team/timeline · outcomes · why · solution
+//   Below the fold: the problem · the evidence · the result (MDX body) · what we learned · next study
 //
 // Spacing system (one rule, used everywhere on the page):
 //   --gap-section  between sections           (96px desktop → 64px phone)
@@ -64,15 +64,15 @@ const Visual = d.visual ? visuals[d.visual] : null;
         </ul>
       </section>
 
-      <section class="pair reveal" aria-labelledby="learned">
-        <h2 id="learned">What we learned</h2>
-        <blockquote class="cs__quote"><p>{d.learned}</p></blockquote>
-      </section>
     </div>
 
     <div class="cs__fold">
       <div class="container cs__body">
         <Content />
+        <section class="pair reveal cs__learned" aria-labelledby="learned">
+          <h2 id="learned">What we learned</h2>
+          <blockquote class="cs__quote"><p>{d.learned}</p></blockquote>
+        </section>
         {d.confidential && <p class="cs__note">All visuals use generic, non-company data for confidentiality.</p>}
       </div>
     </div>
@@ -122,6 +122,7 @@ const Visual = d.visual ? visuals[d.visual] : null;
   .cs__points h3 { font-size: var(--fs-body); }
   .cs__points p { font-size: var(--fs-small); }
 
+  .cs__learned { margin-top: calc(var(--gap-section) - var(--gap-content)); }
   .cs__quote { border-left: 3px solid var(--accent); padding-left: var(--s-3); }
   .cs__quote p { font-family: var(--serif); font-size: var(--fs-h3); color: var(--ink); line-height: 1.45; max-width: 46ch; }
 

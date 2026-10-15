@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-15 · Off Framer completely, learnings at the end
+
+- Motion reel: the last three animations (email, call, CV) are now in `/public/lottie/`, so
+  nothing loads from Framer any more. Picked the full 15s CALL loop over CALL2 (a cut 5s
+  version that jumps at the loop point); duplicates were identical files.
+- Case study template: "What we learned" moved from the opening summary to the end, after
+  the result, so the story reads problem → evidence → result → lessons.
+- Huskeys bullet: "First product designer. Built the design function and helped grow the
+  team to five."
+
 ## 2026-10-14 · One enlarge behaviour everywhere, real pinch zoom
 
 - `Zoom.astro` rewritten: the screen opens fitted to the phone, with real pinch-to-zoom,

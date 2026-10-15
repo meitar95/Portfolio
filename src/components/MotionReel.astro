@@ -3,13 +3,10 @@
 // The player (~45 KB gzipped) loads only when this section nears the screen,
 // plays while visible, pauses off-screen, and shows a still frame for
 // visitors who prefer reduced motion.
-// Originals live in /public/lottie/. Three are still on Framer's CDN (envelope, phone,
-// scroll): their source files weren't in the animations folder. Swap them in before
-// cancelling Framer.
-const framer = (id: string) => `https://framerusercontent.com/assets/${id}.json`;
+// Originals live in /public/lottie/ (exported from LottieFiles AE).
 const files = [
   '/lottie/briefcase.json', '/lottie/coins.json', '/lottie/transaction.json',
-  framer('VCcK2G04NgkzjYND0hr85hhIvw'), framer('YRuOwDptGv7Q7yRbjKOsk5OYWc'), framer('YkzUDWw2dyETnTLDW9V5aF2XPI'),
+  '/lottie/email.json', '/lottie/call.json', '/lottie/cv.json',
 ];
 ---
 <section class="section reel" aria-labelledby="reel-title" data-reel>
