@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-18 · Card glow, calmer AI chips, case-study stepper
+
+- Homepage cards: every visual gets a small soft glow (white 4px ring plus a faint blue
+  halo), echoing the AI box focus ring. Slightly stronger on hover.
+- Filtering card: chips now land 0.6s apart (was 0.35s). Space opens first, the chip fades up,
+  and a brief soft-blue "AI added this" glow settles to grey. Rows, count and toast wait for
+  the last chip.
+- Case-study template: a quiet "← Previous · 2 / 5 · Next →" line above the title, small grey
+  text, accent on hover, wraps around at the ends. Counter hidden under 360px.
+
 ## 2026-10-18 · Photo and a personal touch in the hero
 
 - `HeroAvatar.astro`: Meitar's photo beside the name (140px desktop, 104px phone) in a thin
