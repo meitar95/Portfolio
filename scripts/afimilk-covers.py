@@ -58,19 +58,19 @@ def base():
     return cv
 
 
-def phone(src, height, pad=13, radius=46):
-    """A plain device frame, so the screens read the same way as the browser windows."""
+def phone(src, height, pad=15, radius=50):
+    """A device frame in the same light chrome as the browser windows on the other covers."""
     sh = Image.open(src).convert('RGB')
     sh = sh.resize((int(sh.width * height / sh.height), height), Image.LANCZOS)
     fr = Image.new('RGBA', (sh.width + pad * 2, height + pad * 2), (0, 0, 0, 0))
-    ImageDraw.Draw(fr).rounded_rectangle((0, 0, fr.width - 1, fr.height - 1), radius, fill=(24, 25, 29, 255))
+    ImageDraw.Draw(fr).rounded_rectangle((0, 0, fr.width - 1, fr.height - 1), radius, fill=(241, 244, 247, 255))
     m = Image.new('L', sh.size, 0)
     ImageDraw.Draw(m).rounded_rectangle((0, 0, sh.width - 1, sh.height - 1), radius - pad, fill=255)
     fr.paste(sh, (pad, pad), m)
     return fr
 
 
-def drop(cv, layer, x, y, blur=30, strength=110):
+def drop(cv, layer, x, y, blur=34, strength=120):
     sh = Image.new('L', (W, H), 0)
     sh.paste(layer.split()[3].point(lambda v: strength if v > 8 else 0), (x + 6, y + 22))
     sh = sh.filter(ImageFilter.GaussianBlur(blur))
@@ -79,10 +79,9 @@ def drop(cv, layer, x, y, blur=30, strength=110):
     return cv
 
 
-# ---- Farmers: the two app screens in device frames, front one bleeding off the bottom ----
+# ---- Farmers: one app screen, running off the right and bottom like the windows ----
 cv = base()
-cv = drop(cv, phone(IMG / 'farmers' / 'cow-after.webp', 648), 1150, 124)
-cv = drop(cv, phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 742), 820, 186)
+cv = drop(cv, phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860), 1230, 150)
 cv.save(IMG / 'farmers-1600.webp', quality=86)
 cv.resize((800, 450), Image.LANCZOS).save(IMG / 'farmers-800.webp', quality=86)
 print('wrote farmers')
