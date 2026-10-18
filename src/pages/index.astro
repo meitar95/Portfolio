@@ -13,8 +13,14 @@ const showDrafts = import.meta.env.DEV || import.meta.env.PUBLIC_SHOW_DRAFTS ===
 const work = (await getCollection('work', ({ data }) => showDrafts || !data.draft))
   .sort((a, b) => a.data.order - b.data.order);
 
-const skills = ['AI-native workflows', 'Product design', 'UX design', 'Design systems', 'Interaction design',
-  'Usability testing', 'Design QA', 'Design sprints', 'Motion & micro-interactions'];
+// "What I bring": four groups, each with one line of proof from real work and its skills as quiet tags.
+// Same column pattern as the case-study solution points (tint-4 top rule, small heading, short text).
+const skills = [
+  { t: 'Product & UX', d: 'From the first question to a shipped flow, tested with real users.', tags: ['Product design', 'UX design', 'Interaction design', 'Usability testing', 'Design sprints'] },
+  { t: 'Design systems', d: 'Built from scratch across 5+ design languages, checked through release.', tags: ['Design systems', 'Design QA'] },
+  { t: 'AI-native', d: 'Working prototypes in Claude and Cursor, small UI fixes shipped to code.', tags: ['AI-native workflows', 'Prototyping'] },
+  { t: 'Motion', d: 'Micro-interactions and product illustration, trained in animation at Shenkar.', tags: ['Motion & micro-interactions', 'Lottie'] },
+];
 
 const experience = [
   {
@@ -84,8 +90,14 @@ const experience = [
   <section class="section skills" aria-labelledby="skills-title">
     <div class="container">
       <h2 id="skills-title" class="section__title">What I bring</h2>
-      <ul class="chips reveal">
-        {skills.map((s) => <li>{s}</li>)}
+      <ul class="bring reveal">
+        {skills.map((g) => (
+          <li>
+            <h3>{g.t}</h3>
+            <p>{g.d}</p>
+            <ul class="bring__tags" aria-label={`${g.t} skills`}>{g.tags.map((x) => <li>{x}</li>)}</ul>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
@@ -139,11 +151,15 @@ const experience = [
 
   .skills .container { background: var(--surface-muted); border-radius: var(--radius-lg); padding: clamp(1.5rem, 1rem + 2.5vw, 3rem); }
   .skills .section__title { margin-bottom: var(--s-3); }
-  .chips { display: flex; flex-wrap: wrap; gap: 0.625rem; list-style: none; padding: 0; }
-  .chips li {
-    background: var(--accent); color: #fff; border-radius: 10px;
-    padding: 0.55rem 0.95rem; font-size: var(--fs-small); font-weight: 500;
-  }
+  .bring { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s-4) var(--s-3); }
+  .bring > li { display: grid; gap: var(--s-1); align-content: start; padding-top: var(--s-2); border-top: 2px solid var(--tint-4); }
+  .bring h3 { font-size: var(--fs-body); }
+  .bring p { font-size: var(--fs-small); color: var(--ink-2); }
+  /* Tags read as labels, not buttons: no fill, thin outline, small */
+  .bring__tags { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-1); }
+  .bring__tags li { padding: 0.25rem 0.6rem; border: 1px solid var(--line); border-radius: var(--radius-pill); font-size: 0.875rem; color: var(--ink-2); background: rgb(255 255 255 / 0.6); }
+  @media (max-width: 1023px) { .bring { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .bring { grid-template-columns: 1fr; } }
 
   .exp { display: grid; gap: var(--s-1); padding-block: var(--s-4); border-top: 1px solid var(--line); }
   .exp__head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s-1) var(--s-3); align-items: baseline; }
