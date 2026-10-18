@@ -34,7 +34,6 @@ const Visual = d.visual ? visuals[d.visual] : null;
     <div class="container cs__flow">
       <header class="cs__hero">
         <nav class="cs__steps" aria-label="Case studies">
-          <a href="/#work">All work</a>
           <span class="cs__stepper">
             <a href={`/work/${prev.id}/`} title={prev.data.title} aria-label={`Previous case study: ${prev.data.title}`}><span aria-hidden="true">←</span> Previous</a>
             <span class="cs__pos">{pos} / {total}</span>
@@ -108,7 +107,7 @@ const Visual = d.visual ? visuals[d.visual] : null;
 
   .cs__hero { display: grid; gap: var(--gap-content); }
   /* Quiet top stepper: small, grey, no boxes. Reads as orientation, not a call to action */
-  .cs__steps { display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); font-size: var(--fs-small); color: var(--ink-3); margin-bottom: calc(var(--s-1) - var(--gap-content) / 2); }
+  .cs__steps { display: flex; justify-content: flex-end; align-items: center; gap: var(--s-2); font-size: var(--fs-small); color: var(--ink-3); margin-bottom: calc(var(--s-1) - var(--gap-content) / 2); }
   .cs__steps a { color: var(--ink-3); text-decoration: none; padding-block: 0.6rem; transition: color 0.2s; }
   .cs__steps a:hover { color: var(--accent); }
   .cs__stepper { display: inline-flex; align-items: center; gap: var(--s-2); }
