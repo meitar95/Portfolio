@@ -5,7 +5,10 @@
 - `HeroAvatar.astro`: Meitar's photo beside the name (140px desktop, 104px phone) in a thin
   white rim shaped like the blobs in her Lottie illustrations, with three small sparkles in
   her illustration colors. Quiet motion (14s rim drift, 5.5s twinkle), off for reduced motion.
-- New personal line under the intro: "Trained in animation, I still love the small moments."
+- Footer: two small sparkles beside "Thanks for stopping by." (soft blue and mint, tuned
+  for the dark band), twinkling out of step. A site-wide sparkle system was previewed and
+  turned down in favor of keeping it to the hero and this closing touch.
+- A personal line under the intro was tried and removed.
 - Chosen from four previewed options (photo beside, small avatar, photo with illustrations,
   and this combination). Checked at 1440, 1024, 768, 390 and 320px with no overflow.
 
