@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-18 · Consistency pass
+
+- Before/after slider: drag from the handle only; Before/After tags glide to that side.
+- Zoom icon stays light everywhere (benchmark row had inherited grey).
+- Case-study roles in one format ("Product Designer via UI Human Factors"), Farmers platform
+  now B2B mobile, its "50+" label matches the number, Cybersixgill tagline uses digits.
+- Experience: UIHF title matches the CV (Product Designer & Design Project Manager), "Present".
+
 ## 2026-10-18 · Card glow, calmer AI chips, case-study stepper
 
 - Homepage cards: every visual gets a small soft glow (white 4px ring plus a faint blue
