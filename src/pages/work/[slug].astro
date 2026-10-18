@@ -17,10 +17,10 @@ import HerdSlider from '../../components/herd/HerdSlider.astro';
 
 export async function getStaticPaths() {
   const all = (await getCollection('work', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-  return all.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, next: all[(i + 1) % all.length] } }));
+  return all.map((entry, i) => ({ params: { slug: entry.id }, props: { entry, next: all[(i + 1) % all.length], prev: all[(i - 1 + all.length) % all.length], pos: i + 1, total: all.length } }));
 }
 
-const { entry, next } = Astro.props;
+const { entry, next, prev, pos, total } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
 const visuals = { 'filtering-before-after': FilterBeforeAfter, 'sentrycs-before-after': SentrycsSlider,
@@ -33,6 +33,14 @@ const Visual = d.visual ? visuals[d.visual] : null;
   <article class="cs">
     <div class="container cs__flow">
       <header class="cs__hero">
+        <nav class="cs__steps" aria-label="Case studies">
+          <a href="/#work">All work</a>
+          <span class="cs__stepper">
+            <a href={`/work/${prev.id}/`} title={prev.data.title} aria-label={`Previous case study: ${prev.data.title}`}><span aria-hidden="true">←</span> Previous</a>
+            <span class="cs__pos">{pos} / {total}</span>
+            <a href={`/work/${next.id}/`} title={next.data.title} aria-label={`Next case study: ${next.data.title}`}>Next <span aria-hidden="true">→</span></a>
+          </span>
+        </nav>
         <div class="pair">
           <h1>{d.title}</h1>
           <p class="cs__tagline">{d.tagline}</p>
@@ -99,6 +107,13 @@ const Visual = d.visual ? visuals[d.visual] : null;
   .lead { font-size: var(--fs-lead); line-height: 1.55; }
 
   .cs__hero { display: grid; gap: var(--gap-content); }
+  /* Quiet top stepper: small, grey, no boxes. Reads as orientation, not a call to action */
+  .cs__steps { display: flex; justify-content: space-between; align-items: center; gap: var(--s-2); font-size: var(--fs-small); color: var(--ink-3); margin-bottom: calc(var(--s-1) - var(--gap-content) / 2); }
+  .cs__steps a { color: var(--ink-3); text-decoration: none; padding-block: 0.6rem; transition: color 0.2s; }
+  .cs__steps a:hover { color: var(--accent); }
+  .cs__stepper { display: inline-flex; align-items: center; gap: var(--s-2); }
+  .cs__pos { font-variant-numeric: tabular-nums; color: var(--ink-3); opacity: 0.7; }
+  @media (max-width: 360px) { .cs__pos { display: none; } }
   .cs__tagline { font-size: var(--fs-lead); color: var(--ink); max-width: 52ch; }
 
   .cs__meta {

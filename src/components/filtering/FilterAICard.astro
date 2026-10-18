@@ -62,9 +62,10 @@ const rows = [
       // 2 · think, then filters arrive one by one and the table narrows
       at(typed + 300, () => el.classList.add('is-thinking'));
       at(typed + 1300, () => { el.classList.remove('is-thinking'); el.classList.add('is-done'); });
-      at(typed + 2300, () => { count.textContent = '7'; });
+      // count updates once the third chip has settled (chips land 0.6s apart, see CSS)
+      at(typed + 3200, () => { count.textContent = '7'; });
       // 3 · linger, then a slow return to the start
-      const linger = typed + 2300 + 4200;
+      const linger = typed + 3200 + 4200;
       at(linger, () => { el.classList.add('is-resetting'); el.classList.remove('is-done'); });
       at(linger + 900, () => { count.textContent = '257'; el.classList.remove('is-typing'); text.textContent = placeholder; });
       at(linger + 2200, () => { el.classList.remove('is-resetting'); cycle(); });
@@ -109,16 +110,24 @@ const rows = [
   .fa__bar { display: flex; flex-wrap: nowrap; overflow: hidden; align-items: center; gap: 0.45rem; white-space: nowrap; min-height: 30px; }
   .fa__chip {
     display: inline-flex; gap: 0.3rem; align-items: center; padding: 0.3rem 0.5rem; border-radius: 7px; background: #f2f2f2; color: #8390a3;
-    opacity: 0; transform: translateY(6px) scale(0.98); max-width: 0; padding-inline: 0; margin-right: -0.45rem;
+    opacity: 0; transform: translateY(4px) scale(0.96); max-width: 0; padding-inline: 0; margin-right: -0.45rem;
     transition: opacity 0.7s var(--ease-slow), transform 0.8s var(--ease-slow), max-width 0.8s var(--ease-slow), padding 0.8s var(--ease-slow), margin 0.8s var(--ease-slow);
     overflow: hidden;
   }
   .fa__chip i { font-style: normal; color: #243165; }
   .fa__chip b { font-weight: 600; color: #243165; display: inline-flex; align-items: center; gap: 0.25rem; }
   .fa__chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #9b1c31; }
+  /* Each chip lands on its own beat: the space opens first, then the chip fades up into it
+     with a short soft-blue "AI added this" glow that settles to grey */
   .fa.is-done .fa__chip {
     opacity: 1; transform: none; max-width: 20rem; padding-inline: 0.5rem; margin-right: 0;
-    transition-delay: calc(var(--d) * 0.35s);
+    transition-duration: 0.55s, 0.7s, 0.6s, 0.6s, 0.6s;
+    transition-delay: calc(var(--d) * 0.6s + 0.15s), calc(var(--d) * 0.6s + 0.15s), calc(var(--d) * 0.6s), calc(var(--d) * 0.6s), calc(var(--d) * 0.6s);
+    animation: fa-land 1.4s var(--ease-slow) calc(var(--d) * 0.6s + 0.15s) both;
+  }
+  @keyframes fa-land {
+    0% { background: #e9edff; box-shadow: 0 0 0 3px rgb(70 101 255 / 0.14); }
+    100% { background: #f2f2f2; box-shadow: 0 0 0 3px rgb(70 101 255 / 0); }
   }
   .fa.is-resetting .fa__chip { transition-duration: 0.9s; transition-delay: calc((2 - var(--d)) * 0.12s); }
   .fa__add { color: #287be0; font-weight: 500; max-width: 7rem; overflow: hidden; transition: max-width 0.8s var(--ease-slow), opacity 0.6s var(--ease-slow); }
@@ -140,15 +149,15 @@ const rows = [
   .fa__t { overflow: hidden; text-overflow: ellipsis; color: #6b7588; }
   .fa__sev { display: inline-flex; align-items: center; gap: 0.35rem; }
   .fa__sev em { width: 6px; height: 6px; border-radius: 50%; opacity: 0.7; }
-  .fa.is-done .fa__rows > div:not(.keep) { opacity: 0; transform: translateY(-4px); transition-delay: calc(1s + var(--r) * 0.06s); }
-  .fa.is-done .fa__rows > .keep { background: #f3f6fd; color: #5b6578; transition-delay: 1s; }
+  .fa.is-done .fa__rows > div:not(.keep) { opacity: 0; transform: translateY(-4px); transition-delay: calc(1.6s + var(--r) * 0.07s); }
+  .fa.is-done .fa__rows > .keep { background: #f3f6fd; color: #5b6578; transition-delay: 1.6s; }
 
   .fa__toast {
     position: absolute; left: 50%; bottom: 0.9rem; translate: -50% 0; padding: 0.4rem 0.8rem; border-radius: 8px;
     background: #243165; color: #fff; font-weight: 500; opacity: 0; transform: translateY(8px);
     transition: opacity 0.6s var(--ease-slow), transform 0.6s var(--ease-slow);
   }
-  .fa.is-done .fa__toast { opacity: 1; transform: none; transition-delay: 1.4s; }
+  .fa.is-done .fa__toast { opacity: 1; transform: none; transition-delay: 2.1s; }
 
   @keyframes fa-blink { 50% { opacity: 1; } }
   @keyframes fa-spin { to { transform: rotate(360deg); } }
