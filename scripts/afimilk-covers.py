@@ -81,7 +81,7 @@ def drop(cv, layer, x, y, blur=34, strength=120):
 
 # ---- Farmers: one app screen, running off the right and bottom like the windows ----
 cv = base()
-cv = drop(cv, phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860), 1230, 150)
+cv = drop(cv, phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860), 760, 210)
 cv.save(IMG / 'farmers-1600.webp', quality=86)
 cv.resize((800, 450), Image.LANCZOS).save(IMG / 'farmers-800.webp', quality=86)
 print('wrote farmers')
@@ -99,7 +99,7 @@ for i, c in enumerate([(255, 95, 87), (254, 188, 46), (40, 200, 64)]):
     d.ellipse((18 + i * 22, 13, 29 + i * 22, 24), fill=c)
 mask = Image.new('L', win.size, 0)
 ImageDraw.Draw(mask).rounded_rectangle((0, 0, win.width, win.height + 60), 20, fill=255)
-x, y = 760, 230
+x, y = 760, 210
 sh = Image.new('L', (W, H), 0)
 ImageDraw.Draw(sh).rounded_rectangle((x + 6, y + 26, x + ww + 40, y + win.height + 40), 24, fill=130)
 sh = sh.filter(ImageFilter.GaussianBlur(36))

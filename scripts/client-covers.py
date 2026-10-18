@@ -50,7 +50,7 @@ def put_logo(cv, path, width, x, cy):
 def build(bg, shot_path, logo_name, logo_width, logo_x, logo_cy, shadow, out):
     cv = Image.new('RGB', (W, H), bg)
     win, mask = window(Image.open(shot_path).convert('RGB'), 1120)
-    cv = place(cv, win, mask, 660, 210, shadow)
+    cv = place(cv, win, mask, 760, 210, shadow)
     put_logo(cv, LOGO / logo_name, logo_width, logo_x, logo_cy)
     cv.save(IMG / f'{out}-1600.webp', quality=86)
     cv.resize((800, 450), Image.LANCZOS).save(IMG / f'{out}-800.webp', quality=86)
