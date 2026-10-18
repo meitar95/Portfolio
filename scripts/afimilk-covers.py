@@ -18,7 +18,8 @@ BG = (40, 123, 172)          # Afimilk brand blue, sampled from their own artwor
 GOLD = (252, 176, 13)
 CYAN = (75, 214, 244)
 
-brand = Image.open(IMG / 'farmers-1600.webp').convert('RGB')   # Afimilk's marketing render
+# Afimilk's own artwork, kept here because the covers it used to live in get overwritten
+brand = Image.open(ROOT / 'scripts' / 'assets' / 'afimilk-brand-art.webp').convert('RGB')
 herd_art = Image.open(ROOT / 'scripts' / 'assets' / 'afimilk-herd-art.webp').convert('RGB')
 
 
@@ -81,7 +82,8 @@ def drop(cv, layer, x, y, blur=34, strength=120):
 
 # ---- Farmers: one app screen, running off the right and bottom like the windows ----
 cv = base()
-cv = drop(cv, phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860), 760, 210)
+ph = phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860)
+cv = drop(cv, ph, int(760 + (W - 760 - ph.width) / 2), 210)
 cv.save(IMG / 'farmers-1600.webp', quality=86)
 cv.resize((800, 450), Image.LANCZOS).save(IMG / 'farmers-800.webp', quality=86)
 print('wrote farmers')
