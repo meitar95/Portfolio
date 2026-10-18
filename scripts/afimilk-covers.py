@@ -14,6 +14,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / 'public' / 'images'
 W, H = 1600, 900
+SCREEN_H = 616        # matches scripts/client-covers.py
 BG = (40, 123, 172)          # Afimilk brand blue, sampled from their own artwork
 GOLD = (252, 176, 13)
 CYAN = (75, 214, 244)
@@ -91,8 +92,9 @@ print('wrote farmers')
 # ---- Herd: the Daily Tasks screen in a browser window ----
 cv = base()
 shot = Image.open(ROOT / 'scripts' / 'assets' / 'herd-daily-tasks.png').convert('RGB')
-ww, bar = 1100, 36
-shot = shot.resize((ww, int(shot.height * ww / shot.width)), Image.LANCZOS)
+bar = 36
+ww = int(shot.width * SCREEN_H / shot.height)   # same window height as the other covers
+shot = shot.resize((ww, SCREEN_H), Image.LANCZOS)
 win = Image.new('RGB', (ww, shot.height + bar), (255, 255, 255))
 win.paste(shot, (0, bar))
 d = ImageDraw.Draw(win)

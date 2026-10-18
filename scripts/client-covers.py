@@ -14,12 +14,17 @@ ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / 'public' / 'images'
 LOGO = Path(__file__).resolve().parent / 'assets'
 W, H = 1600, 900
+SCREEN_H = 616        # one window height across every cover
 
 
-def window(shot, width, radius=20, bar=36):
-    """Put a screenshot in a light browser chrome; returns the image and its rounded mask."""
-    h = int(shot.height * width / shot.width)
-    shot = shot.resize((width, h), Image.LANCZOS)
+def window(shot, screen_h, radius=20, bar=36):
+    """Put a screenshot in a light browser chrome; returns the image and its rounded mask.
+
+    Sized by HEIGHT, not width, so every cover's window is exactly the same height no matter
+    the screenshot's aspect ratio. The extra width just runs further off the right edge."""
+    width = int(shot.width * screen_h / shot.height)
+    shot = shot.resize((width, screen_h), Image.LANCZOS)
+    h = screen_h
     win = Image.new('RGB', (width, h + bar), (255, 255, 255))
     win.paste(shot, (0, bar))
     d = ImageDraw.Draw(win)
@@ -49,7 +54,7 @@ def put_logo(cv, path, width, x, cy):
 
 def build(bg, shot_path, logo_name, logo_width, logo_x, logo_cy, shadow, out):
     cv = Image.new('RGB', (W, H), bg)
-    win, mask = window(Image.open(shot_path).convert('RGB'), 1120)
+    win, mask = window(Image.open(shot_path).convert('RGB'), SCREEN_H)
     cv = place(cv, win, mask, 760, 210, shadow)
     put_logo(cv, LOGO / logo_name, logo_width, logo_x, logo_cy)
     cv.save(IMG / f'{out}-1600.webp', quality=86)
