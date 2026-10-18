@@ -1,0 +1,44 @@
+---
+// Homepage avatar: Meitar's photo in a thin white rim shaped like the organic blobs in her
+// Lottie illustrations, with three small sparkles in her illustration colors.
+// The motion is deliberately quiet (14s shape drift, 5.5s twinkle) and stops for reduced motion.
+---
+<div class="avatar">
+  <span class="avatar__rim" aria-hidden="true"></span>
+  <img src="/images/meitar-400.webp" width="400" height="400" alt="Meitar Mechoresh" fetchpriority="high" />
+  <svg class="avatar__spark avatar__spark--1" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v3M6 8v3M1 6h3M8 6h3" /></svg>
+  <svg class="avatar__spark avatar__spark--2" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v3M6 8v3M1 6h3M8 6h3" /></svg>
+  <svg class="avatar__spark avatar__spark--3" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v3M6 8v3M1 6h3M8 6h3" /></svg>
+</div>
+
+<style>
+  /* Margin leaves room for the rim, so its edge lines up with the text column */
+  .avatar { position: relative; flex: none; width: clamp(104px, 11vw, 140px); aspect-ratio: 1; margin: 8px 0 8px 8px; }
+  .avatar img { position: relative; z-index: 1; display: block; width: 100%; height: auto; border-radius: 50%; }
+  .avatar__rim {
+    position: absolute; inset: -5%; z-index: 0; background: #fff;
+    border-radius: 52% 48% 51% 49% / 49% 52% 48% 51%;
+    box-shadow: 0 8px 22px -14px rgb(16 22 42 / 0.28);
+    animation: rim 14s ease-in-out infinite alternate;
+  }
+  @keyframes rim {
+    50% { border-radius: 48% 52% 49% 51% / 52% 48% 52% 48%; transform: rotate(3deg); }
+    100% { border-radius: 51% 49% 47% 53% / 48% 51% 50% 50%; transform: rotate(-2deg); }
+  }
+  .avatar__spark {
+    position: absolute; z-index: 2; width: 11%; fill: none; stroke-width: 1.4; stroke-linecap: round;
+    opacity: 0.25; animation: twinkle 5.5s ease-in-out infinite;
+  }
+  .avatar__spark--1 { top: -9%; right: 1%; stroke: #2b7cff; }
+  .avatar__spark--2 { bottom: 4%; left: -12%; width: 8%; stroke: #0b43a7; animation-delay: -1.8s; }
+  .avatar__spark--3 { top: 40%; right: -15%; width: 7%; stroke: #00c49a; animation-delay: -3.6s; }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.2; transform: scale(0.8) rotate(0deg); }
+    50% { opacity: 0.8; transform: scale(1) rotate(20deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .avatar__rim, .avatar__spark { animation: none; }
+    .avatar__spark { opacity: 0.6; }
+  }
+  @media (max-width: 809px) { .avatar { margin: 8px 0 4px 6px; } }
+</style>

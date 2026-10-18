@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-18 · Photo and a personal touch in the hero
+
+- `HeroAvatar.astro`: Meitar's photo beside the name (140px desktop, 104px phone) in a thin
+  white rim shaped like the blobs in her Lottie illustrations, with three small sparkles in
+  her illustration colors. Quiet motion (14s rim drift, 5.5s twinkle), off for reduced motion.
+- New personal line under the intro: "Trained in animation, I still love the small moments."
+- Chosen from four previewed options (photo beside, small avatar, photo with illustrations,
+  and this combination). Checked at 1440, 1024, 768, 390 and 320px with no overflow.
+
 ## 2026-10-15 · Off Framer completely, learnings at the end
 
 - Motion reel: the last three animations (email, call, CV) are now in `/public/lottie/`, so
