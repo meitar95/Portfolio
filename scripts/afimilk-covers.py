@@ -14,7 +14,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / 'public' / 'images'
 W, H = 1600, 900
-SCREEN_H = 616        # matches scripts/client-covers.py
+SCREEN_H = 720        # matches scripts/client-covers.py; tall enough to run off the bottom
 BG = (40, 123, 172)          # Afimilk brand blue, sampled from their own artwork
 GOLD = (252, 176, 13)
 CYAN = (75, 214, 244)
@@ -81,10 +81,14 @@ def drop(cv, layer, x, y, blur=34, strength=120):
     return cv
 
 
-# ---- Farmers: one app screen, running off the right and bottom like the windows ----
+# ---- Farmers: two app screens, both starting on the same line as every other cover ----
 cv = base()
-ph = phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860)
-cv = drop(cv, ph, int(760 + (W - 760 - ph.width) / 2), 210)
+front = phone(ROOT / 'scripts' / 'assets' / 'farmers-tasks.png', 860)
+back = phone(ROOT / 'scripts' / 'assets' / 'farmers-tag.png', 860)
+overlap = 96
+x0 = int(760 + (W - 760 - (front.width + back.width - overlap)) / 2)
+cv = drop(cv, back, x0 + front.width - overlap, 210)
+cv = drop(cv, front, x0, 210)
 cv.save(IMG / 'farmers-1600.webp', quality=86)
 cv.resize((800, 450), Image.LANCZOS).save(IMG / 'farmers-800.webp', quality=86)
 print('wrote farmers')

@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-19 · Cover system finished
+
+- Windows and phone frames are all 720px tall and start at the same point (760, 210), so
+  they run off the bottom instead of ending in a soft shadow line above it.
+- Sized by height rather than width, so screenshots with different aspect ratios still
+  come out the same size on the card.
+- Farmers: the Tag assignment screen sits behind the Tasks screen.
+
 ## 2026-10-18 · One cover system for all five cards
 
 - Every client cover now follows the same pattern: a flat field in the client's own colour,

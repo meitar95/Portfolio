@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / 'public' / 'images'
 LOGO = Path(__file__).resolve().parent / 'assets'
 W, H = 1600, 900
-SCREEN_H = 616        # one window height across every cover
+SCREEN_H = 720        # one window height across every cover, and tall enough that the
+                      # window runs off the bottom instead of ending in a soft edge
 
 
 def window(shot, screen_h, radius=20, bar=36):
