@@ -1,0 +1,30 @@
+<!doctype html><meta charset="utf8">
+<style>
+@font-face{font-family:'DM Sans';font-weight:400;src:url(fonts/dm-sans-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'DM Sans';font-weight:500;src:url(fonts/dm-sans-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'DM Sans';font-weight:700;src:url(fonts/dm-sans-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Lustria';font-weight:400;src:url(fonts/lustria-latin-400-normal.woff2) format('woff2')}
+*{margin:0;box-sizing:border-box}
+body{width:1200px;height:630px;background:#f9f8f5;font-family:'DM Sans',sans-serif;color:#1f1d1b;
+ display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:48px;padding:72px}
+.eyebrow{font-size:17px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#3f6c88;margin-bottom:22px}
+h1{font-family:'Lustria',Georgia,serif;font-size:72px;line-height:1.04;font-weight:400}
+p.sub{font-size:25px;line-height:1.45;color:#5a5550;margin-top:22px;max-width:19ch}
+.url{position:absolute;left:72px;bottom:64px;font-size:21px;font-weight:700;color:#3f6c88}
+.cards{display:flex;flex-direction:column;gap:22px}
+.card{border-radius:18px;overflow:hidden;background:#fbfaf8;border:1px solid #e3ded6;
+ box-shadow:0 18px 40px -26px rgba(31,45,60,.35);display:flex;align-items:center;gap:20px;padding-right:22px}
+.card img{width:188px;height:118px;object-fit:cover;object-position:72% 50%;flex:none}
+.card b{font-family:'Lustria',Georgia,serif;font-size:25px;font-weight:400;line-height:1.15}
+.card span{display:block;font-size:14px;font-weight:700;letter-spacing:2px;color:#3f6c88;margin-bottom:7px}
+</style>
+<div>
+  <div class="eyebrow">Product design</div>
+  <h1>Case<br>studies</h1>
+  <p class="sub">Two stories, told the way I'd present them.</p>
+  <div class="url">meitarmechoresh.com</div>
+</div>
+<div class="cards">
+  <div class="card"><img src="img/card-filtering.webp"><div><span>HUSKEYS · 2026</span><b>From four filter bars to one</b></div></div>
+  <div class="card"><img src="img/card-afimilk.webp"><div><span>AFIMILK · 2024</span><b>From paper binders to 15,000 farms</b></div></div>
+</div>

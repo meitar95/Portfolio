@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-05 · The case-study deck lives on the site
+
+- `/presentation-deck`: the interactive deck is now served from this domain instead of
+  redirecting to the Claude artifact it was built in. The deck needs no Claude runtime, so
+  it is just `public/presentation-deck/` (index.html, 26 images, fonts).
+- Fonts (DM Sans, Lustria) self-hosted alongside it, so the page makes no external request.
+- Title, description and OG tags moved into `<head>` and filled in; `preview.png` (1200x630)
+  built from `scripts/deck-preview.html`.
+- `noindex, nofollow` as a meta tag and as an `X-Robots-Tag` header (new `vercel.json`), so
+  the page never shows up in search. It stays unlinked from the site.
+
 ## 2026-10-19 · Cover system finished
 
 - Windows and phone frames are all 720px tall and start at the same point (760, 210), so
